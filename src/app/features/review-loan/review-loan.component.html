@@ -1,0 +1,201 @@
+<div class="review-loan-container">
+  <div class="progress-bar-container">
+    <ul class="progress-steps">
+      <li
+        [class.active]="currentSection >= 1"
+        [class.completed]="currentSection > 1"
+      >
+        <div class="step-wrapper">
+          <span class="step-number">
+            {{ currentSection > 1 ? "✔" : "1" }}
+          </span>
+        </div>
+        <span class="step-label">Identitas</span>
+      </li>
+
+      <li
+        [class.active]="currentSection >= 2"
+        [class.completed]="currentSection > 2"
+      >
+        <div class="step-wrapper">
+          <span class="step-number">
+            {{ currentSection > 2 ? "✔" : "2" }}
+          </span>
+        </div>
+        <span class="step-label">Capital</span>
+      </li>
+
+      <li
+        [class.active]="currentSection >= 3"
+        [class.completed]="currentSection > 3"
+      >
+        <div class="step-wrapper">
+          <span class="step-number">
+            {{ currentSection > 3 ? "✔" : "3" }}
+          </span>
+        </div>
+        <span class="step-label">Pengajuan</span>
+      </li>
+
+      <li [class.active]="currentSection >= 4">
+        <div class="step-wrapper">
+          <span class="step-number">4</span>
+        </div>
+        <span class="step-label">Selesai</span>
+      </li>
+    </ul>
+  </div>
+
+  <form [formGroup]="loanForm" (ngSubmit)="submitForm()">
+    <div *ngIf="currentSection === 1">
+      <h3>Informasi Identitas</h3>
+      <div class="form-group">
+        <label>Foto KTP:</label>
+        <div class="image-preview">
+          <img
+            [src]="
+              review_loan.customerDetails.ktp || 'assets/images/default-ktp.jpg'
+            "
+            alt="Foto KTP"
+            class="preview-img"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="namaLengkap">Nama Lengkap:</label>
+        <input type="text" id="namaLengkap" formControlName="namaLengkap" />
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input id="email" type="text" formControlName="email" />
+      </div>
+      <div class="form-group">
+        <label for="alamat">Alamat:</label>
+        <textarea id="alamat" formControlName="alamat"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="noteIdentity">Note:</label>
+        <textarea id="noteIdentity" formControlName="noteIdentity"></textarea>
+      </div>
+      <div class="form-navigation">
+        <button type="button" (click)="nextSection()">Selanjutnya</button>
+      </div>
+    </div>
+
+    <div *ngIf="currentSection === 2">
+      <h3>Informasi Capital</h3>
+      <div class="form-group">
+        <label for="penghasilan">Penghasilan:</label>
+        <input type="number" id="penghasilan" formControlName="penghasilan" />
+      </div>
+      <div class="form-group">
+        <label>Foto Bukti Kepemilikan Rumah:</label>
+        <div class="image-preview">
+          <img
+            [src]="
+              review_loan.customerDetails.houseOwnership ||
+              'assets/images/default-house.jpg'
+            "
+            alt="Bukti Kepemilikan Rumah"
+            class="preview-img"
+          />
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="noteCapital">Note:</label>
+        <textarea id="noteCapital" formControlName="noteCapital"></textarea>
+      </div>
+      <div class="form-navigation">
+        <button type="button" (click)="prevSection()">Sebelumnya</button>
+        <button type="button" (click)="nextSection()">Selanjutnya</button>
+      </div>
+    </div>
+
+    <div *ngIf="currentSection === 3">
+      <h3>Informasi Pengajuan Peminjaman</h3>
+      <div class="form-group">
+        <label for="jumlahPinjaman">Jumlah Pinjaman:</label>
+        <input
+          type="text"
+          id="jumlahPinjaman"
+          formControlName="jumlahPinjaman"
+        />
+      </div>
+      <div class="form-group">
+        <label for="tenor">Tenor (bulan):</label>
+        <input type="number" id="tenor" formControlName="tenor" />
+      </div>
+      <div class="form-group">
+        <label for="tujuanPenggunaan">Tujuan Penggunaan Dana:</label>
+        <textarea
+          id="tujuanPenggunaan"
+          formControlName="tujuanPenggunaan"
+        ></textarea>
+      </div>
+      <div class="form-group">
+        <label for="noteLoan">Note:</label>
+        <textarea id="noteLoan" formControlName="noteLoan"></textarea>
+      </div>
+      <div class="form-navigation">
+        <button type="button" (click)="prevSection()">Sebelumnya</button>
+        <button type="button" (click)="nextSection()">Selanjutnya</button>
+      </div>
+    </div>
+
+    <div *ngIf="currentSection === 4">
+      <h3>Summary</h3>
+
+      <div class="card summary-card my-2">
+        <div class="card-body">
+          <h4>Identitas</h4>
+          <div class="summary-item">
+            <label>Nama Lengkap:</label>
+            <p>{{ loanForm.get("namaLengkap")?.value || "-" }}</p>
+          </div>
+          <div class="summary-item">
+            <label>Note Identitas:</label>
+            <p>{{ loanForm.get("noteIdentity")?.value || "-" }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card summary-card my-2">
+        <div class="card-body">
+          <h4>Capital</h4>
+          <div class="summary-item">
+            <label>Penghasilan:</label>
+            <p>{{ loanForm.get("penghasilan")?.value || "-" }}</p>
+          </div>
+          <div class="summary-item">
+            <label>Note Capital:</label>
+            <p>{{ loanForm.get("noteCapital")?.value || "-" }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="card summary-card my-2">
+        <div class="card-body">
+          <h4>Pengajuan</h4>
+          <div class="summary-item">
+            <label>Jumlah Pinjaman:</label>
+            <p>{{ loanForm.get("jumlahPinjaman")?.value || "-" }}</p>
+          </div>
+          <div class="summary-item">
+            <label>Note Loan:</label>
+            <p>{{ loanForm.get("noteLoan")?.value || "-" }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-navigation">
+        <button type="button" (click)="prevSection()">Sebelumnya</button>
+        <div class="action-buttons">
+          <button type="button" (click)="rejectLoan()" class="btn-reject">Reject</button>
+          <button type="button" (click)="recommendLoan()" class="btn-recommend">Recommend</button>
+        </div>
+      </div>
+
+
+    </div>
+  </form>
+</div>

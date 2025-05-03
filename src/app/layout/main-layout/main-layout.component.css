@@ -1,0 +1,102 @@
+.sidebar-container {
+  width: 280px;
+  flex-shrink: 0; /* Mencegah sidebar menyusut */
+  transition: width 0.3s ease-in-out; /* Animasi transisi lebar */
+}
+
+.content-area {
+  overflow-x: hidden; /* Mencegah scroll horizontal yang tidak perlu */
+}
+
+/* Menyembunyikan teks sidebar dan memperkecil lebar pada layar kecil */
+@media (max-width: 768px) {
+  .sidebar-container {
+    width: 56px; /* Lebar ikon saja */
+    overflow-x: hidden; /* Menyembunyikan konten yang melebihi lebar */
+  }
+
+  .sidebar-container .fs-4, /* Judul Dashboard */
+  .sidebar-container .nav-link span, /* Teks link */
+  .sidebar-container hr,
+  .sidebar-container .dropdown strong,
+  .sidebar-container .dropdown-menu a {
+    display: none !important; /* Sembunyikan teks */
+  }
+
+  .sidebar-container .nav-link {
+    padding: 0.75rem 0.5rem; /* Sesuaikan padding untuk ikon */
+    justify-content: center; /* Tengahkah ikon */
+  }
+
+  .sidebar-container .nav-link .bi {
+    margin-right: 0 !important; /* Hilangkan margin kanan ikon */
+    font-size: 1.2rem; /* Sesuaikan ukuran ikon */
+  }
+
+  .sidebar-container .dropdown a {
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0.5rem !important;
+  }
+
+  .sidebar-container .dropdown img {
+    margin-right: 0 !important;
+  }
+}
+
+/* Lebih kecil lagi, bisa dipertimbangkan untuk menyembunyikan sidebar sepenuhnya dan menampilkan tombol toggler */
+@media (max-width: 576px) {
+  .sidebar-container {
+    position: fixed; /* Agar bisa di-toggle */
+    left: -280px; /* Sembunyikan di luar layar */
+    z-index: 1050; /* Di atas konten lain */
+    height: 100vh;
+    background-color: #2C3E50; /* Warna background sidebar */
+  }
+
+  .sidebar-container.show {
+    left: 0; /* Tampilkan saat class 'show' ditambahkan */
+  }
+
+  /* Tambahkan styling untuk tombol toggler di navbar */
+  .navbar .sidebar-toggler {
+    display: block;
+  }
+}
+
+/* Sembunyikan tombol toggler sidebar pada layar besar */
+.navbar .sidebar-toggler {
+  display: none;
+}
+.content-area {
+  overflow-x: hidden;
+  padding-top: 60px; /* Sesuaikan dengan tinggi navbar Anda */
+  padding-left: 280px; /* Sesuaikan dengan lebar sidebar statis Anda */
+  flex-grow: 1; /* Pastikan konten mengisi sisa ruang */
+}
+
+.bg-light.d-none.d-lg-block { /* Targetkan sidebar statis */
+  /* position: fixed !important; <-- Sudah di HTML */
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 280px;
+  overflow-y: auto;
+  z-index: 1051;
+}
+
+/* Style untuk offcanvas sidebar */
+.offcanvas {
+  z-index: 1052; /* Lebih tinggi dari konten utama dan sidebar statis */
+}
+
+@media (max-width: 991px) { /* Bootstrap sm, md, lg breakpoint bawah */
+  .content-area {
+    padding-top: 56px; /* Sesuaikan dengan tinggi navbar mobile */
+    padding-left: 0; /* Tidak ada padding kiri karena sidebar offcanvas */
+  }
+}
+
+.d-flex.vh-100 {
+  overflow: hidden; /* Mencegah scrollbar body */
+}

@@ -1,0 +1,4 @@
+<app-card [title]="'Tabel Cabang'">
+  <app-table [columns]="columns" [originalRows]="branches" [isLoading]="isLoading" [pageOffset]="pageOffset"
+    (onPage)="onPage($event)"></app-table>
+</app-card>

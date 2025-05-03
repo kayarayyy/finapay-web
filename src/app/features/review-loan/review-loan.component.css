@@ -1,0 +1,193 @@
+/* Progress Bar */
+.progress-bar-container {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.progress-steps {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.progress-steps::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  height: 4px;
+  background-color: #d1d5db; /* light gray */
+  z-index: 0;
+  transform: translateY(-50%);
+}
+
+.progress-steps li {
+  position: relative;
+  text-align: center;
+  flex: 1;
+  z-index: 1;
+}
+
+.step-wrapper {
+  position: relative;
+  z-index: 2;
+  background: white;
+}
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 50%;
+  background: white;
+  border: 3px solid #d1d5db;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #9ca3af;
+  transition: all 0.4s ease;
+}
+
+.step-label {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+/* State */
+li.active .step-number {
+  border-color: #4f46e5;
+  color: #4f46e5;
+}
+
+li.completed .step-number {
+  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  border: none;
+  color: white;
+}
+
+li.completed .step-label {
+  color: #4f46e5;
+}
+
+li.active .step-label {
+  color: #111827;
+  font-weight: bold;
+}
+
+/* Form Styling */
+form {
+  margin-top: 20px;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #374151;
+}
+
+input[type="text"],
+input[type="number"],
+textarea,
+select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1rem;
+  background-color: #f9fafb;
+  transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #4f46e5;
+  outline: none;
+  background-color: white;
+}
+
+button {
+  background: linear-gradient(135deg, #4f46e5, #3b82f6);
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #4338ca, #2563eb);
+}
+
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.image-preview {
+  margin-top: 10px;
+}
+.preview-img {
+  width: 200px;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.action-buttons button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-reject {
+  background: linear-gradient(135deg, #ff5c5c, #ff1a1a); /* Gradasi Merah */
+}
+
+.btn-reject:hover {
+  background: linear-gradient(135deg, #ff1a1a, #ff5c5c);
+}
+
+.btn-recommend {
+  background: linear-gradient(135deg, #4caf50, #388e3c); /* Gradasi Hijau */
+}
+
+.btn-recommend:hover {
+  background: linear-gradient(135deg, #388e3c, #4caf50);
+}
+

@@ -1,0 +1,4 @@
+<div class="custom-card container" [ngStyle]="{ width: 'auto', height: height || 'auto' }">
+  <h5 *ngIf="title" class="card-title mb-3">{{ title }}</h5>
+  <ng-content></ng-content>
+</div>

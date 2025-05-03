@@ -1,0 +1,17 @@
+.modern-card {
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.modern-card:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.section-header {
+  font-size: 1.1rem;
+  font-weight: 600;
+  border-bottom: 1px solid #dee2e6;
+  background-color: #f8f9fa !important;
+}

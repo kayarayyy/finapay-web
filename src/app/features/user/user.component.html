@@ -1,0 +1,23 @@
+<app-card [title]="'Tabel User'">
+  <app-table
+    [columns]="columns"
+    [originalRows]="users"
+    [isLoading]="isLoading"
+    [pageOffset]="pageOffset"
+    [actionTemplate]="actionTpl"
+    (onPage)="onPage($event)"
+  ></app-table>
+  <ng-template #statusTpl let-row>
+    <span class="badge" [ngClass]="row.active ? 'bg-success' : 'bg-secondary'">
+      {{ row.active ? "Active" : "Inactive" }}
+    </span>
+  </ng-template>
+  <ng-template #actionTpl let-row>
+    <button
+      class="btn btn-danger btn-sm"
+      (click)="deleteUser(row.id, row.name)"
+    >
+      Delete
+    </button>
+  </ng-template>
+</app-card>

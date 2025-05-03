@@ -1,0 +1,65 @@
+<div
+  class="container d-flex justify-content-center align-items-center min-vh-100"
+>
+  <div class="card shadow p-4" style="max-width: 400px; width: 100%">
+    <div class="text-center mb-4">
+      <h2 class="fw-bold">FINAPay Login</h2>
+      <p class="text-muted">Masuk ke akun Anda</p>
+    </div>
+    <form #form="ngForm" (ngSubmit)="onSubmit()">
+      <div class="mb-3">
+        <label for="nip" class="form-label">NIP</label>
+        <input
+          type="text"
+          id="nip"
+          class="form-control"
+          name="nip"
+          required
+          [(ngModel)]="nip"
+          #nipRef="ngModel"
+          [ngClass]="{
+            'is-invalid': nipRef.invalid && (nipRef.touched || form.submitted)
+          }"
+        />
+        <div class="invalid-feedback">Please input your NIP.</div>
+      </div>
+      <div class="mb-3">
+        <label for="password" class="form-label">Password</label>
+        <input
+          type="password"
+          id="password"
+          class="form-control"
+          name="password"
+          required
+          [(ngModel)]="password"
+          #passwordRef="ngModel"
+          [ngClass]="{
+            'is-invalid':
+              passwordRef.invalid && (passwordRef.touched || form.submitted)
+          }"
+        />
+        <div class="invalid-feedback">Please input your password.</div>
+      </div>
+      <div class="mb-3 text-end">
+        <a (click)="resetPassword()" class="text-decoration-none small">
+          Lupa password?
+        </a>
+      </div>
+      <button
+        type="submit"
+        class="btn btn-primary w-100 d-flex align-items-center justify-content-center"
+        [disabled]="isLoading"
+      >
+        <span
+          *ngIf="isLoading"
+          class="spinner-border spinner-border-sm"
+          aria-hidden="true"
+        ></span>
+        <span *ngIf="!isLoading">Login</span>
+      </button>
+    </form>
+    <div class="text-center mt-3">
+      <small class="text-muted">© 2025 finapay</small>
+    </div>
+  </div>
+</div>

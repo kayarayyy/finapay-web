@@ -1,0 +1,179 @@
+/* Judul Tabel */
+h3 {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #007bff;
+    text-transform: uppercase;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 10px;
+    margin-bottom: 1rem;
+}
+
+/* Tabel umum */
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+} */
+
+.table {
+    min-width: max-content; /* Ini bikin kolom tidak dipaksa sempit */
+    width: 100%; /* Biar tetap fleksibel */
+    table-layout: auto;
+    border-collapse: collapse;
+}
+
+
+/* Header Tabel */
+.table th {
+    background-color: #f1f3f5;
+    color: #343a40;
+    text-align: center;
+    font-weight: 600;
+    border-bottom: 2px solid #dee2e6;
+    padding: 12px;
+    font-size: 1rem;
+    position: sticky;
+}
+
+/* Isi Tabel */
+.table td {
+    text-align: center;
+    vertical-align: middle;
+    padding: 10px;
+    border-top: 1px solid #dee2e6;
+    font-size: 0.9rem;
+}
+
+/* Hover efek */
+.table tbody tr {
+    transition: background-color 0.2s ease;
+}
+
+.table tbody tr:hover {
+    background-color: #f8f9fa;
+}
+
+/* Border halus */
+.table-bordered {
+    border: none;
+}
+
+.table-bordered td,
+.table-bordered th {
+    border: none;
+}
+
+/* Row antar data lebih halus */
+.table tbody tr {
+    transition: background-color 0.2s ease;
+    border-bottom: 1px solid #f1f1f1;
+    /* garis sangat halus */
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+/* Alternating background rows (opsional) */
+.table tbody tr:nth-child(even) {
+    background-color: #f9fafb;
+}
+
+/* Remove border dari td */
+.table td {
+    border-top: none;
+}
+
+/* Agar tabel bisa di-scroll horizontal tanpa mempengaruhi layout */
+.table-responsive {
+  overflow-x: auto; /* Membolehkan scroll horizontal pada tabel */
+  -webkit-overflow-scrolling: touch; /* Untuk pengalaman scroll lebih halus di perangkat mobile */
+  max-width: 100%; /* Membatasi lebar tabel agar tidak melebihi container */
+}
+
+.table-responsive table {
+  width: 100%; /* Memastikan tabel mengambil seluruh lebar container */
+  table-layout: fixed; /* Membantu menghindari konten tabel yang meluap */
+}
+
+/* Responsif */
+/* .table-responsive {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+} */
+
+/* Tombol */
+.btn {
+    transition: all 0.2s ease;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    padding: 5px 10px;
+}
+
+.btn:hover {
+    opacity: 0.9;
+}
+
+.btn-primary {
+    background-color: #0d6efd;
+    border-color: #0d6efd;
+}
+
+.btn-danger {
+    background-color: #dc3545;
+    border-color: #dc3545;
+}
+
+/* Input & Select */
+.custom-input,
+.custom-select {
+    height: 30px;
+    font-size: 0.85rem;
+    padding: 4px 8px;
+    border-radius: 6px;
+    width: 180px;
+}
+
+/* Pagination custom */
+.custom-pagination .page-item {
+    margin: 0 2px;
+}
+
+.custom-pagination .page-link {
+    padding: 4px 10px;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    border-radius: 6px;
+    color: #007bff;
+    border: 1px solid #dee2e6;
+    transition: background-color 0.2s ease;
+}
+
+.custom-pagination .page-link:hover {
+    background-color: #f1f1f1;
+}
+
+.custom-pagination .page-item.active .page-link {
+    background-color: #0d6efd;
+    color: white;
+    border-color: #0d6efd;
+}
+
+.custom-pagination .page-item.disabled .page-link {
+    color: #ccc;
+    pointer-events: none;
+    background-color: #fff;
+}

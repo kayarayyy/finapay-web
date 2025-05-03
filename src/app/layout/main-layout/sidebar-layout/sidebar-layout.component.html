@@ -1,0 +1,70 @@
+<ul class="nav nav-pills flex-column mb-auto">
+  <li class="nav-item">
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="active"
+      class="nav-link link-dark"
+      aria-current="page"
+    >
+      <i class="bi bi-house-fill me-2"></i>
+      Dashboard
+    </a>
+  </li>
+  <li
+    *ngIf="
+      hasFeature('FEATURE_MANAGE_LOAN_REQUESTS') ||
+      hasFeature('FEATURE_GET_ALL_LOAN_REQUEST_REVIEW') ||
+      hasFeature('FEATURE_GET_ALL_LOAN_REQUEST_APPROVAL')
+    "
+  >
+    <a
+      routerLink="/loan-requests"
+      routerLinkActive="active"
+      class="nav-link link-dark"
+    >
+      <i class="bi bi-table me-2"></i>
+      Loan Requests
+    </a>
+  </li>
+  <li *ngIf="hasFeature('FEATURE_GET_LOAN_REQUEST_DISBURSEMENT')">
+    <a
+      routerLink="/disbursement"
+      routerLinkActive="active"
+      class="nav-link link-dark"
+    >
+      <i class="bi bi-cash-stack me-2"></i>
+      Disbursement
+    </a>
+  </li>
+  <li *ngIf="hasFeature('FEATURE_MANAGE_USERS')">
+    <a
+      routerLink="/users"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="nav-link link-dark"
+    >
+      <i class="bi bi-people me-2"></i>
+      User
+    </a>
+  </li>
+  <li *ngIf="hasFeature('FEATURE_MANAGE_ROLES')">
+    <a
+      routerLink="/roles"
+      routerLinkActive="active"
+      class="nav-link link-dark"
+    >
+      <i class="bi bi-calendar me-2"></i>
+      Roles
+    </a>
+  </li>
+  <li *ngIf="hasFeature('FEATURE_MANAGE_BRANCHES')">
+    <a
+      routerLink="/branches"
+      routerLinkActive="active"
+      class="nav-link link-dark"
+    >
+      <i class="bi bi-file-earmark-person-fill me-2"></i>
+      Branches
+    </a>
+  </li>
+</ul>

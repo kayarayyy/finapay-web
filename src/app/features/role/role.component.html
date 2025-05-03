@@ -1,0 +1,17 @@
+<app-card title="Tabel Role">
+    <app-table [columns]="columns" [originalRows]="role_features" [isLoading]="isLoading" [pageOffset]="pageOffset"
+        (onPage)="onPage($event)" [actionTemplate]="actionTpl"></app-table>
+    <ng-template #actionTpl let-row>
+        <button class="btn btn-danger btn-sm" (click)="deleteRole(row.id)">Delete</button>
+    </ng-template>
+    <ng-template #featuresTpl let-row>
+        <div class="d-flex flex-wrap gap-1">
+            <span *ngFor="let feature of row.listFeatures" class="badge bg-primary">
+                {{ feature.name }}
+                <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close"
+                    (click)="removeFeatureFromRole(row.id, feature.id)">
+                </button>
+            </span>
+        </div>
+    </ng-template>
+</app-card>

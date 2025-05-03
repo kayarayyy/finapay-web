@@ -1,0 +1,50 @@
+<!-- table.component.html -->
+ <div class="container">
+   <div *ngIf="isLoading" class="d-flex justify-content-center align-items-center">
+       <div class="spinner-border text-primary" role="status">
+           <span class="visually-hidden">Loading...</span>
+       </div>
+   </div>
+
+   <!-- Dropdown untuk memilih jumlah data per halaman -->
+   <div class="d-flex justify-content-between mb-3">
+       <div>
+           <select id="itemsPerPage" class="form-select form-select-sm w-auto" [(ngModel)]="itemsPerPage"
+               (change)="onItemsPerPageChange()">
+               <option *ngFor="let option of itemsPerPageOptions" [value]="option">{{ option }} items</option>
+           </select>
+       </div>
+       <div class="d-flex justify-content-end">
+           <input type="text" class="form-control form-control-sm w-auto" placeholder="Cari..." [(ngModel)]="searchTerm"
+               (input)="filterUsers()" />
+       </div>
+   </div>
+
+   <ngx-datatable class="bootstrap" [rows]="rows" [headerHeight]="50" [footerHeight]="50" [rowHeight]="'auto'"
+       [limit]="itemsPerPage" [offset]="pageOffset" (page)="onPageChange($event)" [scrollbarH]="true"
+       [columnMode]="'force'">
+
+       <ngx-datatable-column name="No" [width]="60">
+           <ng-template let-rowIndex="rowIndex" ngx-datatable-cell-template>
+               {{ rowIndex + 1 }}
+           </ng-template>
+       </ngx-datatable-column>
+       <!-- custom  -->
+       <ngx-datatable-column *ngFor="let col of columns" [name]="col.header" [prop]="col.field" [resizeable]="true">
+           <ng-template let-row="row" ngx-datatable-cell-template>
+               <ng-container *ngIf="col.isCustom && col.templateRef; else defaultCell">
+                   <ng-container *ngTemplateOutlet="col.templateRef; context: { $implicit: row }"></ng-container>
+               </ng-container>
+               <ng-template #defaultCell>
+                   {{ row[col.field] }}
+               </ng-template>
+           </ng-template>
+       </ngx-datatable-column>
+       <!-- action -->
+       <ngx-datatable-column *ngIf="actionTemplate" name="Actions">
+           <ng-template let-row="row" ngx-datatable-cell-template>
+               <ng-container *ngTemplateOutlet="actionTemplate; context: { $implicit: row }"></ng-container>
+           </ng-template>
+       </ngx-datatable-column>
+   </ngx-datatable>
+ </div>
