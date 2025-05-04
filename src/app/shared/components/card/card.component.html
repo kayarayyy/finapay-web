@@ -1,4 +1,14 @@
-<div class="custom-card container" [ngStyle]="{ width: 'auto', height: height || 'auto' }">
-  <h5 *ngIf="title" class="card-title mb-3">{{ title }}</h5>
-  <ng-content></ng-content>
+<div
+  class="custom-card container px-0" 
+  [ngStyle]="{ width: 'auto', height: height || 'auto' }"
+>
+  <!-- Header fleksibel -->
+  <div class="d-flex justify-content-between align-items-center mb-3 px-3">
+    <h5 *ngIf="title" class="card-title mb-0">{{ title }}</h5>
+    <ng-content select="[card-header]"></ng-content>
+  </div>
+
+  <div class="px-3">
+    <ng-content></ng-content>
+  </div>
 </div>

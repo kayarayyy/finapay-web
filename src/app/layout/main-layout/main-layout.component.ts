@@ -29,6 +29,7 @@ import { filter } from 'rxjs';
     RouterModule,
   ],
   templateUrl: './main-layout.component.html',
+  styleUrl: './main-layout.component.css',
   encapsulation: ViewEncapsulation.None,
 })
 export class MainLayoutComponent implements OnInit {

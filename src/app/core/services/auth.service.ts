@@ -37,6 +37,19 @@ export class AuthService {
     }
   }
 
+  register(nip: string, name: string, email: string, role_id: string, refferal: string, is_active: boolean): Observable<any> {
+    const payload = {
+      email: email,
+      name: name,
+      role_id: role_id,
+      is_active: is_active,
+      nip: nip,
+      refferal: refferal,
+    };
+
+    return this.http.post<any>(`${this.baseUrl}/auth/register`, payload);
+  }
+
   changePassword(oldPassword: string, newPassword: string, confirmPassword: string): Observable<any> {
     const payload = {
       old_password: oldPassword,

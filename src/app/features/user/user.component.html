@@ -1,4 +1,7 @@
 <app-card [title]="'Tabel User'">
+  <div card-header>
+    <button class="btn btn-primary" (click)="addUser()">Add User</button>
+  </div>
   <app-table
     [columns]="columns"
     [originalRows]="users"

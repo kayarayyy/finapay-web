@@ -1,0 +1,95 @@
+<app-card [height]="'auto'" [title]="'Tambah User'">
+    <form [formGroup]="formData" (ngSubmit)="submitForm()">
+        <!-- Nama -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Nama Lengkap</label>
+            <input type="text" id="name" class="form-control" placeholder="Masukkan nama lengkap" formControlName="name"
+                [ngClass]="{
+            'is-invalid': formData.get('name')?.invalid && (formData.get('name')?.touched || submitted)
+          }" />
+            <div *ngIf="formData.get('name')?.invalid && (formData.get('name')?.touched || submitted)"
+                class="invalid-feedback">
+                Nama lengkap wajib diisi.
+            </div>
+        </div>
+
+        <!-- Email -->
+        <div class="mb-3">
+            <label for="email" class="form-label">Email</label>
+            <input type="email" id="email" class="form-control" placeholder="email@example.com" formControlName="email"
+                [ngClass]="{
+            'is-invalid': formData.get('email')?.invalid && (formData.get('email')?.touched || submitted)
+          }" />
+            <div *ngIf="formData.get('email')?.invalid && (formData.get('email')?.touched || submitted)"
+                class="invalid-feedback">
+                Email harus valid.
+            </div>
+        </div>
+
+        <!-- Password -->
+        <!-- <div class="mb-3">
+            <label for="password" class="form-label">Password</label>
+            <input type="password" id="password" class="form-control" placeholder="Minimal 8 karakter"
+                formControlName="password" [ngClass]="{
+            'is-invalid': formData.get('password')?.invalid && (formData.get('password')?.touched || submitted)
+          }" />
+            <div *ngIf="formData.get('password')?.invalid && (formData.get('password')?.touched || submitted)"
+                class="invalid-feedback">
+                Password wajib diisi dan minimal 8 karakter.
+            </div>
+        </div> -->
+
+        <!-- Role -->
+        <div class="mb-3" *ngIf="!isLoading"> <!-- Menunggu data roles tersedia -->
+            <label for="role_id" class="form-label">Role</label>
+            <select id="role_id" class="form-select" formControlName="role_id" [ngClass]="{
+        'is-invalid': formData.get('role_id')?.invalid && (formData.get('role_id')?.touched || submitted)
+      }">
+                <option value="" disabled selected>Pilih role</option>
+                <option *ngFor="let role of roles" [value]="role.id">
+                    {{ role.name }}
+                </option>
+            </select>
+            <div *ngIf="formData.get('role_id')?.invalid && (formData.get('role_id')?.touched || submitted)"
+                class="invalid-feedback">
+                Role wajib dipilih.
+            </div>
+        </div>
+
+        <!-- Loading indicator -->
+        <div *ngIf="isLoading" class="text-center">
+            <span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Memuat role...
+        </div>
+
+        <!-- NIP -->
+        <!-- <div class="mb-3" *ngIf="!isCustomer"> -->
+        <div class="mb-3">
+            <label for="nip" class="form-label">NIP</label>
+            <input type="text" id="nip" class="form-control" placeholder="NIP" formControlName="nip" [ngClass]="{
+                'is-invalid': formData.get('nip')?.invalid && (formData.get('nip')?.touched || submitted)
+              }" />
+            <div *ngIf="formData.get('nip')?.invalid && (formData.get('nip')?.touched || submitted)"
+                class="invalid-feedback">
+                NIP wajib diisi.
+            </div>
+        </div>
+
+
+        <!-- Active Checkbox -->
+        <div class="form-check form-switch mb-4">
+            <input type="checkbox" id="is_active" class="form-check-input" formControlName="is_active" />
+            <label for="is_active" class="form-check-label">Aktifkan User</label>
+        </div>
+
+        <!-- Submit -->
+        <!-- Submit -->
+        <div class="d-flex justify-content-end mt-4">
+            <button type="submit" class="btn btn-primary d-flex align-items-center"
+                [disabled]="formData.invalid || isSubmitting">
+                <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" aria-hidden="true"></span>
+                <span *ngIf="!isSubmitting">Simpan</span>
+            </button>
+        </div>
+
+    </form>
+</app-card>

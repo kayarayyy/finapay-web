@@ -1,1 +1,65 @@
 /* You can add global styles to this file, and also import other style files */
+.btn-primary {
+    background: linear-gradient(to right, #007bff, #00c6ff);
+    border: none;
+}
+
+.btn-danger {
+    background: linear-gradient(to right, #dc3545, #ff6b6b);
+    /* merah ke oranye */
+    border: none;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(to right, #c82333, #ff4d4d);
+    opacity: 0.95;
+}
+
+.btn-info {
+    background: linear-gradient(to right, #0dcaf0, #5ee7ff);
+    /* biru muda ke cyan */
+    border: none;
+    color: white;
+}
+
+.btn-info:hover {
+    background: linear-gradient(to right, #0bbcd6, #3fd8f0);
+    opacity: 0.95;
+}
+
+.btn-warning {
+    background: linear-gradient(to right, #ffc107, #ffdd57);
+    /* kuning ke emas */
+    border: none;
+    color: black;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(to right, #e0a800, #ffcc00);
+    opacity: 0.95;
+}
+
+.btn-success {
+    background: linear-gradient(to right, #28a745, #a8e063);
+    /* hijau tua ke hijau muda */
+    border: none;
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(to right, #218838, #8bc34a);
+    opacity: 0.95;
+}
+
+.btn-secondary {
+    background: linear-gradient(to right, #6c757d, #a1a1a1);
+    /* abu ke silver */
+    border: none;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: linear-gradient(to right, #5a6268, #8a8a8a);
+    opacity: 0.95;
+}

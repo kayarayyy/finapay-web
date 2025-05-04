@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { LoanRequest } from '../../core/models/loan-request.model';
@@ -14,6 +14,7 @@ import Swal from 'sweetalert2';
   imports: [CardComponent, TableComponent, NgIf, CommonModule],
   templateUrl: './loan-request.component.html',
   styleUrl: './loan-request.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class LoanRequestComponent implements OnInit {
   loan_requests: LoanRequest[] = [];

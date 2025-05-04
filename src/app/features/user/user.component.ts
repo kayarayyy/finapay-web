@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { FormsModule } from '@angular/forms';
 import { TableComponent } from '../../shared/components/table/table.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-user',
@@ -25,7 +26,7 @@ export class UserComponent implements OnInit {
   @ViewChild('statusTpl', { static: true }) statusTpl!: TemplateRef<any>;
 
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private router: Router) { }
 
   ngOnInit(): void {
     this.columns = [
@@ -99,5 +100,9 @@ export class UserComponent implements OnInit {
         );
       }
     });
+  }
+
+  addUser(): void {
+    this.router.navigate(['/users/add']);
   }
 }

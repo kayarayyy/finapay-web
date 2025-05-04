@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -9,7 +9,8 @@ import Swal from 'sweetalert2';
   selector: 'app-reset-password',
   imports: [CommonModule, FormsModule],
   templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.css'
+  styleUrl: './reset-password.component.css',
+  encapsulation: ViewEncapsulation.None
 })
 export class ResetPasswordComponent  {
   email = '';

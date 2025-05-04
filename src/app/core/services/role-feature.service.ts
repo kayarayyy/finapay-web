@@ -11,8 +11,8 @@ export class RoleFeatureService {
 
     }
 
-    getAllRoleWithFeatures(): Observable<RoleFeature[]>{
-            return this.http.get<{ data:RoleFeature[] }>(`${this.baseUrl}/role-features`)
+    getAllRoleWithFeatures(): Observable<RoleFeature[]> {
+        return this.http.get<{ data: RoleFeature[] }>(`${this.baseUrl}/role-features`)
             .pipe(map(response => response.data));
-        }
+    }
 }
