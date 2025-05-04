@@ -30,7 +30,7 @@ export class LoanRequestComponent implements OnInit {
     private loanRequestService: LoanRequestService,
     private authSessionService: AuthSessionService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.columns = [
@@ -140,7 +140,7 @@ export class LoanRequestComponent implements OnInit {
     this.router.navigate(['/loan-requests/review/' + id]);
   }
   detailRequest(id: string): void {
-    this.router.navigate(['/loan-requests/review/' + id]);
+    this.router.navigate(['/loan-requests/approval/' + id]);
   }
   actionRequest(id: string): void {
     Swal.fire({
@@ -156,15 +156,43 @@ export class LoanRequestComponent implements OnInit {
       preConfirm: (notes) => {
         return notes;
       },
+      preDeny: () => {
+        const inputEl = Swal.getInput() as unknown as HTMLTextAreaElement;
+        const value = inputEl?.value || '';
+        return value;
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         const notes = result.value;
-        this.submitApproval(id, true, notes);
+        Swal.fire({
+          title: 'Apakah anda yakin?',
+          text: 'Kamu akan menyetujui pengajuan!',
+          icon: 'question',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Setujui',
+          cancelButtonText: 'Batalkan',
+        }).then((confirmRes) => {
+          if (confirmRes.isConfirmed) {
+            this.submitApproval(id, true, notes);
+          }
+        });
       } else if (result.isDenied) {
         const notes = result.value;
-        this.submitApproval(id, false, notes);
+        Swal.fire({
+          title: 'Apakah anda yakin?',
+          text: 'Kamu akan menolak pengajuan!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Ya, Tolak',
+          cancelButtonText: 'Batalkan',
+        }).then((confirmRes) => {
+          if (confirmRes.isConfirmed) {
+            this.submitApproval(id, false, notes);
+          }
+        });
       }
     });
+
   }
 
   submitApproval(id: string, approval: boolean, notes: string): void {
@@ -178,6 +206,6 @@ export class LoanRequestComponent implements OnInit {
       },
     });
   }
-  updateRequest(id: string): void {}
-  deleteRequest(id: string): void {}
+  updateRequest(id: string): void { }
+  deleteRequest(id: string): void { }
 }

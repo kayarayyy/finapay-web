@@ -13,4 +13,5 @@ export interface CustomerDetails {
   user: User;
   ktp: string;
   houseOwnership: string;
+  salarySlip: string;
 }

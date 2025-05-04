@@ -1,10 +1,7 @@
 <div class="review-loan-container">
   <div class="progress-bar-container">
     <ul class="progress-steps">
-      <li
-        [class.active]="currentSection >= 1"
-        [class.completed]="currentSection > 1"
-      >
+      <li [class.active]="currentSection >= 1" [class.completed]="currentSection > 1">
         <div class="step-wrapper">
           <span class="step-number">
             {{ currentSection > 1 ? "✔" : "1" }}
@@ -13,28 +10,22 @@
         <span class="step-label">Identitas</span>
       </li>
 
-      <li
-        [class.active]="currentSection >= 2"
-        [class.completed]="currentSection > 2"
-      >
+      <li [class.active]="currentSection >= 2" [class.completed]="currentSection > 2">
         <div class="step-wrapper">
           <span class="step-number">
             {{ currentSection > 2 ? "✔" : "2" }}
           </span>
         </div>
-        <span class="step-label">Capital</span>
+        <span class="step-label">Kontak</span>
       </li>
 
-      <li
-        [class.active]="currentSection >= 3"
-        [class.completed]="currentSection > 3"
-      >
+      <li [class.active]="currentSection >= 3" [class.completed]="currentSection > 3">
         <div class="step-wrapper">
           <span class="step-number">
             {{ currentSection > 3 ? "✔" : "3" }}
           </span>
         </div>
-        <span class="step-label">Pengajuan</span>
+        <span class="step-label">Capital & Pengajuan</span>
       </li>
 
       <li [class.active]="currentSection >= 4">
@@ -47,155 +38,361 @@
   </div>
 
   <form [formGroup]="loanForm" (ngSubmit)="submitForm()">
-    <div *ngIf="currentSection === 1">
-      <h3>Informasi Identitas</h3>
-      <div class="form-group">
-        <label>Foto KTP:</label>
-        <div class="image-preview">
-          <img
-            [src]="
-              review_loan.customerDetails.ktp || 'assets/images/default-ktp.jpg'
-            "
-            alt="Foto KTP"
-            class="preview-img"
-          />
+    <div *ngIf="currentSection === 1" class="container mt-4">
+      <h3 class="mb-3">Informasi Identitas</h3>
+      <div class="row g-4">
+        <!-- Kiri: Preview KTP -->
+        <div class="col-md-5">
+          <div class="card shadow-sm">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+              <span>Foto KTP</span>
+              <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#ktpModal">
+                Lihat Besar
+              </button>
+            </div>
+            <div class="card-body text-center">
+              <img [src]="review_loan.customerDetails.ktp || 'assets/images/default-ktp.jpg'" alt="Foto KTP"
+                class="img-fluid rounded shadow-sm" style="max-height: 300px; object-fit: cover; cursor: zoom-in"
+                data-bs-toggle="modal" data-bs-target="#ktpModal" />
+            </div>
+
+          </div>
+          <!-- Modal KTP -->
+          <div class="modal fade" id="ktpModal" tabindex="-1" aria-labelledby="ktpModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="ktpModalLabel">Pratinjau KTP</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"><i
+                      class="bi bi-x-lg me-2"></i></button>
+                </div>
+                <div class="modal-body text-center">
+                  <img [src]="review_loan.customerDetails.ktp || 'assets/images/default-ktp.jpg'" alt="Foto KTP"
+                    id="zoomableImg" class="img-fluid rounded shadow-sm"
+                    style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
+                    (click)="toggleZoom($event)" />
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="namaLengkap">Nama Lengkap:</label>
-        <input type="text" id="namaLengkap" formControlName="namaLengkap" />
-      </div>
-      <div class="form-group">
-        <label for="email">Email:</label>
-        <input id="email" type="text" formControlName="email" />
-      </div>
-      <div class="form-group">
-        <label for="alamat">Alamat:</label>
-        <textarea id="alamat" formControlName="alamat"></textarea>
-      </div>
-      <div class="form-group">
-        <label for="noteIdentity">Note:</label>
-        <textarea id="noteIdentity" formControlName="noteIdentity"></textarea>
-      </div>
-      <div class="form-navigation">
-        <button type="button" (click)="nextSection()">Selanjutnya</button>
-      </div>
-    </div>
 
-    <div *ngIf="currentSection === 2">
-      <h3>Informasi Capital</h3>
-      <div class="form-group">
-        <label for="penghasilan">Penghasilan:</label>
-        <input type="number" id="penghasilan" formControlName="penghasilan" />
-      </div>
-      <div class="form-group">
-        <label>Foto Bukti Kepemilikan Rumah:</label>
-        <div class="image-preview">
-          <img
-            [src]="
-              review_loan.customerDetails.houseOwnership ||
-              'assets/images/default-house.jpg'
-            "
-            alt="Bukti Kepemilikan Rumah"
-            class="preview-img"
-          />
+        <!-- Kanan: Data Identitas -->
+        <div class="col-md-7">
+          <div class="card shadow-sm">
+            <div class="card-header bg-secondary text-white">
+              Data Inputan
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label for="namaLengkap" class="form-label">Nama Lengkap</label>
+                <input type="text" class="form-control" id="namaLengkap" formControlName="namaLengkap" />
+              </div>
+
+              <div class="mb-3">
+                <label for="alamat" class="form-label">Alamat</label>
+                <textarea class="form-control" id="alamat" formControlName="alamat" rows="3"></textarea>
+              </div>
+
+              <div class="mb-3">
+                <label for="noKtp" class="form-label">No KTP</label>
+                <input type="text" class="form-control" id="noKtp" formControlName="noKtp" />
+              </div>
+
+              <div class="mb-3">
+                <label for="tglLahir" class="form-label">Tanggal Lahir</label>
+                <input type="text" class="form-control" id="tglLahir" formControlName="tglLahir" />
+              </div>
+
+              <div class="mb-3">
+                <label for="noteIdentity" class="form-label">Catatan</label>
+                <textarea class="form-control" id="noteIdentity" formControlName="noteIdentity" rows="3"></textarea>
+              </div>
+
+              <div class="text-end">
+                <button type="button" class="btn btn-primary" (click)="nextSection()">
+                  Selanjutnya
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="form-group">
-        <label for="noteCapital">Note:</label>
-        <textarea id="noteCapital" formControlName="noteCapital"></textarea>
-      </div>
-      <div class="form-navigation">
-        <button type="button" (click)="prevSection()">Sebelumnya</button>
-        <button type="button" (click)="nextSection()">Selanjutnya</button>
+
       </div>
     </div>
 
-    <div *ngIf="currentSection === 3">
-      <h3>Informasi Pengajuan Peminjaman</h3>
-      <div class="form-group">
-        <label for="jumlahPinjaman">Jumlah Pinjaman:</label>
-        <input
-          type="text"
-          id="jumlahPinjaman"
-          formControlName="jumlahPinjaman"
-        />
-      </div>
-      <div class="form-group">
-        <label for="tenor">Tenor (bulan):</label>
-        <input type="number" id="tenor" formControlName="tenor" />
-      </div>
-      <div class="form-group">
-        <label for="tujuanPenggunaan">Tujuan Penggunaan Dana:</label>
-        <textarea
-          id="tujuanPenggunaan"
-          formControlName="tujuanPenggunaan"
-        ></textarea>
-      </div>
-      <div class="form-group">
-        <label for="noteLoan">Note:</label>
-        <textarea id="noteLoan" formControlName="noteLoan"></textarea>
-      </div>
-      <div class="form-navigation">
-        <button type="button" (click)="prevSection()">Sebelumnya</button>
-        <button type="button" (click)="nextSection()">Selanjutnya</button>
-      </div>
-    </div>
 
-    <div *ngIf="currentSection === 4">
-      <h3>Summary</h3>
-
-      <div class="card summary-card my-2">
+    <div *ngIf="currentSection === 2" class="container mt-4">
+      <h3>Informasi Kontak</h3>
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white">
+          Kontak Pribadi
+        </div>
         <div class="card-body">
-          <h4>Identitas</h4>
-          <div class="summary-item">
-            <label>Nama Lengkap:</label>
+          <div class="row mb-3">
+            <div class="col-md-6">
+              <label for="noTelpon" class="form-label">No Telpon</label>
+              <input type="text" id="noTelpon" class="form-control" formControlName="noTelpon" />
+            </div>
+            <div class="col-md-6">
+              <label for="email" class="form-label">Email</label>
+              <input type="text" id="email" class="form-control" formControlName="email" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-warning text-dark">
+          Kontak Darurat
+        </div>
+        <div class="card-body">
+          <!-- Darurat 1 -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="kontakDarurat1" class="form-label">Nama Kontak Darurat 1</label>
+              <input type="text" id="kontakDarurat1" class="form-control" formControlName="kontakDarurat1" />
+            </div>
+            <div class="col-md-4">
+              <label for="hubungan1" class="form-label">Hubungan</label>
+              <input type="text" id="hubungan1" class="form-control" formControlName="hubungan1" />
+            </div>
+            <div class="col-md-4">
+              <label for="kontak1" class="form-label">Kontak</label>
+              <input type="text" id="kontak1" class="form-control" formControlName="kontak1" />
+            </div>
+          </div>
+
+          <!-- Darurat 2 -->
+          <div class="row mb-3">
+            <div class="col-md-4">
+              <label for="kontakDarurat2" class="form-label">Nama Kontak Darurat 2</label>
+              <input type="text" id="kontakDarurat2" class="form-control" formControlName="kontakDarurat2" />
+            </div>
+            <div class="col-md-4">
+              <label for="hubungan2" class="form-label">Hubungan</label>
+              <input type="text" id="hubungan2" class="form-control" formControlName="hubungan2" />
+            </div>
+            <div class="col-md-4">
+              <label for="kontak2" class="form-label">Kontak</label>
+              <input type="text" id="kontak2" class="form-control" formControlName="kontak2" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label for="noteContact" class="form-label">Catatan</label>
+        <textarea id="noteContact" rows="3" class="form-control" formControlName="noteContact"></textarea>
+      </div>
+
+      <div class="form-navigation d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" (click)="prevSection()">Sebelumnya</button>
+        <button type="button" class="btn btn-primary" (click)="nextSection()">Selanjutnya</button>
+      </div>
+    </div>
+
+
+    <div *ngIf="currentSection === 3" class="container mt-4">
+      <h3>Informasi Capital & Pengajuan</h3>
+
+      <!-- Slip Gaji -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+          <span>Foto Slip Gaji</span>
+          <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#slipGajiModal">Lihat
+            Besar</button>
+        </div>
+        <div class="card-body text-center">
+          <img [src]="review_loan.customerDetails.salarySlip || 'assets/images/default-salary.jpg'" alt="Slip Gaji"
+            class="img-fluid rounded shadow-sm" style="max-height: 300px; object-fit: cover; cursor: pointer"
+            data-bs-toggle="modal" data-bs-target="#slipGajiModal" />
+        </div>
+      </div>
+
+      <!-- Informasi Finansial -->
+      <div class="row mb-4">
+        <div class="col-md-6 mb-3">
+          <label for="penghasilan" class="form-label">Penghasilan</label>
+          <input type="number" id="penghasilan" class="form-control" formControlName="penghasilan" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="statusPekerjaan" class="form-label">Status Pekerjaan</label>
+          <input type="text" id="statusPekerjaan" class="form-control" formControlName="statusPekerjaan" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="jumlahPinjaman" class="form-label">Jumlah Pinjaman</label>
+          <input type="text" id="jumlahPinjaman" class="form-control" formControlName="jumlahPinjaman" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="tenor" class="form-label">Tenor</label>
+          <input type="text" id="tenor" class="form-control" formControlName="tenor" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="plafond" class="form-label">Plafond</label>
+          <input type="text" id="plafond" class="form-control" formControlName="plafond" />
+        </div>
+        <div class="col-md-6 mb-3">
+          <label for="sisaPlafond" class="form-label">Sisa Plafond</label>
+          <input type="text" id="sisaPlafond" class="form-control" formControlName="sisaPlafond" />
+        </div>
+        <div class="col-12 mb-3">
+          <label for="tujuanPenggunaan" class="form-label">Tujuan Penggunaan</label>
+          <input type="text" id="tujuanPenggunaan" class="form-control" formControlName="tujuanPenggunaan" />
+        </div>
+      </div>
+
+      <!-- Foto Rumah -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+          <span>Foto Rumah</span>
+          <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#fotoRumahModal">Lihat
+            Besar</button>
+        </div>
+        <div class="card-body text-center">
+          <img [src]="review_loan.customerDetails.houseOwnership || 'assets/images/default-house.jpg'" alt="Rumah"
+            class="img-fluid rounded shadow-sm" style="max-height: 300px; object-fit: cover; cursor: pointer"
+            data-bs-toggle="modal" data-bs-target="#fotoRumahModal" />
+        </div>
+      </div>
+
+      <!-- Catatan -->
+      <div class="mb-3">
+        <label for="noteCapital" class="form-label">Catatan</label>
+        <textarea id="noteCapital" rows="3" class="form-control" formControlName="noteCapital"></textarea>
+      </div>
+
+      <!-- Navigasi -->
+      <div class="form-navigation d-flex justify-content-between">
+        <button type="button" class="btn btn-secondary" (click)="prevSection()">Sebelumnya</button>
+        <button type="button" class="btn btn-primary" (click)="nextSection()">Selanjutnya</button>
+      </div>
+
+      <!-- Modal Slip Gaji -->
+      <div class="modal fade" id="slipGajiModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-body text-center p-0">
+              <img [src]="review_loan.customerDetails.salarySlip || 'assets/images/default-salary.jpg'"
+                alt="Slip Gaji Besar" class="img-fluid rounded shadow-sm"
+                style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
+                (click)="toggleZoom($event)" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Foto Rumah -->
+      <div class="modal fade" id="fotoRumahModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+          <div class="modal-content">
+            <div class="modal-body text-center p-0">
+              <img [src]="review_loan.customerDetails.houseOwnership || 'assets/images/default-house.jpg'"
+                alt="Foto Rumah Besar" class="img-fluid rounded shadow-sm"
+                style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
+                (click)="toggleZoom($event)" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div *ngIf="currentSection === 4" class="container mt-4">
+      <h3 class="mb-3">Ringkasan Pengajuan</h3>
+
+      <!-- Identitas -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-secondary text-white">
+          Identitas
+        </div>
+        <div class="card-body row">
+          <div class="col-md-6 mb-2">
+            <label class="fw-bold">Nama Lengkap:</label>
             <p>{{ loanForm.get("namaLengkap")?.value || "-" }}</p>
           </div>
-          <div class="summary-item">
-            <label>Note Identitas:</label>
+          <div class="col-md-6 mb-2">
+            <label class="fw-bold">Alamat:</label>
+            <p>{{ loanForm.get("alamat")?.value || "-" }}</p>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="fw-bold">Note Identity:</label>
             <p>{{ loanForm.get("noteIdentity")?.value || "-" }}</p>
           </div>
         </div>
       </div>
 
-      <div class="card summary-card my-2">
-        <div class="card-body">
-          <h4>Capital</h4>
-          <div class="summary-item">
-            <label>Penghasilan:</label>
-            <p>{{ loanForm.get("penghasilan")?.value || "-" }}</p>
+      <!-- Kontak -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white">
+          Kontak
+        </div>
+        <div class="card-body row">
+          <div class="col-md-4 mb-2">
+            <label class="fw-bold">No Telpon:</label>
+            <p>{{ loanForm.get("notelpon")?.value || "-" }}</p>
           </div>
-          <div class="summary-item">
-            <label>Note Capital:</label>
+          <div class="col-md-4 mb-2">
+            <label class="fw-bold">Kontak Darurat 1:</label>
+            <p>{{ loanForm.get("kontakdarurat1")?.value || "-" }}</p>
+          </div>
+          <div class="col-md-4 mb-2">
+            <label class="fw-bold">Kontak Darurat 2:</label>
+            <p>{{ loanForm.get("kontakdarurat2")?.value || "-" }}</p>
+          </div>
+          <div class="col-md-6 mb-2">
+            <label class="fw-bold">Note Contact:</label>
+            <p>{{ loanForm.get("noteContact")?.value || "-" }}</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Capital & Pengajuan -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white">
+          Capital & Pengajuan
+        </div>
+        <div class="card-body row">
+          <div class="col-md-4 mb-2">
+            <label class="fw-bold">Jumlah Pinjaman:</label>
+            <p class="text-danger fw-semibold">
+              {{ loanForm.get("jumlahPinjaman")?.value || "Rp0" }}
+            </p>
+          </div>
+          <div class="col-md-4 mb-2">
+            <label class="fw-bold">Sisa Plafond:</label>
+            <p>{{ loanForm.get("sisaPlafond")?.value || "Rp0" }}</p>
+          </div>
+          <div class="col-md-4 mb-2">
+            <label class="fw-bold">Tenor:</label>
+            <p>{{ loanForm.get("tenor")?.value || "0" }} bulan</p>
+          </div>
+          <div class="col-md-12 mb-2">
+            <label class="fw-bold">Note Capital:</label>
             <p>{{ loanForm.get("noteCapital")?.value || "-" }}</p>
           </div>
         </div>
       </div>
 
-      <div class="card summary-card my-2">
-        <div class="card-body">
-          <h4>Pengajuan</h4>
-          <div class="summary-item">
-            <label>Jumlah Pinjaman:</label>
-            <p>{{ loanForm.get("jumlahPinjaman")?.value || "-" }}</p>
-          </div>
-          <div class="summary-item">
-            <label>Note Loan:</label>
-            <p>{{ loanForm.get("noteLoan")?.value || "-" }}</p>
-          </div>
+      <!-- Navigasi & Aksi -->
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <button type="button" class="btn btn-outline-secondary" (click)="prevSection()">
+          <i class="bi bi-arrow-left-circle"></i> Sebelumnya
+        </button>
+
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-outline-danger" (click)="rejectLoan()">
+            <i class="bi bi-x-circle-fill"></i> Tolak
+          </button>
+          <button type="button" class="btn btn-outline-success" (click)="recommendLoan()">
+            <i class="bi bi-check-circle-fill"></i> Rekomendasikan
+          </button>
         </div>
       </div>
-
-      <div class="form-navigation">
-        <button type="button" (click)="prevSection()">Sebelumnya</button>
-        <div class="action-buttons">
-          <button type="button" (click)="rejectLoan()" class="btn-reject">Reject</button>
-          <button type="button" (click)="recommendLoan()" class="btn-recommend">Recommend</button>
-        </div>
-      </div>
-
 
     </div>
+
   </form>
 </div>

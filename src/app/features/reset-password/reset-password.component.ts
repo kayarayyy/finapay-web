@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
@@ -11,19 +11,19 @@ import Swal from 'sweetalert2';
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css'
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent  {
   email = '';
   newPassword = '';
   confirmPassword = '';
   resetId = '';
 
   constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router) {}
-
-  ngOnInit(): void {
-    this.resetId = this.route.snapshot.paramMap.get('id') || '';
+  navigateToLogin() {
+    console.log("Dasd")
+    this.router.navigate(['/login']);
   }
-
   handleSetPassword(form: NgForm): void {
+    this.resetId = this.route.snapshot.paramMap.get('id') || '';
     if (form.invalid) {
       return;
     }

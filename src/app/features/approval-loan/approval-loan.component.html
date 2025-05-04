@@ -39,26 +39,14 @@
 
     <form [formGroup]="loanForm" (ngSubmit)="submitForm()">
         <div *ngIf="currentSection === 1" class="container mt-4">
-            <div class="alert alert-warning d-flex align-items-start gap-4 shadow-sm p-3 mb-4 rounded">
-                <i class="bi bi-chat-left-quote-fill fs-4 text-dark mt-1"></i>
-
-                <div class="d-flex flex-grow-1 gap-4">
-                    <!-- Catatan Marketing -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Marketing:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="vr"></div>
-
-                    <!-- Catatan Branch Manager -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Branch Manager:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.branchManagerNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
+            <div class="alert alert-warning d-flex align-items-start gap-3 shadow-sm p-3 mb-4 rounded">
+                <i class="bi bi-chat-left-quote-fill fs-4 text-dark"></i>
+                <div>
+                    <strong>Catatan dari Marketing:</strong>
+                    <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
                 </div>
             </div>
+
 
             <h3 class="mb-3">Informasi Identitas</h3>
             <div class="row g-4">
@@ -147,25 +135,13 @@
             </div>
         </div>
 
+
         <div *ngIf="currentSection === 2" class="container mt-4">
-            <div class="alert alert-warning d-flex align-items-start gap-4 shadow-sm p-3 mb-4 rounded">
-                <i class="bi bi-chat-left-quote-fill fs-4 text-dark mt-1"></i>
-
-                <div class="d-flex flex-grow-1 gap-4">
-                    <!-- Catatan Marketing -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Marketing:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="vr"></div>
-
-                    <!-- Catatan Branch Manager -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Branch Manager:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.branchManagerNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
+            <div class="alert alert-warning d-flex align-items-start gap-3 shadow-sm p-3 mb-4 rounded">
+                <i class="bi bi-chat-left-quote-fill fs-4 text-dark"></i>
+                <div>
+                    <strong>Catatan dari Marketing:</strong>
+                    <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
                 </div>
             </div>
             <h3>Informasi Kontak</h3>
@@ -239,25 +215,13 @@
             </div>
         </div>
 
+
         <div *ngIf="currentSection === 3" class="container mt-4">
-            <div class="alert alert-warning d-flex align-items-start gap-4 shadow-sm p-3 mb-4 rounded">
-                <i class="bi bi-chat-left-quote-fill fs-4 text-dark mt-1"></i>
-
-                <div class="d-flex flex-grow-1 gap-4">
-                    <!-- Catatan Marketing -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Marketing:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="vr"></div>
-
-                    <!-- Catatan Branch Manager -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Branch Manager:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.branchManagerNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
+            <div class="alert alert-warning d-flex align-items-start gap-3 shadow-sm p-3 mb-4 rounded">
+                <i class="bi bi-chat-left-quote-fill fs-4 text-dark"></i>
+                <div>
+                    <strong>Catatan dari Marketing:</strong>
+                    <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
                 </div>
             </div>
             <h3>Informasi Capital & Pengajuan</h3>
@@ -365,25 +329,15 @@
             </div>
         </div>
 
+
+
+
         <div *ngIf="currentSection === 4" class="container mt-4">
-            <div class="alert alert-warning d-flex align-items-start gap-4 shadow-sm p-3 mb-4 rounded">
-                <i class="bi bi-chat-left-quote-fill fs-4 text-dark mt-1"></i>
-
-                <div class="d-flex flex-grow-1 gap-4">
-                    <!-- Catatan Marketing -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Marketing:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="vr"></div>
-
-                    <!-- Catatan Branch Manager -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Branch Manager:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.branchManagerNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
+            <div class="alert alert-warning d-flex align-items-start gap-3 shadow-sm p-3 mb-4 rounded">
+                <i class="bi bi-chat-left-quote-fill fs-4 text-dark"></i>
+                <div>
+                    <strong>Catatan dari Marketing:</strong>
+                    <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
                 </div>
             </div>
             <h3 class="mb-3">Ringkasan Pengajuan</h3>
@@ -471,8 +425,8 @@
                     <button type="button" class="btn btn-outline-danger" (click)="rejectLoan()">
                         <i class="bi bi-x-circle-fill"></i> Tolak
                     </button>
-                    <button type="button" class="btn btn-outline-success" (click)="disburseLoan()">
-                        <i class="bi bi-check-circle-fill"></i> Cairkan
+                    <button type="button" class="btn btn-outline-success" (click)="approveLoan()">
+                        <i class="bi bi-check-circle-fill"></i> Setujui
                     </button>
                 </div>
             </div>

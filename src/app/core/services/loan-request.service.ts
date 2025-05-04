@@ -84,5 +84,16 @@ export class LoanRequestService {
       .get<{ data: LoanRequest[] }>(`${this.baseUrl}/loan-requests/disbursement-ongoing`)
       .pipe(map((response) => response.data));
   }
+  updateLoanRequestDisbursement(id: string, disbursement: boolean, notes: string): Observable<any> {
+    const payload = {
+      disbursement: disbursement,
+      notes: notes
+    }
+
+    console.log(payload);
+
+    return this.http.put<{ message: string }>(`${this.baseUrl}/loan-requests/disbursement/${id}`, payload);
+  }
+
 
 }

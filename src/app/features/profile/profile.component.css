@@ -12,6 +12,7 @@
 .section-header {
   font-size: 1.1rem;
   font-weight: 600;
+  background-color: #f9fafb;
+  color: #343a40;
   border-bottom: 1px solid #dee2e6;
-  background-color: #f8f9fa !important;
 }

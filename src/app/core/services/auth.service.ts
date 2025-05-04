@@ -52,7 +52,8 @@ export class AuthService {
   }
 
   setResetPassword(id: string, email: string, newPassword: string, confirmPassword: string): Observable<{ message: string }> {
-    const payload = { email, new_password: newPassword, confirm_password: confirmPassword };
+    const payload = { email: email, new_password: newPassword, confirm_password: confirmPassword };
+    console.log(payload)
     return this.http.put<{ message: string }>(`${this.baseUrl}/auth/reset-password/${id}`, payload);
   }
 

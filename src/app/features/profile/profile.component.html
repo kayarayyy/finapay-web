@@ -1,32 +1,28 @@
 <div class="container py-4">
-  <h2 class="mb-4 fw-bold text-dark">Profile</h2>
+  <h2 class="mb-4 fw-bold text-dark">Profil Pegawai</h2>
 
   <!-- Section: Data Pribadi -->
   <div class="card modern-card mb-4" *ngIf="employeeDetails">
-    <div class="card-header section-header bg-light text-dark">
+    <div class="card-header section-header">
       <i class="bi bi-person-fill me-2 text-primary"></i> Data Pribadi
     </div>
     <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-sm-4 text-muted">Nama</div>
-        <div class="col-sm-8 fw-semibold">{{ employeeDetails.user?.name }}</div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-sm-4 text-muted">NIP</div>
-        <div class="col-sm-8 fw-semibold">
-          {{ employeeDetails.user?.nip || "-" }}
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="text-muted">Nama</label>
+          <p class="fw-semibold mb-0">{{ employeeDetails.user?.name }}</p>
         </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col-sm-4 text-muted">Email</div>
-        <div class="col-sm-8 fw-semibold">
-          {{ employeeDetails.user?.email || "-" }}
+        <div class="col-md-6">
+          <label class="text-muted">NIP</label>
+          <p class="fw-semibold mb-0">{{ employeeDetails.user?.nip || "-" }}</p>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-sm-4 text-muted">Kode Referral</div>
-        <div class="col-sm-8 fw-semibold">
-          {{ employeeDetails.user?.refferal || "-" }}
+        <div class="col-md-6">
+          <label class="text-muted">Email</label>
+          <p class="fw-semibold mb-0">{{ employeeDetails.user?.email || "-" }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="text-muted">Kode Referral</label>
+          <p class="fw-semibold mb-0">{{ employeeDetails.user?.refferal || "-" }}</p>
         </div>
       </div>
     </div>
@@ -34,11 +30,11 @@
 
   <!-- Section: Alamat -->
   <div class="card modern-card mb-4" *ngIf="employeeDetails">
-    <div class="card-header section-header bg-light text-dark">
+    <div class="card-header section-header">
       <i class="bi bi-geo-alt-fill me-2 text-success"></i> Alamat
     </div>
     <div class="card-body">
-      <p class="mb-0 fw-semibold text-secondary">
+      <p class="fw-semibold text-secondary mb-0">
         {{ employeeDetails.street }}<br />
         {{ employeeDetails.district }}, {{ employeeDetails.province }}<br />
         {{ employeeDetails.postalCode }}
@@ -47,33 +43,28 @@
   </div>
 
   <!-- Section: Jabatan -->
-  <div class="card modern-card" *ngIf="employeeDetails">
-    <div class="card-header section-header bg-light text-dark">
+  <div class="card modern-card mb-4" *ngIf="employeeDetails">
+    <div class="card-header section-header">
       <i class="bi bi-briefcase-fill me-2 text-info"></i> Jabatan
     </div>
     <div class="card-body">
-      <div class="row mb-3">
-        <div class="col-sm-4 text-muted">Nama Jabatan</div>
-        <div class="col-sm-8 fw-semibold">{{ employeeDetails.user?.role }}</div>
-      </div>
-      <div class="row">
-        <div class="col-sm-4 text-muted">Cabang</div>
-        <div class="col-sm-8 fw-semibold">
-          {{ employeeDetails.user?.branch || "-" }}
+      <div class="row g-3">
+        <div class="col-md-6">
+          <label class="text-muted">Nama Jabatan</label>
+          <p class="fw-semibold mb-0">{{ employeeDetails.user?.role }}</p>
+        </div>
+        <div class="col-md-6">
+          <label class="text-muted">Cabang</label>
+          <p class="fw-semibold mb-0">{{ employeeDetails.user?.branch || "-" }}</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Section: Tombol Aksi -->
-  <div class="d-flex justify-content-end gap-2 mt-4" *ngIf="employeeDetails">
-    <button
-      class="btn btn-outline-primary"
-      routerLink="/change-password"
-      routerLinkActive="active"
-      [routerLinkActiveOptions]="{ exact: true }"
-    >
-      <i class="bi bi-key-fill me-1"></i> Change Password
+  <!-- Tombol Aksi -->
+  <div class="d-flex justify-content-end gap-2 mt-4">
+    <button class="btn btn-outline-primary" routerLink="/change-password">
+      <i class="bi bi-key-fill me-1"></i> Ganti Password
     </button>
     <button class="btn btn-outline-danger" (click)="onLogout()">
       <i class="bi bi-box-arrow-right me-1"></i> Logout

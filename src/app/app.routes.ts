@@ -16,6 +16,7 @@ import { AuthLayoutComponent } from './layout/auth-layout/auth-layout.component'
 import { LoginComponent } from './features/login/login.component';
 import { redirectIfLoggedInGuard } from './core/guards/redirect.guard';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
+import { ApprovalLoanComponent } from './features/approval-loan/approval-loan.component';
 
 export const routes: Routes = [
     {
@@ -49,7 +50,12 @@ export const routes: Routes = [
             {
               path: 'review/:id',
               component: ReviewLoanComponent,
-              canActivate: [featureGuard('FEATURE_MANAGE_LOAN_REQUESTS', 'FEATURE_GET_LOAN_REQUEST_BY_ID_REVIEW', 'FEATURE_GET_LOAN_REQUEST_BY_ID_APPROVAL')],
+              canActivate: [featureGuard('FEATURE_MANAGE_LOAN_REQUESTS', 'FEATURE_GET_LOAN_REQUEST_BY_ID_REVIEW')],
+            },
+            {
+              path: 'approval/:id',
+              component: ApprovalLoanComponent,
+              canActivate: [featureGuard('FEATURE_MANAGE_LOAN_REQUESTS','FEATURE_GET_LOAN_REQUEST_BY_ID_APPROVAL')],
             },
           ],
         },
@@ -97,11 +103,11 @@ export const routes: Routes = [
           data: { title: 'Login' },
           canActivate: [redirectIfLoggedInGuard],
         },
-        {
-          path: 'reset-password/:id',
-          component: ResetPasswordComponent,
-        },
       ],
+    },
+    {
+      path: 'reset-password/:id',
+      component: ResetPasswordComponent,
     },
     { path: '**', redirectTo: '/login' },
   ];
