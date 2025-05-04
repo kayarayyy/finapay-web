@@ -1,17 +1,48 @@
-<app-card title="Tabel Role">
-    <app-table [columns]="columns" [originalRows]="role_features" [isLoading]="isLoading" [pageOffset]="pageOffset"
-        (onPage)="onPage($event)" [actionTemplate]="actionTpl"></app-table>
-    <ng-template #actionTpl let-row>
-        <button class="btn btn-danger btn-sm" (click)="deleteRole(row.id)">Delete</button>
-    </ng-template>
-    <ng-template #featuresTpl let-row>
-        <div class="d-flex flex-wrap gap-1">
-            <span *ngFor="let feature of row.listFeatures" class="badge bg-primary">
-                {{ feature.name }}
-                <button type="button" class="btn-close btn-close-white btn-sm ms-1" aria-label="Close"
-                    (click)="removeFeatureFromRole(row.id, feature.id)">
-                </button>
-            </span>
+<app-card title="Kelola Role dan Akses">
+    <div class="mb-3 text-end">
+        <button class="btn btn-primary" (click)="addRole()">+ Tambah Role</button>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-6 col-xl-4" *ngFor="let role of role_features">
+            <div class="card h-100 shadow-sm rounded-3 border-0">
+                <div class="card-body d-flex flex-column">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h5 class="card-title mb-0">{{ role.name }}</h5>
+                        <button class="btn btn-sm btn-outline-danger" (click)="deleteRole(role.id, role.name)">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+
+                    <button
+                        class="btn btn-sm btn-light border d-flex justify-content-between align-items-center w-100 mt-2"
+                        (click)="toggleFeature(role.id)">
+                        <span>Akses Fitur</span>
+                        <i class="bi" [ngClass]="{
+                            'bi-chevron-down': !openedRoles.includes(role.id),
+                            'bi-chevron-up': openedRoles.includes(role.id)
+                        }"></i>
+                    </button>
+
+
+                    <div *ngIf="openedRoles.includes(role.id)" class="mt-2">
+                        <div class="d-flex flex-wrap gap-1">
+                            <span *ngFor="let feature of role.listFeatures"
+                                class="badge bg-primary d-flex align-items-center">
+                                {{ feature.name }}
+                                <button type="button" class="btn-close btn-close-white btn-sm ms-2"
+                                    (click)="removeFeatureFromRole(role.id, role.name, feature.id, feature.name)"></button>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="mt-auto pt-3 text-end">
+                        <button class="btn btn-sm btn-outline-secondary me-1" (click)="editRole(role)">Edit</button>
+                        <button class="btn btn-sm btn-outline-success" (click)="manageFeatures(role)">Kelola
+                            Akses</button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </ng-template>
+    </div>
 </app-card>
