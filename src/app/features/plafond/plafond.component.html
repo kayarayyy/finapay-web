@@ -1,0 +1,256 @@
+<!-- Main Container -->
+<div class="plafond-management">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-content">
+      <h1 class="page-title">
+        <i class="icon-credit-card"></i>
+        Kelola Plafond
+      </h1>
+      <p class="page-description">Manage plafond packages and their configurations</p>
+    </div>
+    <button class="btn btn-primary" (click)="openCreateModal()">
+      <i class="icon-plus"></i>
+      Tambah Plafond
+    </button>
+  </div>
+
+  <!-- Alert Messages -->
+  <div class="alert alert-success" *ngIf="successMessage">
+    <i class="icon-check-circle"></i>
+    {{ successMessage }}
+  </div>
+
+  <div class="alert alert-error" *ngIf="errorMessage">
+    <i class="icon-x-circle"></i>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="search-filter">
+    <div class="search-box">
+      <i class="icon-search"></i>
+      <input type="text" placeholder="Cari plafond..." [(ngModel)]="searchTerm" class="search-input">
+    </div>
+
+    <div class="sort-controls">
+      <label>Sort by:</label>
+      <select [(ngModel)]="sortBy" class="sort-select">
+        <option value="plan">Plan</option>
+        <option value="amount">Amount</option>
+        <option value="annualRate">Annual Rate</option>
+      </select>
+      <button class="sort-order-btn" (click)="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'">
+        <i [class]="sortOrder === 'asc' ? 'icon-arrow-up' : 'icon-arrow-down'"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading Spinner -->
+  <div class="loading-spinner" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <!-- Plafond Cards Grid -->
+  <div class="plafond-grid" *ngIf="!isLoading">
+    <div class="plafond-card" *ngFor="let plafond of filteredPlafonds" [style.background]="getGradientStyle(plafond)">
+
+      <div class="card-header">
+        <h3 class="plan-name">{{ plafond.plan }}</h3>
+        <div class="card-actions">
+          <button class="btn-icon btn-edit" (click)="openEditModal(plafond)" title="Edit">
+            <i class="icon-edit"></i>
+          </button>
+          <button class="btn-icon btn-delete" (click)="openDeleteModal(plafond)" title="Delete">
+            <i class="icon-trash"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="card-content">
+        <div class="amount">{{ plafond.amount }}</div>
+
+        <div class="rates">
+          <div class="rate-item">
+            <span class="label">Annual Rate:</span>
+            <span class="value">{{ formatPercentage(plafond.annualRate) }}</span>
+          </div>
+          <div class="rate-item">
+            <span class="label">Admin Rate:</span>
+            <span class="value">{{ formatPercentage(plafond.adminRate) }}</span>
+          </div>
+        </div>
+
+        <div class="color-preview">
+          <div class="color-item">
+            <div class="color-box" [style.background-color]="plafond.colorStart"></div>
+            <span>{{ plafond.colorStart }}</span>
+          </div>
+          <div class="color-item">
+            <div class="color-box" [style.background-color]="plafond.colorEnd"></div>
+            <span>{{ plafond.colorEnd }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="filteredPlafonds.length === 0">
+      <div class="empty-icon">
+        <i class="icon-credit-card"></i>
+      </div>
+      <h3>No plafonds found</h3>
+      <p>{{ searchTerm ? 'Try adjusting your search criteria.' : 'Start by creating your first plafond package.' }}</p>
+      <button class="btn btn-primary" (click)="openCreateModal()" *ngIf="!searchTerm">
+        <i class="icon-plus"></i>
+        Create Plafond
+      </button>
+    </div>
+  </div>
+
+  <!-- Create/Edit Modal -->
+  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
+    <div class="modal" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>{{ isEditMode ? 'Edit Plafond' : 'Tambah Plafond Baru' }}</h2>
+        <button class="modal-close" (click)="closeModal()">
+          <i class="icon-x"></i>
+        </button>
+      </div>
+
+      <form [formGroup]="plafondForm" (ngSubmit)="savePlafond()">
+        <div class="modal-body">
+          <div class="form-grid">
+            <!-- Plan -->
+            <div class="form-group">
+              <label for="plan">Plan *</label>
+              <select formControlName="plan" id="plan" class="form-control">
+                <option value="">Pilih Plan</option>
+                <option *ngFor="let option of planOptions" [value]="option">
+                  {{ option }}
+                </option>
+              </select>
+              <div class="error-message" *ngIf="getFieldError('plan')">
+                {{ getFieldError('plan') }}
+              </div>
+            </div>
+
+            <!-- Amount -->
+            <div class="form-group">
+              <label for="amount">Amount (Rp) *</label>
+              <input type="number" formControlName="amount" id="amount" class="form-control" placeholder="1000000">
+              <div class="error-message" *ngIf="getFieldError('amount')">
+                {{ getFieldError('amount') }}
+              </div>
+            </div>
+
+            <!-- Annual Rate -->
+            <div class="form-group">
+              <label for="annualRate">Annual Rate (0-1) *</label>
+              <input type="number" formControlName="annualRate" id="annualRate" class="form-control" step="0.01" min="0"
+                max="1" placeholder="0.12">
+              <small class="form-help">Contoh: 0.12 untuk 12%</small>
+              <div class="error-message" *ngIf="getFieldError('annualRate')">
+                {{ getFieldError('annualRate') }}
+              </div>
+            </div>
+
+            <!-- Admin Rate -->
+            <div class="form-group">
+              <label for="adminRate">Admin Rate (0-1) *</label>
+              <input type="number" formControlName="adminRate" id="adminRate" class="form-control" step="0.001" min="0"
+                max="1" placeholder="0.025">
+              <small class="form-help">Contoh: 0.025 untuk 2.5%</small>
+              <div class="error-message" *ngIf="getFieldError('adminRate')">
+                {{ getFieldError('adminRate') }}
+              </div>
+            </div>
+
+            <!-- Color Start -->
+            <div class="form-group">
+              <label for="colorStart">Start Color *</label>
+              <div class="color-input-group">
+                <input type="color" formControlName="colorStart" id="colorStart" class="color-picker">
+                <input type="text" formControlName="colorStart" class="form-control color-text" placeholder="#000000">
+              </div>
+              <div class="error-message" *ngIf="getFieldError('colorStart')">
+                {{ getFieldError('colorStart') }}
+              </div>
+            </div>
+
+            <!-- Color End -->
+            <div class="form-group">
+              <label for="colorEnd">End Color *</label>
+              <div class="color-input-group">
+                <input type="color" formControlName="colorEnd" id="colorEnd" class="color-picker">
+                <input type="text" formControlName="colorEnd" class="form-control color-text" placeholder="#000000">
+              </div>
+              <div class="error-message" *ngIf="getFieldError('colorEnd')">
+                {{ getFieldError('colorEnd') }}
+              </div>
+            </div>
+          </div>
+
+          <!-- Preview -->
+          <div class="preview-section" *ngIf="plafondForm.valid">
+            <h4>Preview:</h4>
+            <div class="preview-card"
+              [style.background]="'linear-gradient(135deg, ' + plafondForm.get('colorStart')?.value + ' 0%, ' + plafondForm.get('colorEnd')?.value + ' 100%)'">
+              <div class="preview-plan">{{ plafondForm.get('plan')?.value }}</div>
+              <div class="preview-amount">
+                {{ plafondForm.get('amount')?.value }}
+              </div>
+              <div class="preview-rates">
+                <span>Annual: {{ formatPercentage(plafondForm.get('annualRate')?.value || 0) }}</span>
+                <span>Admin: {{ formatPercentage(plafondForm.get('adminRate')?.value || 0) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="closeModal()">
+            Batal
+          </button>
+          <button type="submit" class="btn btn-primary" [disabled]="plafondForm.invalid || isLoading">
+            <span *ngIf="isLoading" class="loading-icon"></span>
+            {{ isEditMode ? 'Update' : 'Simpan' }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeModal()">
+    <div class="modal modal-sm" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>Konfirmasi Hapus</h2>
+        <button class="modal-close" (click)="closeModal()">
+          <i class="icon-x"></i>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <div class="delete-confirmation">
+          <div class="warning-icon">
+            <i class="icon-alert-triangle"></i>
+          </div>
+          <p>Apakah Anda yakin ingin menghapus plafond <strong>{{ selectedPlafond?.plan }}</strong>?</p>
+          <p class="warning-text">Tindakan ini tidak dapat dibatalkan.</p>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          Batal
+        </button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="isLoading">
+          <span *ngIf="isLoading" class="loading-icon"></span>
+          Hapus
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

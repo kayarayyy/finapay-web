@@ -67,4 +67,14 @@
       Branches
     </a>
   </li>
+  <li *ngIf="hasFeature('FEATURE_MANAGE_PLAFONDS')">
+    <a
+      routerLink="/plafond"
+      routerLinkActive="active"
+      class="nav-link link-dark"
+    >
+      <i class="bi bi-file-earmark-person-fill me-2"></i>
+      Plafond
+    </a>
+  </li>
 </ul>
