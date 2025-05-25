@@ -18,6 +18,7 @@ import { redirectIfLoggedInGuard } from './core/guards/redirect.guard';
 import { ResetPasswordComponent } from './features/reset-password/reset-password.component';
 import { ApprovalLoanComponent } from './features/approval-loan/approval-loan.component';
 import { AddUserComponent } from './features/add-user/add-user.component';
+import { LandingComponent } from './features/landing/landing.component';
 
 export const routes: Routes = [
   {
@@ -118,6 +119,10 @@ export const routes: Routes = [
   {
     path: 'reset-password/:id',
     component: ResetPasswordComponent,
+  },
+  {
+    path: 'landing',
+    component: LandingComponent
   },
   { path: '**', redirectTo: '/login' },
 ];
