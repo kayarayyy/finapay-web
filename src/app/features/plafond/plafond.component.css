@@ -1,150 +1,371 @@
-/* Card styling to match the role component */
-.card {
-  border-radius: 1rem;
-  border: none;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* ========== SKELETON LOADING STYLES ========== */
+.skeleton-badge {
+  width: 80px;
+  height: 24px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 12px;
 }
 
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.1) !important;
+.skeleton-button {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
 }
 
-.card-header {
-  border-radius: 1rem 1rem 0 0 !important;
+.skeleton-title {
+  width: 120px;
+  height: 28px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
 }
 
-.color-preview {
-  width: 40px;
-  height: 25px;
+.skeleton-info {
+  width: 100%;
+  height: 60px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-color-preview {
+  width: 100%;
+  height: 40px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 8px;
+}
+
+.skeleton-button-full {
+  width: 100%;
+  height: 32px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+  border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* ========== CARD ANIMATIONS ========== */
+.plafond-card-enter {
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.plafond-updating {
+  opacity: 0.8;
+  transform: scale(0.98);
+  transition: all 0.3s ease;
+}
+
+.plafond-deleting {
+  opacity: 0.6;
+  transform: scale(0.95);
+  transition: all 0.3s ease;
+}
+
+/* ========== LOADING OVERLAY ========== */
+.card-loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
   border-radius: 0.375rem;
-  border: 1px solid #dee2e6;
-  display: inline-block;
+  z-index: 10;
+}
+
+/* ========== SPIN ANIMATIONS ========== */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+.spin-slow {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ========== COLOR PREVIEW STYLES ========== */
+.color-preview-card {
+  height: 40px;
+  border-radius: 8px;
+  border: 2px solid #e9ecef;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.color-preview-card:hover {
+  transform: scale(1.05);
 }
 
 .color-preview-large {
-  width: 100%;
   height: 80px;
-  border-radius: 0.5rem;
-  border: 1px solid #dee2e6;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
   overflow: hidden;
+  transition: transform 0.2s ease;
 }
 
-.color-preview-card {
-  height: 50px;
-  border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+.color-preview-large:hover {
+  transform: scale(1.02);
 }
 
 .preview-text {
   color: white;
   font-weight: bold;
   font-size: 1.1rem;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5);
-  letter-spacing: 1px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  z-index: 1;
+  user-select: none;
+}
+
+/* ========== MODAL ENHANCEMENTS ========== */
+.modal-content {
+  border: none;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  border-radius: 12px;
+}
+
+.modal-header {
+  border-bottom: 1px solid #e9ecef;
+  background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+  border-radius: 12px 12px 0 0;
+}
+
+.modal-title {
+  font-weight: 600;
+}
+
+/* ========== BUTTON ENHANCEMENTS ========== */
+.btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  transition: transform 0.2s ease;
+}
+
+.btn:not(:disabled):active {
+  transform: translateY(0);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #007bff, #0056b3);
+  border: none;
+}
+
+.btn-primary:hover {
+  background: linear-gradient(135deg, #0056b3, #004085);
+}
+
+.btn-outline-danger:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+}
+
+.btn-outline-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* ========== CARD ENHANCEMENTS ========== */
+.card {
+  transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
+}
+
+.card-body {
+  padding: 1.5rem;
+}
+
+/* ========== BADGE ENHANCEMENTS ========== */
+.badge {
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ========== FORM ENHANCEMENTS ========== */
+.form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .form-control-color {
   width: 50px;
   height: 38px;
-  border-radius: 0.375rem 0 0 0.375rem;
+  padding: 0.25rem;
 }
 
-.btn-group .btn {
-  border-radius: 0.375rem !important;
-  margin-right: 0.25rem;
+.input-group .form-control-color {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
 }
 
-.btn-group .btn:last-child {
-  margin-right: 0;
+/* ========== EMPTY STATE ENHANCEMENTS ========== */
+.bi-credit-card.display-1 {
+  opacity: 0.3;
+  animation: float 3s ease-in-out infinite;
 }
 
-.table th {
-  font-weight: 600;
-  color: #495057;
-  border-bottom: 2px solid #dee2e6;
-}
-
-.table-hover tbody tr:hover {
-  background-color: rgba(0, 123, 255, 0.05);
-}
-
-.badge {
-  padding: 0.5em 1em;
-  border-radius: 0.5rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.modal.show {
-  background-color: rgba(0, 0, 0, 0.5);
-}
-
-.modal-content {
-  border-radius: 1rem;
-  border: none;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
-}
-
-.modal-header {
-  border-bottom: 1px solid #dee2e6;
-  border-radius: 1rem 1rem 0 0;
-}
-
-.modal-footer {
-  border-top: 1px solid #dee2e6;
-  border-radius: 0 0 1rem 1rem;
-}
-
-.input-group .form-control:not(:first-child) {
-  border-left: 0;
-}
-
-.input-group .form-control-color + .form-control {
-  border-radius: 0 0.375rem 0.375rem 0;
-}
-
-/* Loading animation */
-@keyframes pulse {
-  0% {
-    opacity: 0.6;
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
   }
   50% {
-    opacity: 1;
+    transform: translateY(-10px);
+  }
+}
+
+/* ========== LOADING STATES ========== */
+.spinner-border-sm {
+  width: 1rem;
+  height: 1rem;
+}
+
+/* ========== RESPONSIVE IMPROVEMENTS ========== */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 1rem;
+  }
+
+  .plafond-card-enter {
+    animation: slideInUp 0.2s ease-out;
+  }
+
+  .card-body {
+    padding: 1rem;
+  }
+
+  .preview-text {
+    font-size: 1rem;
+  }
+
+  .btn-sm {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .d-none.d-sm-inline {
+    display: none !important;
+  }
+
+  .color-preview-large {
+    height: 60px;
+  }
+
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+}
+
+/* ========== ACCESSIBILITY IMPROVEMENTS ========== */
+.btn:focus {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+.form-control:focus {
+  outline: none;
+}
+
+/* ========== CUSTOM SCROLLBAR ========== */
+.modal-body::-webkit-scrollbar {
+  width: 6px;
+}
+
+.modal-body::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover {
+  background: #999;
+}
+
+/* ========== TOAST NOTIFICATION POSITIONING ========== */
+.swal2-container.swal2-top-end {
+  top: 20px;
+  right: 20px;
+}
+
+/* ========== PULSE ANIMATION FOR UPDATES ========== */
+.pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(0, 123, 255, 0);
   }
   100% {
-    opacity: 0.6;
+    box-shadow: 0 0 0 0 rgba(0, 123, 255, 0);
   }
 }
 
-.spinner-border {
-  animation: pulse 1.5s ease-in-out infinite;
+/* ========== PROGRESS INDICATOR ========== */
+.progress-bar-striped {
+  background-image: linear-gradient(45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%, transparent);
+  background-size: 1rem 1rem;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .btn-group {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .btn-group .btn {
-    margin-right: 0;
-    margin-bottom: 0.25rem;
-    border-radius: 0.375rem !important;
-  }
-
-  .btn-group .btn:last-child {
-    margin-bottom: 0;
-  }
-
-  .table-responsive {
-    font-size: 0.875rem;
+/* ========== DARK MODE SUPPORT (OPTIONAL) ========== */
+@media (prefers-color-scheme: dark) {
+  .skeleton-badge,
+  .skeleton-button,
+  .skeleton-title,
+  .skeleton-info,
+  .skeleton-color-preview,
+  .skeleton-button-full {
+    background: linear-gradient(90deg, #2a2a2a 25%, #3a3a3a 50%, #2a2a2a 75%);
   }
 }

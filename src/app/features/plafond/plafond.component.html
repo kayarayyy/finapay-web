@@ -1,36 +1,88 @@
 <app-card title="Kelola Plafond">
   <div class="mb-3 text-end">
-    <button class="btn btn-primary" (click)="openModal()">
-      + Tambah Plafond
+    <button
+      class="btn btn-primary"
+      (click)="openModal()"
+      [disabled]="isLoading"
+    >
+      <i class="bi bi-plus-circle me-1"></i>
+      Tambah Plafond
     </button>
   </div>
 
-  <!-- Loading state -->
-  <div *ngIf="isLoading" class="text-center py-4">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Loading...</span>
+  <!-- Loading state with skeleton -->
+  <div *ngIf="isLoading" class="row g-3">
+    <div class="col-md-6 col-xl-4" *ngFor="let item of [1, 2, 3]">
+      <div class="card h-100 shadow-sm rounded-3 border-0">
+        <div class="card-body d-flex flex-column">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div class="skeleton-badge"></div>
+            <div class="skeleton-button"></div>
+          </div>
+          <div class="mb-3">
+            <div class="skeleton-title"></div>
+          </div>
+          <div class="mb-3">
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="skeleton-info"></div>
+              </div>
+              <div class="col-6">
+                <div class="skeleton-info"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="skeleton-color-preview"></div>
+          </div>
+          <div class="mt-auto pt-3">
+            <div class="skeleton-button-full"></div>
+          </div>
+        </div>
+      </div>
     </div>
-    <p class="mt-2 text-muted">Memuat data plafond...</p>
   </div>
 
   <!-- Empty state -->
   <div *ngIf="!isLoading && plafonds.length === 0" class="text-center py-5">
     <i class="bi bi-credit-card display-1 text-muted"></i>
     <h5 class="mt-3 text-muted">Belum ada plafond yang dibuat</h5>
-    <p class="text-muted">
+    <p class="text-muted mb-4">
       Klik tombol "Tambah Plafond" untuk membuat plafond pertama Anda
     </p>
+    <button class="btn btn-primary btn-lg" (click)="openModal()">
+      <i class="bi bi-plus-circle me-2"></i>
+      Buat Plafond Pertama
+    </button>
   </div>
 
-  <!-- Plafond Cards -->
+  <!-- Plafond Cards with animations -->
   <div class="row g-3" *ngIf="!isLoading && plafonds.length > 0">
-    <div class="col-md-6 col-xl-4" *ngFor="let plafond of plafonds">
-      <div class="card h-100 shadow-sm rounded-3 border-0">
+    <div
+      class="col-md-6 col-xl-4 plafond-card-enter"
+      *ngFor="let plafond of plafonds; trackBy: trackByPlafondId"
+      [class.plafond-updating]="isPlafondUpdating(plafond.id)"
+      [class.plafond-deleting]="isPlafondDeleting(plafond.id)"
+    >
+      <div class="card h-100 shadow-sm rounded-3 border-0 position-relative">
+        <!-- Loading overlay untuk individual card -->
+        <div
+          *ngIf="isPlafondDeleting(plafond.id)"
+          class="card-loading-overlay d-flex align-items-center justify-content-center"
+        >
+          <div class="text-center text-white">
+            <div class="spinner-border spinner-border-sm mb-2" role="status">
+              <span class="visually-hidden">Menghapus...</span>
+            </div>
+            <div><small>Menghapus...</small></div>
+          </div>
+        </div>
+
         <div class="card-body d-flex flex-column">
           <!-- Header dengan Plan dan Delete Button -->
           <div class="d-flex justify-content-between align-items-start mb-3">
             <span
-              class="badge fs-6 text-dark px-3 py-2"
+              class="badge fs-6 text-dark px-3 py-2 position-relative"
               [style.background]="
                 'linear-gradient(135deg, ' +
                 plafond.colorStart +
@@ -40,12 +92,33 @@
               "
             >
               {{ plafond.plan }}
+              <!-- Update indicator -->
+              <span
+                *ngIf="isPlafondUpdating(plafond.id)"
+                class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-info"
+              >
+                <i class="bi bi-arrow-clockwise spin-slow"></i>
+              </span>
             </span>
+
             <button
-              class="btn btn-sm btn-outline-danger"
+              class="btn btn-sm btn-outline-danger position-relative"
               (click)="deletePlafond(plafond)"
+              [disabled]="
+                isPlafondDeleting(plafond.id) || isPlafondUpdating(plafond.id)
+              "
+              [title]="
+                isPlafondDeleting(plafond.id) ? 'Menghapus...' : 'Hapus plafond'
+              "
             >
-              <i class="bi bi-trash"></i>
+              <span *ngIf="!isPlafondDeleting(plafond.id)">
+                <i class="bi bi-trash"></i>
+              </span>
+              <span *ngIf="isPlafondDeleting(plafond.id)">
+                <span class="spinner-border spinner-border-sm" role="status">
+                  <span class="visually-hidden">Loading...</span>
+                </span>
+              </span>
             </button>
           </div>
 
@@ -94,10 +167,24 @@
           <!-- Actions -->
           <div class="mt-auto pt-3">
             <button
-              class="btn btn-sm btn-outline-primary w-100"
+              class="btn btn-sm btn-outline-primary w-100 position-relative"
               (click)="openModal(plafond)"
+              [disabled]="
+                isPlafondDeleting(plafond.id) || isPlafondUpdating(plafond.id)
+              "
             >
-              <i class="bi bi-pencil me-1"></i> Edit Plafond
+              <span *ngIf="!isPlafondUpdating(plafond.id)">
+                <i class="bi bi-pencil me-1"></i> Edit Plafond
+              </span>
+              <span *ngIf="isPlafondUpdating(plafond.id)">
+                <span
+                  class="spinner-border spinner-border-sm me-1"
+                  role="status"
+                >
+                  <span class="visually-hidden">Loading...</span>
+                </span>
+                Memperbarui...
+              </span>
             </button>
           </div>
         </div>
@@ -106,7 +193,7 @@
   </div>
 </app-card>
 
-<!-- Modal Form -->
+<!-- Enhanced Modal Form -->
 <div
   class="modal fade"
   [class.show]="showModal"
@@ -114,15 +201,21 @@
   tabindex="-1"
   (click)="closeModal($event)"
 >
-  <div class="modal-dialog">
+  <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">
           <i class="bi bi-credit-card me-2"></i>
           {{ isEditMode ? "Edit Plafond" : "Tambah Plafond" }}
         </h5>
-        <button type="button" class="btn-close" (click)="closeModal()"></button>
+        <button
+          type="button"
+          class="btn-close"
+          (click)="closeModal()"
+          [disabled]="isProcessing"
+        ></button>
       </div>
+
       <form #plafondForm="ngForm" (ngSubmit)="savePlafond()">
         <div class="modal-body">
           <div class="row">
@@ -136,6 +229,7 @@
                 required
                 [(ngModel)]="formData.plan"
                 #planRef="ngModel"
+                [disabled]="isProcessing"
                 [ngClass]="{
                   'is-invalid':
                     planRef.invalid &&
@@ -144,6 +238,7 @@
               />
               <div class="invalid-feedback">Plan harus diisi.</div>
             </div>
+
             <div class="col-md-6 mb-3">
               <label for="amount" class="form-label">Amount *</label>
               <input
@@ -157,16 +252,17 @@
                 (keypress)="allowOnlyNumber($event)"
                 #amountRef="ngModel"
                 placeholder="Rp1.000.000"
+                [disabled]="isProcessing"
                 [ngClass]="{
                   'is-invalid':
                     amountRef.invalid &&
                     (amountRef.touched || plafondForm.submitted)
                 }"
               />
-
               <div class="invalid-feedback">Amount harus diisi.</div>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="annualRate" class="form-label"
@@ -183,6 +279,7 @@
                 step="0.01"
                 [(ngModel)]="annualRatePercent"
                 #annualRateRef="ngModel"
+                [disabled]="isProcessing"
                 [ngClass]="{
                   'is-invalid':
                     annualRateRef.invalid &&
@@ -193,6 +290,7 @@
                 Annual rate harus diisi dan valid.
               </div>
             </div>
+
             <div class="col-md-6 mb-3">
               <label for="adminRate" class="form-label">Admin Rate (%) *</label>
               <input
@@ -206,6 +304,7 @@
                 step="0.01"
                 [(ngModel)]="adminRatePercent"
                 #adminRateRef="ngModel"
+                [disabled]="isProcessing"
                 [ngClass]="{
                   'is-invalid':
                     adminRateRef.invalid &&
@@ -217,6 +316,7 @@
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="col-md-6 mb-3">
               <label for="colorStart" class="form-label">Color Start *</label>
@@ -229,6 +329,7 @@
                   required
                   [(ngModel)]="formData.colorStart"
                   #colorStartRef="ngModel"
+                  [disabled]="isProcessing"
                   [ngClass]="{
                     'is-invalid':
                       colorStartRef.invalid &&
@@ -245,6 +346,7 @@
               </div>
               <div class="invalid-feedback">Color start harus diisi.</div>
             </div>
+
             <div class="col-md-6 mb-3">
               <label for="colorEnd" class="form-label">Color End *</label>
               <div class="input-group">
@@ -256,6 +358,7 @@
                   required
                   [(ngModel)]="formData.colorEnd"
                   #colorEndRef="ngModel"
+                  [disabled]="isProcessing"
                   [ngClass]="{
                     'is-invalid':
                       colorEndRef.invalid &&
@@ -273,6 +376,7 @@
               <div class="invalid-feedback">Color end harus diisi.</div>
             </div>
           </div>
+
           <div class="mb-3">
             <label class="form-label">Preview</label>
             <div
@@ -291,19 +395,22 @@
             </div>
           </div>
         </div>
+
         <div class="modal-footer">
           <button
             type="button"
             class="btn btn-secondary"
             (click)="closeModal()"
+            [disabled]="isProcessing"
           >
             <i class="bi bi-x-circle me-1"></i>
             Batal
           </button>
+
           <button
             type="submit"
             class="btn btn-primary"
-            [disabled]="isProcessing"
+            [disabled]="isProcessing || plafondForm.invalid"
           >
             <span
               *ngIf="isProcessing"
@@ -311,7 +418,9 @@
               aria-hidden="true"
             ></span>
             <i *ngIf="!isProcessing" class="bi bi-check-circle me-1"></i>
-            {{ isEditMode ? "Update" : "Simpan" }}
+            {{
+              isProcessing ? "Menyimpan..." : isEditMode ? "Update" : "Simpan"
+            }}
           </button>
         </div>
       </form>

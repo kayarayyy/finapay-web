@@ -24,10 +24,14 @@ import { PlafondComponent } from './features/plafond/plafond.component';
 export const routes: Routes = [
   {
     path: '',
+    redirectTo: 'landing',
+    pathMatch: 'full',
+  },
+  {
+    path: '',
     component: MainLayoutComponent,
     canActivate: [authGuard],
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       {
         path: 'dashboard',
         component: HomeComponent,
@@ -36,14 +40,8 @@ export const routes: Routes = [
         path: 'users',
         canActivate: [featureGuard('FEATURE_MANAGE_USERS')],
         children: [
-          {
-            path: '',
-            component: UserComponent,
-          },
-          {
-            path: 'add',
-            component: AddUserComponent,
-          }
+          { path: '', component: UserComponent },
+          { path: 'add', component: AddUserComponent }
         ]
       },
       {
@@ -107,12 +105,10 @@ export const routes: Routes = [
       }
     ],
   },
-  // auth layout tetap
   {
     path: 'login',
     component: AuthLayoutComponent,
     children: [
-      // { path: '', redirectTo: 'login', pathMatch: 'full' },
       {
         path: '',
         component: LoginComponent,
@@ -129,5 +125,5 @@ export const routes: Routes = [
     path: 'landing',
     component: LandingComponent
   },
-  { path: '**', redirectTo: '/login' },
+  { path: '**', redirectTo: '/landing' },
 ];

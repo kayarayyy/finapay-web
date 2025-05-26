@@ -26,6 +26,10 @@ export class PlafondComponent implements OnInit {
   isEditMode = false;
   selectedPlafondId = '';
 
+  // Loading states untuk setiap item
+  deletingPlafondIds = new Set<string>();
+  updatingPlafondIds = new Set<string>();
+
   formData: PlafondCreateUpdate = {
     amount: '',
     plan: '',
@@ -89,6 +93,15 @@ export class PlafondComponent implements OnInit {
     this.formData.adminRate = value / 100;
   }
 
+  // Helper methods untuk check loading states
+  isPlafondDeleting(id: string): boolean {
+    return this.deletingPlafondIds.has(id);
+  }
+
+  isPlafondUpdating(id: string): boolean {
+    return this.updatingPlafondIds.has(id);
+  }
+
   constructor(private plafondService: PlafondService) {}
 
   ngOnInit(): void {
@@ -124,6 +137,7 @@ export class PlafondComponent implements OnInit {
 
     if (plafond) {
       this.selectedPlafondId = plafond.id;
+      this.updatingPlafondIds.add(plafond.id);
 
       // Ubah format string 'Rp1.000.000' ke angka
       const numericAmount = +String(plafond.amount).replace(/[^\d]/g, '');
@@ -151,6 +165,8 @@ export class PlafondComponent implements OnInit {
 
     if (!this.showModal) {
       this.resetForm();
+      // Clear updating state
+      this.updatingPlafondIds.clear();
       // Restore body scroll
       document.body.style.overflow = 'auto';
     }
@@ -175,11 +191,6 @@ export class PlafondComponent implements OnInit {
 
     try {
       let response;
-      // Format ke Rp string jika diperlukan oleh backend
-      // const formattedAmountToSend = 'Rp' + this._amount.toLocaleString('id-ID');
-
-      // Kirim ke backend
-      // this.formData.amount = formattedAmountToSend;
 
       if (this.isEditMode) {
         response = await firstValueFrom(
@@ -195,17 +206,37 @@ export class PlafondComponent implements OnInit {
       }
 
       if (response && (response.status_code === 201 || response.status_code === 200)) {
-        Swal.fire({
+        // Update data secara reaktif
+        if (this.isEditMode) {
+          // Update existing plafond in array
+          const index = this.plafonds.findIndex(p => p.id === this.selectedPlafondId);
+          if (index !== -1) {
+            this.plafonds[index] = { ...response.data };
+          }
+        } else {
+          // Add new plafond to array
+          this.plafonds = [response.data, ...this.plafonds];
+        }
+
+        // Show success toast (less intrusive)
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 3000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+          }
+        });
+
+        Toast.fire({
           icon: 'success',
-          title: 'Berhasil!',
-          text: `Plafond berhasil ${
-            this.isEditMode ? 'diperbarui' : 'ditambahkan'
-          }`,
-          confirmButtonColor: '#28a745',
+          title: `Plafond berhasil ${this.isEditMode ? 'diperbarui' : 'ditambahkan'}!`
         });
 
         this.closeModal();
-        await this.loadPlafonds();
       } else {
         throw new Error(response?.message || 'Operation failed');
       }
@@ -238,20 +269,35 @@ export class PlafondComponent implements OnInit {
       cancelButtonText: 'Batal',
     }).then(async (result) => {
       if (result.isConfirmed) {
+        // Set loading state untuk item specific
+        this.deletingPlafondIds.add(plafond.id);
+
         try {
           const response = await firstValueFrom(
             this.plafondService.deletePlafond(plafond.id)
           );
 
           if (response && response.status_code === 200) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Berhasil!',
-              text: 'Plafond berhasil dihapus',
-              confirmButtonColor: '#28a745',
+            // Update data secara reaktif - remove dari array
+            this.plafonds = this.plafonds.filter(p => p.id !== plafond.id);
+
+            // Show success toast
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer)
+                toast.addEventListener('mouseleave', Swal.resumeTimer)
+              }
             });
 
-            await this.loadPlafonds();
+            Toast.fire({
+              icon: 'success',
+              title: 'Plafond berhasil dihapus!'
+            });
           } else {
             throw new Error(response?.message || 'Delete failed');
           }
@@ -265,8 +311,34 @@ export class PlafondComponent implements OnInit {
               'Terjadi kesalahan saat menghapus plafond',
             confirmButtonColor: '#d33',
           });
+        } finally {
+          // Remove loading state
+          this.deletingPlafondIds.delete(plafond.id);
         }
       }
     });
+  }
+
+  // Method untuk refresh data secara manual jika diperlukan
+  async refreshPlafonds(): Promise<void> {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 2000,
+      timerProgressBar: true,
+    });
+
+    Toast.fire({
+      icon: 'info',
+      title: 'Memperbarui data...'
+    });
+
+    await this.loadPlafonds();
+  }
+
+  // TrackBy function untuk optimasi ngFor
+  trackByPlafondId(index: number, plafond: Plafond): string {
+    return plafond.id;
   }
 }
