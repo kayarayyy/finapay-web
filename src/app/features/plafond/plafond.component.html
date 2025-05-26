@@ -1,256 +1,323 @@
-<!-- Main Container -->
-<div class="plafond-management">
-  <!-- Header -->
-  <div class="header">
-    <div class="header-content">
-      <h1 class="page-title">
-        <i class="icon-credit-card"></i>
-        Kelola Plafond
-      </h1>
-      <p class="page-description">Manage plafond packages and their configurations</p>
-    </div>
-    <button class="btn btn-primary" (click)="openCreateModal()">
-      <i class="icon-plus"></i>
-      Tambah Plafond
+<app-card title="Kelola Plafond">
+  <div class="mb-3 text-end">
+    <button class="btn btn-primary" (click)="openModal()">
+      + Tambah Plafond
     </button>
   </div>
 
-  <!-- Alert Messages -->
-  <div class="alert alert-success" *ngIf="successMessage">
-    <i class="icon-check-circle"></i>
-    {{ successMessage }}
-  </div>
-
-  <div class="alert alert-error" *ngIf="errorMessage">
-    <i class="icon-x-circle"></i>
-    {{ errorMessage }}
-  </div>
-
-  <!-- Search and Filter -->
-  <div class="search-filter">
-    <div class="search-box">
-      <i class="icon-search"></i>
-      <input type="text" placeholder="Cari plafond..." [(ngModel)]="searchTerm" class="search-input">
+  <!-- Loading state -->
+  <div *ngIf="isLoading" class="text-center py-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
     </div>
-
-    <div class="sort-controls">
-      <label>Sort by:</label>
-      <select [(ngModel)]="sortBy" class="sort-select">
-        <option value="plan">Plan</option>
-        <option value="amount">Amount</option>
-        <option value="annualRate">Annual Rate</option>
-      </select>
-      <button class="sort-order-btn" (click)="sortOrder = sortOrder === 'asc' ? 'desc' : 'asc'">
-        <i [class]="sortOrder === 'asc' ? 'icon-arrow-up' : 'icon-arrow-down'"></i>
-      </button>
-    </div>
+    <p class="mt-2 text-muted">Memuat data plafond...</p>
   </div>
 
-  <!-- Loading Spinner -->
-  <div class="loading-spinner" *ngIf="isLoading">
-    <div class="spinner"></div>
-    <p>Loading...</p>
+  <!-- Empty state -->
+  <div *ngIf="!isLoading && plafonds.length === 0" class="text-center py-5">
+    <i class="bi bi-credit-card display-1 text-muted"></i>
+    <h5 class="mt-3 text-muted">Belum ada plafond yang dibuat</h5>
+    <p class="text-muted">
+      Klik tombol "Tambah Plafond" untuk membuat plafond pertama Anda
+    </p>
   </div>
 
-  <!-- Plafond Cards Grid -->
-  <div class="plafond-grid" *ngIf="!isLoading">
-    <div class="plafond-card" *ngFor="let plafond of filteredPlafonds" [style.background]="getGradientStyle(plafond)">
+  <!-- Plafond Cards -->
+  <div class="row g-3" *ngIf="!isLoading && plafonds.length > 0">
+    <div class="col-md-6 col-xl-4" *ngFor="let plafond of plafonds">
+      <div class="card h-100 shadow-sm rounded-3 border-0">
+        <div class="card-body d-flex flex-column">
+          <!-- Header dengan Plan dan Delete Button -->
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <span
+              class="badge fs-6 text-dark px-3 py-2"
+              [style.background]="
+                'linear-gradient(135deg, ' +
+                plafond.colorStart +
+                ', ' +
+                plafond.colorEnd +
+                ')'
+              "
+            >
+              {{ plafond.plan }}
+            </span>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              (click)="deletePlafond(plafond)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
 
-      <div class="card-header">
-        <h3 class="plan-name">{{ plafond.plan }}</h3>
-        <div class="card-actions">
-          <button class="btn-icon btn-edit" (click)="openEditModal(plafond)" title="Edit">
-            <i class="icon-edit"></i>
-          </button>
-          <button class="btn-icon btn-delete" (click)="openDeleteModal(plafond)" title="Delete">
-            <i class="icon-trash"></i>
-          </button>
+          <!-- Amount -->
+          <div class="mb-3">
+            <h4 class="fw-bold text-primary mb-0">{{ plafond.amount }}</h4>
+          </div>
+
+          <!-- Rates Info -->
+          <div class="mb-3">
+            <div class="row g-2">
+              <div class="col-6">
+                <div class="p-2 bg-light rounded">
+                  <small class="text-white d-block">Annual Rate</small>
+                  <strong class="text-success"
+                    >{{ plafond.annualRate * 100 | number : "1.1-1" }}%</strong
+                  >
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="p-2 bg-light rounded">
+                  <small class="text-white d-block">Admin Rate</small>
+                  <strong class="text-warning"
+                    >{{ plafond.adminRate * 100 | number : "1.1-1" }}%</strong
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Color Preview -->
+          <div class="mb-3">
+            <small class="text-muted d-block mb-1">Color Preview</small>
+            <div
+              class="color-preview-card"
+              [style.background]="
+                'linear-gradient(135deg, ' +
+                plafond.colorStart +
+                ', ' +
+                plafond.colorEnd +
+                ')'
+              "
+            ></div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-auto pt-3">
+            <button
+              class="btn btn-sm btn-outline-primary w-100"
+              (click)="openModal(plafond)"
+            >
+              <i class="bi bi-pencil me-1"></i> Edit Plafond
+            </button>
+          </div>
         </div>
       </div>
-
-      <div class="card-content">
-        <div class="amount">{{ plafond.amount }}</div>
-
-        <div class="rates">
-          <div class="rate-item">
-            <span class="label">Annual Rate:</span>
-            <span class="value">{{ formatPercentage(plafond.annualRate) }}</span>
-          </div>
-          <div class="rate-item">
-            <span class="label">Admin Rate:</span>
-            <span class="value">{{ formatPercentage(plafond.adminRate) }}</span>
-          </div>
-        </div>
-
-        <div class="color-preview">
-          <div class="color-item">
-            <div class="color-box" [style.background-color]="plafond.colorStart"></div>
-            <span>{{ plafond.colorStart }}</span>
-          </div>
-          <div class="color-item">
-            <div class="color-box" [style.background-color]="plafond.colorEnd"></div>
-            <span>{{ plafond.colorEnd }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Empty State -->
-    <div class="empty-state" *ngIf="filteredPlafonds.length === 0">
-      <div class="empty-icon">
-        <i class="icon-credit-card"></i>
-      </div>
-      <h3>No plafonds found</h3>
-      <p>{{ searchTerm ? 'Try adjusting your search criteria.' : 'Start by creating your first plafond package.' }}</p>
-      <button class="btn btn-primary" (click)="openCreateModal()" *ngIf="!searchTerm">
-        <i class="icon-plus"></i>
-        Create Plafond
-      </button>
     </div>
   </div>
+</app-card>
 
-  <!-- Create/Edit Modal -->
-  <div class="modal-overlay" *ngIf="showModal" (click)="closeModal()">
-    <div class="modal" (click)="$event.stopPropagation()">
+<!-- Modal Form -->
+<div
+  class="modal fade"
+  [class.show]="showModal"
+  [style.display]="showModal ? 'block' : 'none'"
+  tabindex="-1"
+  (click)="closeModal($event)"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
       <div class="modal-header">
-        <h2>{{ isEditMode ? 'Edit Plafond' : 'Tambah Plafond Baru' }}</h2>
-        <button class="modal-close" (click)="closeModal()">
-          <i class="icon-x"></i>
-        </button>
+        <h5 class="modal-title">
+          <i class="bi bi-credit-card me-2"></i>
+          {{ isEditMode ? "Edit Plafond" : "Tambah Plafond" }}
+        </h5>
+        <button type="button" class="btn-close" (click)="closeModal()"></button>
       </div>
-
-      <form [formGroup]="plafondForm" (ngSubmit)="savePlafond()">
+      <form #plafondForm="ngForm" (ngSubmit)="savePlafond()">
         <div class="modal-body">
-          <div class="form-grid">
-            <!-- Plan -->
-            <div class="form-group">
-              <label for="plan">Plan *</label>
-              <select formControlName="plan" id="plan" class="form-control">
-                <option value="">Pilih Plan</option>
-                <option *ngFor="let option of planOptions" [value]="option">
-                  {{ option }}
-                </option>
-              </select>
-              <div class="error-message" *ngIf="getFieldError('plan')">
-                {{ getFieldError('plan') }}
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="plan" class="form-label">Plan *</label>
+              <input
+                type="text"
+                id="plan"
+                class="form-control"
+                name="plan"
+                required
+                [(ngModel)]="formData.plan"
+                #planRef="ngModel"
+                [ngClass]="{
+                  'is-invalid':
+                    planRef.invalid &&
+                    (planRef.touched || plafondForm.submitted)
+                }"
+              />
+              <div class="invalid-feedback">Plan harus diisi.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="amount" class="form-label">Amount *</label>
+              <input
+                type="text"
+                id="amount"
+                class="form-control"
+                name="amount"
+                required
+                [ngModel]="formattedAmount"
+                (ngModelChange)="onAmountChange($event)"
+                (keypress)="allowOnlyNumber($event)"
+                #amountRef="ngModel"
+                placeholder="Rp1.000.000"
+                [ngClass]="{
+                  'is-invalid':
+                    amountRef.invalid &&
+                    (amountRef.touched || plafondForm.submitted)
+                }"
+              />
+
+              <div class="invalid-feedback">Amount harus diisi.</div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="annualRate" class="form-label"
+                >Annual Rate (%) *</label
+              >
+              <input
+                type="number"
+                id="annualRate"
+                class="form-control"
+                name="annualRate"
+                required
+                min="0"
+                max="100"
+                step="0.01"
+                [(ngModel)]="annualRatePercent"
+                #annualRateRef="ngModel"
+                [ngClass]="{
+                  'is-invalid':
+                    annualRateRef.invalid &&
+                    (annualRateRef.touched || plafondForm.submitted)
+                }"
+              />
+              <div class="invalid-feedback">
+                Annual rate harus diisi dan valid.
               </div>
             </div>
-
-            <!-- Amount -->
-            <div class="form-group">
-              <label for="amount">Amount (Rp) *</label>
-              <input type="number" formControlName="amount" id="amount" class="form-control" placeholder="1000000">
-              <div class="error-message" *ngIf="getFieldError('amount')">
-                {{ getFieldError('amount') }}
-              </div>
-            </div>
-
-            <!-- Annual Rate -->
-            <div class="form-group">
-              <label for="annualRate">Annual Rate (0-1) *</label>
-              <input type="number" formControlName="annualRate" id="annualRate" class="form-control" step="0.01" min="0"
-                max="1" placeholder="0.12">
-              <small class="form-help">Contoh: 0.12 untuk 12%</small>
-              <div class="error-message" *ngIf="getFieldError('annualRate')">
-                {{ getFieldError('annualRate') }}
-              </div>
-            </div>
-
-            <!-- Admin Rate -->
-            <div class="form-group">
-              <label for="adminRate">Admin Rate (0-1) *</label>
-              <input type="number" formControlName="adminRate" id="adminRate" class="form-control" step="0.001" min="0"
-                max="1" placeholder="0.025">
-              <small class="form-help">Contoh: 0.025 untuk 2.5%</small>
-              <div class="error-message" *ngIf="getFieldError('adminRate')">
-                {{ getFieldError('adminRate') }}
-              </div>
-            </div>
-
-            <!-- Color Start -->
-            <div class="form-group">
-              <label for="colorStart">Start Color *</label>
-              <div class="color-input-group">
-                <input type="color" formControlName="colorStart" id="colorStart" class="color-picker">
-                <input type="text" formControlName="colorStart" class="form-control color-text" placeholder="#000000">
-              </div>
-              <div class="error-message" *ngIf="getFieldError('colorStart')">
-                {{ getFieldError('colorStart') }}
-              </div>
-            </div>
-
-            <!-- Color End -->
-            <div class="form-group">
-              <label for="colorEnd">End Color *</label>
-              <div class="color-input-group">
-                <input type="color" formControlName="colorEnd" id="colorEnd" class="color-picker">
-                <input type="text" formControlName="colorEnd" class="form-control color-text" placeholder="#000000">
-              </div>
-              <div class="error-message" *ngIf="getFieldError('colorEnd')">
-                {{ getFieldError('colorEnd') }}
+            <div class="col-md-6 mb-3">
+              <label for="adminRate" class="form-label">Admin Rate (%) *</label>
+              <input
+                type="number"
+                id="adminRate"
+                class="form-control"
+                name="adminRate"
+                required
+                min="0"
+                max="100"
+                step="0.01"
+                [(ngModel)]="adminRatePercent"
+                #adminRateRef="ngModel"
+                [ngClass]="{
+                  'is-invalid':
+                    adminRateRef.invalid &&
+                    (adminRateRef.touched || plafondForm.submitted)
+                }"
+              />
+              <div class="invalid-feedback">
+                Admin rate harus diisi dan valid.
               </div>
             </div>
           </div>
-
-          <!-- Preview -->
-          <div class="preview-section" *ngIf="plafondForm.valid">
-            <h4>Preview:</h4>
-            <div class="preview-card"
-              [style.background]="'linear-gradient(135deg, ' + plafondForm.get('colorStart')?.value + ' 0%, ' + plafondForm.get('colorEnd')?.value + ' 100%)'">
-              <div class="preview-plan">{{ plafondForm.get('plan')?.value }}</div>
-              <div class="preview-amount">
-                {{ plafondForm.get('amount')?.value }}
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="colorStart" class="form-label">Color Start *</label>
+              <div class="input-group">
+                <input
+                  type="color"
+                  id="colorStart"
+                  class="form-control form-control-color"
+                  name="colorStart"
+                  required
+                  [(ngModel)]="formData.colorStart"
+                  #colorStartRef="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      colorStartRef.invalid &&
+                      (colorStartRef.touched || plafondForm.submitted)
+                  }"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="formData.colorStart"
+                  placeholder="#FFFFFF"
+                  readonly
+                />
               </div>
-              <div class="preview-rates">
-                <span>Annual: {{ formatPercentage(plafondForm.get('annualRate')?.value || 0) }}</span>
-                <span>Admin: {{ formatPercentage(plafondForm.get('adminRate')?.value || 0) }}</span>
+              <div class="invalid-feedback">Color start harus diisi.</div>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label for="colorEnd" class="form-label">Color End *</label>
+              <div class="input-group">
+                <input
+                  type="color"
+                  id="colorEnd"
+                  class="form-control form-control-color"
+                  name="colorEnd"
+                  required
+                  [(ngModel)]="formData.colorEnd"
+                  #colorEndRef="ngModel"
+                  [ngClass]="{
+                    'is-invalid':
+                      colorEndRef.invalid &&
+                      (colorEndRef.touched || plafondForm.submitted)
+                  }"
+                />
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="formData.colorEnd"
+                  placeholder="#FFFFFF"
+                  readonly
+                />
               </div>
+              <div class="invalid-feedback">Color end harus diisi.</div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Preview</label>
+            <div
+              class="color-preview-large"
+              [style.background]="
+                'linear-gradient(135deg, ' +
+                formData.colorStart +
+                ', ' +
+                formData.colorEnd +
+                ')'
+              "
+            >
+              <span class="preview-text">{{
+                formData.plan || "PLAN NAME"
+              }}</span>
             </div>
           </div>
         </div>
-
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" (click)="closeModal()">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            (click)="closeModal()"
+          >
+            <i class="bi bi-x-circle me-1"></i>
             Batal
           </button>
-          <button type="submit" class="btn btn-primary" [disabled]="plafondForm.invalid || isLoading">
-            <span *ngIf="isLoading" class="loading-icon"></span>
-            {{ isEditMode ? 'Update' : 'Simpan' }}
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="isProcessing"
+          >
+            <span
+              *ngIf="isProcessing"
+              class="spinner-border spinner-border-sm me-1"
+              aria-hidden="true"
+            ></span>
+            <i *ngIf="!isProcessing" class="bi bi-check-circle me-1"></i>
+            {{ isEditMode ? "Update" : "Simpan" }}
           </button>
         </div>
       </form>
     </div>
   </div>
-
-  <!-- Delete Confirmation Modal -->
-  <div class="modal-overlay" *ngIf="showDeleteModal" (click)="closeModal()">
-    <div class="modal modal-sm" (click)="$event.stopPropagation()">
-      <div class="modal-header">
-        <h2>Konfirmasi Hapus</h2>
-        <button class="modal-close" (click)="closeModal()">
-          <i class="icon-x"></i>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div class="delete-confirmation">
-          <div class="warning-icon">
-            <i class="icon-alert-triangle"></i>
-          </div>
-          <p>Apakah Anda yakin ingin menghapus plafond <strong>{{ selectedPlafond?.plan }}</strong>?</p>
-          <p class="warning-text">Tindakan ini tidak dapat dibatalkan.</p>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModal()">
-          Batal
-        </button>
-        <button type="button" class="btn btn-danger" (click)="confirmDelete()" [disabled]="isLoading">
-          <span *ngIf="isLoading" class="loading-icon"></span>
-          Hapus
-        </button>
-      </div>
-    </div>
-  </div>
 </div>
+
+<!-- Modal Backdrop -->
+<div *ngIf="showModal" class="modal-backdrop fade show"></div>

@@ -19,7 +19,7 @@ import { ResetPasswordComponent } from './features/reset-password/reset-password
 import { ApprovalLoanComponent } from './features/approval-loan/approval-loan.component';
 import { AddUserComponent } from './features/add-user/add-user.component';
 import { LandingComponent } from './features/landing/landing.component';
-import { PlafondManagementComponent } from './features/plafond/plafond.component';
+import { PlafondComponent } from './features/plafond/plafond.component';
 
 export const routes: Routes = [
   {
@@ -103,7 +103,7 @@ export const routes: Routes = [
       },
       {
         path: 'plafond',
-        component: PlafondManagementComponent,
+        component: PlafondComponent,
       }
     ],
   },
