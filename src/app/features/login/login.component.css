@@ -5,3 +5,35 @@ body {
 .card {
   border-radius: 1rem;
 }
+
+/* CSS untuk password toggle */
+.input-group .form-control {
+  border-right: none;
+}
+
+.input-group .btn-outline-secondary {
+  border-left: none;
+  border-color: #ced4da;
+  background-color: transparent;
+  color: #6c757d;
+}
+
+.input-group .btn-outline-secondary:hover {
+  background-color: #f8f9fa;
+  border-color: #ced4da;
+  color: #495057;
+}
+
+.input-group .btn-outline-secondary:focus {
+  box-shadow: none;
+  border-color: #86b7fe;
+}
+
+/* Untuk memastikan styling saat input dalam state invalid */
+.input-group .form-control.is-invalid {
+  border-right: none;
+}
+
+.input-group .form-control.is-invalid ~ .btn-outline-secondary {
+  border-color: #dc3545;
+}
