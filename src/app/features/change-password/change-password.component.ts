@@ -18,26 +18,37 @@ export class ChangePasswordComponent {
   oldPassword: string = '';
   newPassword: string = '';
   confirmPassword: string = '';
-  isLoading: boolean = false;  // Untuk menandakan loading
-  errorMessage: string = '';  // Untuk menampilkan error
-  successMessage: string = '';  // Untuk menampilkan pesan sukses
+  isLoading: boolean = false;
+  errorMessage: string = '';
+  successMessage: string = '';
+
+  // Properties untuk show/hide password
+  showOldPassword: boolean = false;
+  showNewPassword: boolean = false;
+  showConfirmPassword: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
+  // Methods untuk toggle visibility password
+  toggleOldPasswordVisibility() {
+    this.showOldPassword = !this.showOldPassword;
+  }
+
+  toggleNewPasswordVisibility() {
+    this.showNewPassword = !this.showNewPassword;
+  }
+
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
+
   onSubmit() {
-
-    // // Validasi input form
+    // Validasi input form
     if (!this.oldPassword || !this.newPassword || !this.confirmPassword) {
-
       return;
     }
 
-    // if (this.newPassword !== this.confirmPassword) {
-    //   this.errorMessage = 'Konfirmasi password tidak cocok.';
-    //   return;
-    // }
-
-    this.isLoading = true; // Set loading true saat proses submit
+    this.isLoading = true;
     console.log(this.isLoading);
 
     // Panggil service untuk ubah password
@@ -51,7 +62,7 @@ export class ChangePasswordComponent {
         }).then(() => {
           this.router.navigate(['/profile']); // Arahkan ke halaman profil setelah sukses
         });
-        this.isLoading = false;  // Set loading false setelah selesai
+        this.isLoading = false;
       },
       error: (err) => {
         const errorMessage = err.error?.message || 'Terjadi kesalahan saat mengubah password.';
@@ -61,11 +72,10 @@ export class ChangePasswordComponent {
           title: 'Gagal!',
           text: errorMessage,
         });
-        this.isLoading = false;  // Set loading false setelah selesai
+        this.isLoading = false;
       },
     });
   }
-
 
   goBack() {
     this.router.navigate(['/profile']);
