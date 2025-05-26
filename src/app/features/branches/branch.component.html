@@ -1,4 +1,307 @@
-<app-card [title]="'Tabel Cabang'">
-  <app-table [columns]="columns" [originalRows]="branches" [isLoading]="isLoading" [pageOffset]="pageOffset"
-    (onPage)="onPage($event)"></app-table>
+<app-card title="Kelola Cabang">
+  <div class="mb-3 text-end">
+    <button class="btn btn-primary" (click)="addNewBranch()">
+      <i class="bi bi-plus-circle me-1"></i>
+      Tambah Cabang
+    </button>
+  </div>
+  <!-- Filters Section -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">
+            <i class="bi bi-search me-1"></i>
+            Cari Cabang
+          </label>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Cari berdasarkan nama, kota, atau staff..."
+            [value]="searchTerm()"
+            (input)="onSearchChange($event)"
+          />
+        </div>
+        <div class="col-md-3">
+          <label class="form-label">
+            <i class="bi bi-geo-alt me-1"></i>
+            Filter Kota
+          </label>
+          <select
+            class="form-select"
+            [value]="selectedCity()"
+            (change)="onCityChange($event)"
+          >
+            <option value="">Semua Kota</option>
+            <option *ngFor="let city of cities()" [value]="city">
+              {{ city }}
+            </option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <label class="form-label">Items per Page</label>
+          <select
+            class="form-select"
+            [value]="itemsPerPage()"
+            (change)="onItemsPerPageChange($event)"
+          >
+            <option value="5">5</option>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="50">50</option>
+          </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end">
+          <button
+            class="btn btn-outline-secondary w-100"
+            (click)="clearFilters()"
+          >
+            <i class="bi bi-x-circle me-1"></i>
+            Clear Filters
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats Section -->
+  <!-- <div class="row mb-4">
+    <div class="col-md-3">
+      <div class="card bg-primary text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+              <h6 class="card-title mb-0">Total Cabang</h6>
+              <h5 class="mb-0">{{ branches().length }}</h5>
+            </div>
+            <i class="bi bi-building fs-1 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-success text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+              <h6 class="card-title mb-0">Dengan Manager</h6>
+              <h5 class="mb-0">
+                {{ branchWithoutManager() }}
+              </h5>
+            </div>
+            <i class="bi bi-person-check fs-1 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-warning text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+              <h6 class="card-title mb-0">Tanpa Manager</h6>
+              <h5 class="mb-0">
+                {{ branchWithoutManager() }}
+              </h5>
+            </div>
+            <i class="bi bi-person-x fs-1 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-3">
+      <div class="card bg-info text-white">
+        <div class="card-body">
+          <div class="d-flex align-items-center">
+            <div class="flex-grow-1">
+              <h6 class="card-title mb-0">Total Marketing</h6>
+              <h5 class="mb-0">
+                {{ totalMarketing() }}
+              </h5>
+            </div>
+            <i class="bi bi-people fs-1 opacity-75"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading()" class="card">
+    <div class="card-body text-center py-5">
+      <div class="spinner-border text-primary mb-3" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <p class="text-muted">Memuat data cabang...</p>
+    </div>
+  </div>
+
+  <!-- Branch Cards -->
+  <div *ngIf="!isLoading()" class="row">
+    <div
+      *ngFor="let branch of paginatedBranches()"
+      class="col-lg-6 col-xl-4 mb-4"
+    >
+      <div class="card h-100 shadow-sm">
+        <div
+          class="card-header d-flex justify-content-between align-items-center"
+        >
+          <h5 class="mb-0">
+            <i class="bi bi-building me-2 text-primary"></i>
+            {{ branch.name }}
+          </h5>
+          <div class="d-flex gap-2">
+            <button
+              class="btn btn-sm btn-outline-primary"
+              (click)="viewBranchDetails(branch)"
+            >
+              <i class="bi bi-eye"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-secondary"
+              (click)="editBranch(branch)"
+            >
+              <i class="bi bi-pencil"></i>
+            </button>
+            <button
+              class="btn btn-sm btn-outline-danger"
+              (click)="deleteBranch(branch)"
+            >
+              <i class="bi bi-trash"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="mb-3">
+            <span class="badge bg-secondary">
+              <i class="bi bi-geo-alt me-1"></i>
+              {{ branch.city }}
+            </span>
+          </div>
+
+          <div class="mb-3">
+            <small class="text-muted d-block">Koordinat:</small>
+            <span class="small"
+              >{{ branch.latitude }}, {{ branch.longitude }}</span
+            >
+          </div>
+
+          <div class="mb-3">
+            <small class="text-muted d-block">Branch Manager:</small>
+            <div *ngIf="branch.branchManager !== null; else noBranchManager">
+              <div class="d-flex align-items-center">
+                <i class="bi bi-person-check text-success me-2"></i>
+                <div>
+                  <div class="fw-bold">{{ branch.branchManager.name }}</div>
+                  <small class="text-muted">{{
+                    branch.branchManager.email
+                  }}</small>
+                </div>
+              </div>
+            </div>
+            <ng-template #noBranchManager>
+              <div class="text-muted">
+                <i class="bi bi-person-x me-2"></i>
+                Belum ada manager
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="mb-3">
+            <small class="text-muted d-block"
+              >Marketing ({{ branch.marketing.length }}):</small
+            >
+            <div *ngIf="branch.marketing.length > 0; else noMarketing">
+              <div
+                *ngFor="let marketing of branch.marketing.slice(0, 2)"
+                class="small"
+              >
+                <i class="bi bi-person text-info me-1"></i>
+                {{ marketing.name }}
+              </div>
+              <div *ngIf="branch.marketing.length > 2" class="small text-muted">
+                +{{ branch.marketing.length - 2 }} lainnya
+              </div>
+            </div>
+            <ng-template #noMarketing>
+              <div class="text-muted small">
+                <i class="bi bi-people me-2"></i>
+                Belum ada marketing
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <div class="card-footer bg-transparent">
+          <div class="d-flex gap-2">
+            <button
+              *ngIf="!branch.branchManager"
+              class="btn btn-sm btn-outline-success flex-fill"
+              (click)="assignBranchManager(branch)"
+            >
+              <i class="bi bi-person-plus me-1"></i>
+              Assign Manager
+            </button>
+            <button
+              class="btn btn-sm btn-outline-info flex-fill"
+              (click)="addMarketing(branch)"
+            >
+              <i class="bi bi-people me-1"></i>
+              Tambah Marketing
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading() && filteredBranches().length === 0" class="card">
+    <div class="card-body text-center py-5">
+      <i class="bi bi-building text-muted mb-3" style="font-size: 3rem"></i>
+      <h5 class="text-muted">Tidak ada cabang ditemukan</h5>
+      <p class="text-muted">Coba ubah filter atau tambah cabang baru</p>
+      <button class="btn btn-primary" (click)="clearFilters()">
+        Clear Filters
+      </button>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div
+    *ngIf="!isLoading() && filteredBranches().length > 0"
+    class="d-flex justify-content-between align-items-center mt-4"
+  >
+    <div class="text-muted">
+      Menampilkan {{ paginationInfo().start }}-{{ paginationInfo().end }} dari
+      {{ paginationInfo().total }} cabang
+    </div>
+
+    <nav *ngIf="totalPages() > 1">
+      <ul class="pagination mb-0">
+        <li class="page-item" [class.disabled]="currentPage() === 1">
+          <button class="page-link" (click)="goToPage(currentPage() - 1)">
+            <i class="bi bi-chevron-left"></i>
+          </button>
+        </li>
+
+        <li
+          *ngFor="let page of getPaginationPages()"
+          class="page-item"
+          [class.active]="page === currentPage()"
+        >
+          <button class="page-link" (click)="goToPage(page)">
+            {{ page }}
+          </button>
+        </li>
+
+        <li class="page-item" [class.disabled]="currentPage() === totalPages()">
+          <button class="page-link" (click)="goToPage(currentPage() + 1)">
+            <i class="bi bi-chevron-right"></i>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
 </app-card>
