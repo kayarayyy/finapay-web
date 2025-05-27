@@ -1,26 +1,251 @@
 <app-card [title]="'Tabel User'">
   <div card-header>
-    <button class="btn btn-primary" (click)="addUser()">Add User</button>
+    <button class="btn btn-primary" (click)="openAddUserModal()">
+      <i class="fas fa-plus me-2"></i>Tambah User
+    </button>
   </div>
   <app-table
     [columns]="columns"
-    [originalRows]="users"
-    [isLoading]="isLoading"
+    [originalRows]="(users$ | async) ?? []"
+    [isLoading]="(isLoading$ | async) ?? false"
     [pageOffset]="pageOffset"
     [actionTemplate]="actionTpl"
     (onPage)="onPage($event)"
   ></app-table>
+
+  <!-- Status Template -->
   <ng-template #statusTpl let-row>
     <span class="badge" [ngClass]="row.active ? 'bg-success' : 'bg-secondary'">
       {{ row.active ? "Active" : "Inactive" }}
     </span>
   </ng-template>
+
+  <!-- Action Template -->
   <ng-template #actionTpl let-row>
-    <button
-      class="btn btn-danger btn-sm"
-      (click)="deleteUser(row.id, row.name)"
-    >
-      Delete
-    </button>
+    <div class="btn-group btn-group-sm" role="group">
+      <button
+        class="btn btn-outline-primary"
+        (click)="openEditUserModal(row)"
+        title="Edit User"
+      >
+        <i class="bi bi-pencil"></i>
+      </button>
+      <button
+        class="btn btn-outline-danger"
+        (click)="deleteUser(row.id, row.name)"
+        title="Hapus User"
+      >
+        <i class="bi bi-trash"></i>
+      </button>
+    </div>
   </ng-template>
 </app-card>
+
+<!-- Modal Form User -->
+<div
+  class="modal fade"
+  id="userModal"
+  tabindex="-1"
+  aria-labelledby="userModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="userModalLabel">
+          {{ isEditMode ? "Edit User" : "Tambah User" }}
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="name" class="form-label"
+                  >Nama <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="name"
+                  formControlName="name"
+                  [class.is-invalid]="
+                    userForm.get('name')?.invalid &&
+                    userForm.get('name')?.touched
+                  "
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    userForm.get('name')?.invalid &&
+                    userForm.get('name')?.touched
+                  "
+                >
+                  <div *ngIf="userForm.get('name')?.errors?.['required']">
+                    Nama wajib diisi
+                  </div>
+                  <div *ngIf="userForm.get('name')?.errors?.['minlength']">
+                    Nama minimal 2 karakter
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="nip" class="form-label"
+                  >NIP <span class="text-danger">*</span></label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  id="nip"
+                  formControlName="nip"
+                  [class.is-invalid]="
+                    userForm.get('nip')?.invalid && userForm.get('nip')?.touched
+                  "
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    userForm.get('nip')?.invalid && userForm.get('nip')?.touched
+                  "
+                >
+                  <div *ngIf="userForm.get('nip')?.errors?.['required']">
+                    NIP wajib diisi
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="email" class="form-label"
+                  >Email <span class="text-danger">*</span></label
+                >
+                <input
+                  type="email"
+                  class="form-control"
+                  id="email"
+                  formControlName="email"
+                  [readonly]="isEditMode"
+                  [class.is-invalid]="
+                    userForm.get('email')?.invalid &&
+                    userForm.get('email')?.touched
+                  "
+                />
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    userForm.get('email')?.invalid &&
+                    userForm.get('email')?.touched
+                  "
+                >
+                  <div *ngIf="userForm.get('email')?.errors?.['required']">
+                    Email wajib diisi
+                  </div>
+                  <div *ngIf="userForm.get('email')?.errors?.['email']">
+                    Format email tidak valid
+                  </div>
+                </div>
+                <div class="form-text" *ngIf="isEditMode">
+                  Email tidak dapat diubah
+                </div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="role" class="form-label"
+                  >Role <span class="text-danger">*</span></label
+                >
+                <select
+                  class="form-select"
+                  id="role"
+                  formControlName="role"
+                  [class.is-invalid]="
+                    userForm.get('role')?.invalid &&
+                    userForm.get('role')?.touched
+                  "
+                >
+                  <option value="">Pilih Role</option>
+                  <option *ngFor="let role of roles" [value]="role.id">
+                    {{ role.name }}
+                  </option>
+                </select>
+                <div
+                  class="invalid-feedback"
+                  *ngIf="
+                    userForm.get('role')?.invalid &&
+                    userForm.get('role')?.touched
+                  "
+                >
+                  <div *ngIf="userForm.get('role')?.errors?.['required']">
+                    Role wajib dipilih
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="mb-3">
+                <label for="refferal" class="form-label">Referral</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="refferal"
+                  formControlName="refferal"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="active"
+                  formControlName="active"
+                />
+                <label class="form-check-label" for="active">
+                  Status Aktif
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Batal
+          </button>
+          <button
+            type="submit"
+            class="btn btn-primary"
+            [disabled]="userForm.invalid || (isSubmitting$ | async)"
+          >
+            <span
+              *ngIf="isSubmitting$ | async"
+              class="spinner-border spinner-border-sm me-2"
+              role="status"
+            ></span>
+            {{ isEditMode ? "Update" : "Simpan" }}
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
