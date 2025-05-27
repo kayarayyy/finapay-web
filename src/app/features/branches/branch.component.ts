@@ -77,13 +77,13 @@ export class BranchComponent implements OnInit {
     return { start, end, total };
   });
 
-  branchWithoutManager = computed(
-    () => this.branches().filter((b) => b.branchManager === null).length
-  );
+  // branchWithoutManager = computed(
+  //   () => this.branches().filter((b) => b.branchManager === null).length
+  // );
 
-  totalMarketing = computed(() =>
-    this.branches().reduce((sum, b) => sum + b.marketing.length, 0)
-  );
+  // totalMarketing = computed(() =>
+  //   this.branches().reduce((sum, b) => sum + b.marketing.length, 0)
+  // );
 
   constructor(private branchService: BranchService) {}
 
@@ -92,7 +92,7 @@ export class BranchComponent implements OnInit {
   }
 
   loadBranches(): void {
-    this.isLoading.set(true);
+    // this.isLoading.set(true);
     this.branchService.getAllBranches().subscribe({
       next: (branches) => {
         this.branches.set(branches);
@@ -199,21 +199,43 @@ export class BranchComponent implements OnInit {
   assignBranchManager(branch: Branch): void {
     Swal.fire({
       title: 'Assign Branch Manager',
-      text: `Assign manager untuk cabang ${branch.name}`,
-      icon: 'info',
+      text: `Masukkan email manager untuk cabang ${branch.name}:`,
+      input: 'email',
+      inputPlaceholder: 'contoh: manager@example.com',
       showCancelButton: true,
       confirmButtonText: 'Assign',
       cancelButtonText: 'Batal',
       confirmButtonColor: '#198754',
+      preConfirm: (email) => {
+        if (!email) {
+          Swal.showValidationMessage('Email tidak boleh kosong');
+        }
+        return email;
+      },
     }).then((result) => {
-      if (result.isConfirmed) {
-        // TODO: Implement assign branch manager logic
-        Swal.fire({
-          icon: 'success',
-          title: 'Berhasil',
-          text: 'Branch manager berhasil di-assign',
-          timer: 2000,
-          showConfirmButton: false,
+      if (result.isConfirmed && result.value) {
+        const email = result.value;
+
+        this.branchService.assignManager(branch.id, email).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil',
+              text: 'Branch manager berhasil di-assign',
+              timer: 2000,
+              showConfirmButton: false,
+            });
+            this.loadBranches();
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal',
+              text:
+                error?.error?.message ||
+                'Terjadi kesalahan saat assign manager',
+            });
+          },
         });
       }
     });
@@ -222,48 +244,130 @@ export class BranchComponent implements OnInit {
   addMarketing(branch: Branch): void {
     Swal.fire({
       title: 'Tambah Marketing',
-      text: `Tambah marketing untuk cabang ${branch.name}`,
-      icon: 'info',
+      html: `Masukkan email marketing untuk cabang <strong>${branch.name}</strong><br><small>Pisahkan dengan koma atau baris baru</small>`,
+      input: 'textarea',
+      inputPlaceholder:
+        'contoh:\nmarketing1@example.com, marketing2@example.com\natau:\nmarketing1@example.com\nmarketing2@example.com',
       showCancelButton: true,
       confirmButtonText: 'Tambah',
       cancelButtonText: 'Batal',
       confirmButtonColor: '#198754',
+      preConfirm: (value) => {
+        if (!value) {
+          Swal.showValidationMessage('Minimal 1 email harus diisi');
+          return;
+        }
+
+        const emails = value
+          .split(/[\s,]+/)
+          .map((e: string) => e.trim())
+          .filter((e: string) => e.length > 0);
+
+        if (emails.length === 0) {
+          Swal.showValidationMessage('Tidak ada email valid');
+          return;
+        }
+
+        return emails;
+      },
     }).then((result) => {
-      if (result.isConfirmed) {
-        // TODO: Implement add marketing logic
-        Swal.fire({
-          icon: 'success',
-          title: 'Berhasil',
-          text: 'Marketing berhasil ditambahkan',
-          timer: 2000,
-          showConfirmButton: false,
+      if (result.isConfirmed && result.value) {
+        const emails: string[] = result.value;
+
+        this.branchService.addMarketing(branch.id, emails).subscribe({
+          next: () => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil',
+              text: `${emails.length} marketing berhasil ditambahkan`,
+              timer: 2000,
+              showConfirmButton: false,
+            });
+            this.loadBranches();
+          },
+          error: (error) => {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal',
+              text:
+                error?.error?.message ||
+                'Terjadi kesalahan saat menambahkan marketing',
+            });
+          },
         });
       }
     });
   }
 
-  editBranch(branch: Branch): void {
-    Swal.fire({
-      title: 'Edit Cabang',
-      text: `Edit data cabang ${branch.name}`,
-      icon: 'info',
-      showCancelButton: true,
-      confirmButtonText: 'Edit',
-      cancelButtonText: 'Batal',
-      confirmButtonColor: '#ffc107',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // TODO: Implement edit branch logic
-        Swal.fire({
-          icon: 'success',
-          title: 'Berhasil',
-          text: 'Data cabang berhasil diperbarui',
-          timer: 2000,
-          showConfirmButton: false,
-        });
+editBranch(branch: Branch): void {
+  Swal.fire({
+    title: 'Edit Cabang',
+    html: `
+      <input id="edit-branch-name" class="swal2-input" placeholder="Nama Cabang" value="${branch.name}">
+      <input id="edit-branch-city" class="swal2-input" placeholder="Kota (contoh: JAKARTA)" value="${branch.city}">
+      <input id="edit-branch-latitude" class="swal2-input" placeholder="Latitude" value="${branch.latitude ?? ''}">
+      <input id="edit-branch-longitude" class="swal2-input" placeholder="Longitude" value="${branch.longitude ?? ''}">
+    `,
+    focusConfirm: false,
+    showCancelButton: true,
+    confirmButtonText: 'Simpan',
+    cancelButtonText: 'Batal',
+    confirmButtonColor: '#ffc107',
+    preConfirm: () => {
+      const name = (document.getElementById('edit-branch-name') as HTMLInputElement)?.value.trim();
+      const city = (document.getElementById('edit-branch-city') as HTMLInputElement)?.value.trim().toUpperCase();
+      const latitudeStr = (document.getElementById('edit-branch-latitude') as HTMLInputElement)?.value.trim();
+      const longitudeStr = (document.getElementById('edit-branch-longitude') as HTMLInputElement)?.value.trim();
+
+      if (!name || !city) {
+        Swal.showValidationMessage('Nama dan kota wajib diisi');
+        return;
       }
-    });
-  }
+
+      const latitude = latitudeStr ? parseFloat(latitudeStr) : 0;
+      const longitude = longitudeStr ? parseFloat(longitudeStr) : 0;
+
+      if ((latitudeStr && isNaN(latitude)) || (longitudeStr && isNaN(longitude))) {
+        Swal.showValidationMessage('Latitude dan Longitude harus berupa angka');
+        return;
+      }
+
+      return { name, city, latitude, longitude };
+    }
+  }).then((result) => {
+    if (result.isConfirmed && result.value) {
+      const { name, city, latitude, longitude } = result.value;
+
+      const payload = {
+        name,
+        city,
+        latitude,
+        longitude,
+      };
+
+      this.branchService.updateBranch(branch.id, payload).subscribe({
+        next: () => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Data cabang berhasil diperbarui',
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          this.loadBranches();
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: 'error',
+            title: 'Gagal',
+            text: error?.error?.message || 'Gagal memperbarui data cabang',
+          });
+        }
+      });
+    }
+  });
+}
+
 
   deleteBranch(branch: Branch): void {
     Swal.fire({
@@ -277,20 +381,28 @@ export class BranchComponent implements OnInit {
       cancelButtonColor: '#6c757d',
     }).then((result) => {
       if (result.isConfirmed) {
-        // TODO: Implement delete branch API call
-        Swal.fire({
-          icon: 'success',
-          title: 'Terhapus!',
-          text: 'Cabang berhasil dihapus',
-          timer: 2000,
-          showConfirmButton: false,
+        this.branchService.deleteBranchById(branch.id).subscribe({
+          next: (branches) => {
+            Swal.fire({
+              icon: 'success',
+              title: 'Terhapus!',
+              text: 'Cabang berhasil dihapus',
+              timer: 2000,
+              showConfirmButton: false,
+            });
+            this.loadBranches();
+          },
+          error: (error) => {
+            console.error('Error loading branches:', error);
+            this.isLoading.set(false);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Gagal menghapus data cabang',
+              confirmButtonColor: '#dc3545',
+            });
+          },
         });
-
-        // Remove from local state (replace with actual API call)
-        const updatedBranches = this.branches().filter(
-          (b) => b.id !== branch.id
-        );
-        this.branches.set(updatedBranches);
       }
     });
   }
@@ -298,22 +410,75 @@ export class BranchComponent implements OnInit {
   addNewBranch(): void {
     Swal.fire({
       title: 'Tambah Cabang Baru',
-      text: 'Fitur untuk menambah cabang baru',
-      icon: 'info',
+      html: `
+      <input id="branch-name" class="swal2-input" placeholder="Nama Cabang">
+      <input id="branch-city" class="swal2-input" placeholder="Kota (contoh: JAKARTA)">
+      <input id="branch-latitude" class="swal2-input" placeholder="Latitude">
+      <input id="branch-longitude" class="swal2-input" placeholder="Longitude">
+    `,
+      focusConfirm: false,
       showCancelButton: true,
       confirmButtonText: 'Tambah',
       cancelButtonText: 'Batal',
       confirmButtonColor: '#198754',
+      preConfirm: () => {
+        const name = (
+          document.getElementById('branch-name') as HTMLInputElement
+        )?.value.trim();
+        const city = (
+          document.getElementById('branch-city') as HTMLInputElement
+        )?.value
+          .trim()
+          .toUpperCase();
+        const latitudeStr = (
+          document.getElementById('branch-latitude') as HTMLInputElement
+        )?.value.trim();
+        const longitudeStr = (
+          document.getElementById('branch-longitude') as HTMLInputElement
+        )?.value.trim();
+
+        if (!name || !city || !latitudeStr || !longitudeStr) {
+          Swal.showValidationMessage('Semua field wajib diisi');
+          return;
+        }
+
+        const latitude = parseFloat(latitudeStr);
+        const longitude = parseFloat(longitudeStr);
+
+        if (isNaN(latitude) || isNaN(longitude)) {
+          Swal.showValidationMessage(
+            'Latitude dan Longitude harus berupa angka'
+          );
+          return;
+        }
+
+        return { name, city, latitude, longitude };
+      },
     }).then((result) => {
-      if (result.isConfirmed) {
-        // TODO: Navigate to add branch form or open modal
-        Swal.fire({
-          icon: 'info',
-          title: 'Coming Soon',
-          text: 'Fitur tambah cabang akan segera hadir',
-          timer: 2000,
-          showConfirmButton: false,
-        });
+      if (result.isConfirmed && result.value) {
+        const { name, city, latitude, longitude } = result.value;
+
+        this.branchService
+          .createBranch(name, city, latitude, longitude)
+          .subscribe({
+            next: (branch) => {
+              Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: `Cabang "${branch.name}" berhasil ditambahkan`,
+                timer: 2000,
+                showConfirmButton: false,
+              });
+              this.loadBranches();
+            },
+            error: (error) => {
+              Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: error?.error?.message || 'Gagal menambahkan cabang',
+              });
+            },
+          });
       }
     });
   }
