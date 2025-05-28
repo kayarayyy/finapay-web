@@ -1,0 +1,22 @@
+<div class="modal fade" [id]="modalId" tabindex="-1" [attr.aria-labelledby]="modalId + 'Label'" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" [id]="modalId + 'Label'">{{ title }}</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+          <!-- <i class="bi bi-x-lg me-2"></i> -->
+        </button>
+      </div>
+      <div class="modal-body text-center">
+        <img
+          [src]="imageUrl"
+          alt="Zoom Gambar"
+          class="img-fluid rounded shadow-sm"
+          style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease;"
+          [ngStyle]="{ cursor: zoomed ? 'zoom-out' : 'zoom-in' }"
+          (click)="toggleZoom($event)"
+        />
+      </div>
+    </div>
+  </div>
+</div>

@@ -10,18 +10,18 @@ import { CommonModule } from '@angular/common';
 import { LoanRequestService } from '../../core/services/loan-request.service';
 import { ReviewLoan } from '../../core/models/review-loan';
 import Swal from 'sweetalert2';
+import { ImageModalComponent } from '../../shared/components/image-modal/image-modal.component';
 
 interface FormData {
   identity: any;
   capital: any;
-  contact: any;
 }
 
 @Component({
   selector: 'app-review-loan',
   templateUrl: './review-loan.component.html',
   styleUrl: './review-loan.component.css',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ImageModalComponent],
   standalone: true,
 })
 export class ReviewLoanComponent implements OnInit {
@@ -31,8 +31,7 @@ export class ReviewLoanComponent implements OnInit {
   loanForm: FormGroup;
   formData: FormData = {
     identity: {},
-    capital: {},
-    contact: {},
+    capital: {}
   };
 
   constructor(
@@ -49,17 +48,6 @@ export class ReviewLoanComponent implements OnInit {
       tglLahir: [{ value: '', disabled: true }],
       noteIdentity: [''],
       // ... tambahkan field identitas lainnya
-
-      // Bagian kontak
-      noTelpon: [{ value: '', disabled: true }],
-      email: [{ value: '', disabled: true }],
-      kontakDarurat1: [{ value: '', disabled: true }],
-      hubungan1: [{ value: '', disabled: true }],
-      kontak1: [{ value: '', disabled: true }],
-      kontakDarurat2: [{ value: '', disabled: true }],
-      hubungan2: [{ value: '', disabled: true }],
-      kontak2: [{ value: '', disabled: true }],
-      noteContact: [''],
 
       // Bagian Capital
       penghasilan: [{ value: '', disabled: true }],
@@ -143,10 +131,6 @@ export class ReviewLoanComponent implements OnInit {
         noteIdentity: this.loanForm.get('noteIdentity')?.value,
       };
 
-      this.formData.contact = {
-        noteContact: this.loanForm.get('noteContact')?.value,
-      };
-
       this.formData.capital = {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
@@ -155,10 +139,6 @@ export class ReviewLoanComponent implements OnInit {
 
       if (this.formData.identity.noteIdentity?.trim()) {
         notes.push('Identity: ' + this.formData.identity.noteIdentity);
-      }
-
-      if (this.formData.contact.noteContact?.trim()) {
-        notes.push('Contact: ' + this.formData.contact.noteContact);
       }
 
       if (this.formData.capital.noteCapital?.trim()) {
@@ -213,10 +193,6 @@ export class ReviewLoanComponent implements OnInit {
         noteIdentity: this.loanForm.get('noteIdentity')?.value,
       };
 
-      this.formData.contact = {
-        noteContact: this.loanForm.get('noteContact')?.value,
-      };
-
       this.formData.capital = {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
@@ -225,10 +201,6 @@ export class ReviewLoanComponent implements OnInit {
 
       if (this.formData.identity.noteIdentity?.trim()) {
         notes.push('Identity: ' + this.formData.identity.noteIdentity);
-      }
-
-      if (this.formData.contact.noteContact?.trim()) {
-        notes.push('Contact: ' + this.formData.contact.noteContact);
       }
 
       if (this.formData.capital.noteCapital?.trim()) {

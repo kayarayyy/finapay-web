@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { firstValueFrom } from 'rxjs';
 import Swal from 'sweetalert2';
 import {
-  Plafond,
   PlafondCreateUpdate,
   PlafondService,
 } from '../../core/services/plafond.service';
 import { CardComponent } from '../../shared/components/card/card.component';
+import { Plafond } from '../../core/models/plafond.model';
 
 @Component({
   selector: 'app-plafond',

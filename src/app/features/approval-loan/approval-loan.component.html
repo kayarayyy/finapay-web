@@ -61,7 +61,7 @@
                             </button>
                         </div>
                         <div class="card-body text-center">
-                            <img [src]="review_loan.customerDetails.ktp || 'assets/images/default-ktp.jpg'"
+                            <img [src]="review_loan.customerDetails.ktpUrl || 'assets/images/default-ktp.jpg'"
                                 alt="Foto KTP" class="img-fluid rounded shadow-sm"
                                 style="max-height: 300px; object-fit: cover; cursor: zoom-in" data-bs-toggle="modal"
                                 data-bs-target="#ktpModal" />
@@ -79,7 +79,7 @@
                                         aria-label="Close"><i class="bi bi-x-lg me-2"></i></button>
                                 </div>
                                 <div class="modal-body text-center">
-                                    <img [src]="review_loan.customerDetails.ktp || 'assets/images/default-ktp.jpg'"
+                                    <img [src]="review_loan.customerDetails.ktpUrl || 'assets/images/default-ktp.jpg'"
                                         alt="Foto KTP" id="zoomableImg" class="img-fluid rounded shadow-sm"
                                         style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
                                         (click)="toggleZoom($event)" />
@@ -233,12 +233,12 @@
                     <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#slipGajiModal">Lihat
                         Besar</button>
                 </div>
-                <div class="card-body text-center">
+                <!-- <div class="card-body text-center">
                     <img [src]="review_loan.customerDetails.salarySlip || 'assets/images/default-salary.jpg'"
                         alt="Slip Gaji" class="img-fluid rounded shadow-sm"
                         style="max-height: 300px; object-fit: cover; cursor: pointer" data-bs-toggle="modal"
                         data-bs-target="#slipGajiModal" />
-                </div>
+                </div> -->
             </div>
 
             <!-- Informasi Finansial -->
@@ -281,7 +281,7 @@
                         Besar</button>
                 </div>
                 <div class="card-body text-center">
-                    <img [src]="review_loan.customerDetails.houseOwnership || 'assets/images/default-house.jpg'"
+                    <img [src]="review_loan.customerDetails.houseUrl || 'assets/images/default-house.jpg'"
                         alt="Rumah" class="img-fluid rounded shadow-sm"
                         style="max-height: 300px; object-fit: cover; cursor: pointer" data-bs-toggle="modal"
                         data-bs-target="#fotoRumahModal" />
@@ -304,12 +304,12 @@
             <div class="modal fade" id="slipGajiModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content">
-                        <div class="modal-body text-center p-0">
+                        <!-- <div class="modal-body text-center p-0">
                             <img [src]="review_loan.customerDetails.salarySlip || 'assets/images/default-salary.jpg'"
                                 alt="Slip Gaji Besar" class="img-fluid rounded shadow-sm"
                                 style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
                                 (click)="toggleZoom($event)" />
-                        </div>
+                        </div> -->
                     </div>
                 </div>
             </div>
@@ -319,7 +319,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <div class="modal-content">
                         <div class="modal-body text-center p-0">
-                            <img [src]="review_loan.customerDetails.houseOwnership || 'assets/images/default-house.jpg'"
+                            <img [src]="review_loan.customerDetails.houseUrl || 'assets/images/default-house.jpg'"
                                 alt="Foto Rumah Besar" class="img-fluid rounded shadow-sm"
                                 style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
                                 (click)="toggleZoom($event)" />

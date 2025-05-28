@@ -2,16 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-
-export interface Plafond {
-  id: string;
-  amount: string;
-  plan: string;
-  annualRate: number;
-  adminRate: number;
-  colorStart: string;
-  colorEnd: string;
-}
+import { Plafond } from '../models/plafond.model';
 
 export interface PlafondResponse {
   status: string;
