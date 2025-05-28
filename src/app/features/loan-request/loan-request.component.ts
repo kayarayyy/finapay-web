@@ -1,4 +1,10 @@
-import { Component, OnInit, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  TemplateRef,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CardComponent } from '../../shared/components/card/card.component';
 import { TableComponent } from '../../shared/components/table/table.component';
 import { LoanRequest } from '../../core/models/loan-request.model';
@@ -14,7 +20,7 @@ import Swal from 'sweetalert2';
   imports: [CardComponent, TableComponent, NgIf, CommonModule],
   templateUrl: './loan-request.component.html',
   styleUrl: './loan-request.component.css',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoanRequestComponent implements OnInit {
   loan_requests: LoanRequest[] = [];
@@ -31,7 +37,7 @@ export class LoanRequestComponent implements OnInit {
     private loanRequestService: LoanRequestService,
     private authSessionService: AuthSessionService,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.columns = [
@@ -116,7 +122,9 @@ export class LoanRequestComponent implements OnInit {
             ...loan_request,
             customerEmail: loan_request.customer.email,
             marketingEmail: loan_request.marketing?.email ?? '-',
-            marketingNotes: loan_request.marketingNotes?.trim() ? loan_request.marketingNotes : '-',
+            marketingNotes: loan_request.marketingNotes?.trim()
+              ? loan_request.marketingNotes
+              : '-',
           }));
 
           this.isLoading = false;
@@ -138,11 +146,17 @@ export class LoanRequestComponent implements OnInit {
   }
 
   reviewRequest(id: string): void {
-    this.router.navigate(['/loan-requests/review/' + id]);
+    this.router.navigate(['/loan-requests/review'], {
+      queryParams: { id },
+    });
   }
+
   detailRequest(id: string): void {
-    this.router.navigate(['/loan-requests/approval/' + id]);
+    this.router.navigate(['/loan-requests/approval'], {
+      queryParams: { id },
+    });
   }
+
   actionRequest(id: string): void {
     Swal.fire({
       title: 'Tindaklanjuti Pengajuan',
@@ -161,7 +175,7 @@ export class LoanRequestComponent implements OnInit {
         const inputEl = Swal.getInput() as unknown as HTMLTextAreaElement;
         const value = inputEl?.value || '';
         return value;
-      }
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         const notes = result.value;
@@ -193,20 +207,31 @@ export class LoanRequestComponent implements OnInit {
         });
       }
     });
-
   }
 
   submitApproval(id: string, approval: boolean, notes: string): void {
-    this.loanRequestService.updateLoanRequestApproval(id, approval, notes).subscribe({
-      next: (res) => {
-        this.loan_requests = this.loan_requests.filter(item => item.id !== id);
-        Swal.fire('Berhasil', res.message || 'Pengajuan berhasil ditindaklanjuti.', 'success');
-      },
-      error: (err) => {
-        Swal.fire('Gagal', err.error?.message || 'Terjadi kesalahan.', 'error');
-      },
-    });
+    this.loanRequestService
+      .updateLoanRequestApproval(id, approval, notes)
+      .subscribe({
+        next: (res) => {
+          this.loan_requests = this.loan_requests.filter(
+            (item) => item.id !== id
+          );
+          Swal.fire(
+            'Berhasil',
+            res.message || 'Pengajuan berhasil ditindaklanjuti.',
+            'success'
+          );
+        },
+        error: (err) => {
+          Swal.fire(
+            'Gagal',
+            err.error?.message || 'Terjadi kesalahan.',
+            'error'
+          );
+        },
+      });
   }
-  updateRequest(id: string): void { }
-  deleteRequest(id: string): void { }
+  updateRequest(id: string): void {}
+  deleteRequest(id: string): void {}
 }

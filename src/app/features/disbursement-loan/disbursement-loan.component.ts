@@ -40,11 +40,14 @@ export class DisbursementLoanComponent implements OnInit {
       error: () => {
         this.isLoading = false;
       },
-    })
+    });
   }
 
   goToDetail(id: string) {
-    this.router.navigate(['/disbursement/detail', id]);
+    // this.router.navigate(['/disbursement/detail', id]);
+    this.router.navigate(['/disbursement/detail'], {
+      queryParams: { id },
+    });
   }
 
   getPengajuan(): void {
@@ -53,9 +56,15 @@ export class DisbursementLoanComponent implements OnInit {
       next: (value) => {
         this.loanRequest = value;
         this.isLoading = false;
-        console.log('loan_request', this.loanRequest);
-        console.log('loan_request id', this.loanRequest.id);
-        this.router.navigate(['/disbursement/detail/' + this.loanRequest.id]);
+
+        const id = this.loanRequest.id;
+
+        this.router.navigate(['/disbursement/detail'], {
+          queryParams: { id: id },
+        });
+
+        // Alternatif singkat:
+        // this.router.navigate(['/disbursement/detail'], { queryParams: { id: this.loanRequest.id } });
       },
       error: (err) => {
         this.loanRequestService.getLoanRequestCount().subscribe({

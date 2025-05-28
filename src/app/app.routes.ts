@@ -41,8 +41,8 @@ export const routes: Routes = [
         canActivate: [featureGuard('FEATURE_MANAGE_USERS')],
         children: [
           { path: '', component: UserComponent },
-          { path: 'add', component: AddUserComponent }
-        ]
+          { path: 'add', component: AddUserComponent },
+        ],
       },
       {
         path: 'branches',
@@ -54,18 +54,36 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            canActivate: [featureGuard('FEATURE_MANAGE_LOAN_REQUESTS', 'FEATURE_GET_ALL_LOAN_REQUEST_REVIEW', 'FEATURE_GET_ALL_LOAN_REQUEST_APPROVAL')],
+            canActivate: [
+              featureGuard(
+                'FEATURE_MANAGE_LOAN_REQUESTS',
+                'FEATURE_GET_ALL_LOAN_REQUEST_REVIEW',
+                'FEATURE_GET_ALL_LOAN_REQUEST_APPROVAL'
+              ),
+            ],
             component: LoanRequestComponent,
           },
           {
-            path: 'review/:id',
+            path: 'review',
             component: ReviewLoanComponent,
-            canActivate: [featureGuard('FEATURE_MANAGE_LOAN_REQUESTS', 'FEATURE_GET_LOAN_REQUEST_BY_ID_REVIEW')],
+            canActivate: [
+              featureGuard(
+                'FEATURE_MANAGE_LOAN_REQUESTS',
+                'FEATURE_GET_LOAN_REQUEST_BY_ID_REVIEW'
+              ),
+            ],
+            data: { prerender: false },
           },
           {
-            path: 'approval/:id',
+            path: 'approval',
             component: ApprovalLoanComponent,
-            canActivate: [featureGuard('FEATURE_MANAGE_LOAN_REQUESTS', 'FEATURE_GET_LOAN_REQUEST_BY_ID_APPROVAL')],
+            canActivate: [
+              featureGuard(
+                'FEATURE_MANAGE_LOAN_REQUESTS',
+                'FEATURE_GET_LOAN_REQUEST_BY_ID_APPROVAL'
+              ),
+            ],
+            data: { prerender: false },
           },
         ],
       },
@@ -74,15 +92,20 @@ export const routes: Routes = [
         children: [
           {
             path: '',
-            canActivate: [featureGuard('FEATURE_GET_LOAN_REQUEST_DISBURSEMENT')],
+            canActivate: [
+              featureGuard('FEATURE_GET_LOAN_REQUEST_DISBURSEMENT'),
+            ],
             component: DisbursementLoanComponent,
           },
           {
-            path: 'detail/:id',
-            canActivate: [featureGuard('FEATURE_GET_LOAN_REQUEST_BY_ID_DISBURSEMENT')],
+            path: 'detail',
+            canActivate: [
+              featureGuard('FEATURE_GET_LOAN_REQUEST_BY_ID_DISBURSEMENT'),
+            ],
             component: DisbursementDetailComponent,
+            data: { prerender: false },
           },
-        ]
+        ],
       },
       {
         path: 'roles',
@@ -102,7 +125,7 @@ export const routes: Routes = [
       {
         path: 'plafond',
         component: PlafondComponent,
-      }
+      },
     ],
   },
   {
@@ -118,12 +141,13 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'reset-password/:id',
+    path: 'reset-password',
     component: ResetPasswordComponent,
+    data: { prerender: false },
   },
   {
     path: 'landing',
-    component: LandingComponent
+    component: LandingComponent,
   },
   { path: '**', redirectTo: '/landing' },
 ];

@@ -30,8 +30,6 @@ export class DisbursementDetailComponent implements OnInit {
     contact: {},
   };
 
-
-
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -46,7 +44,6 @@ export class DisbursementDetailComponent implements OnInit {
       tglLahir: [{ value: '', disabled: true }],
       noteIdentity: [''],
       // ... tambahkan field identitas lainnya
-
 
       // Bagian kontak
       noTelpon: [{ value: '', disabled: true }],
@@ -75,49 +72,53 @@ export class DisbursementDetailComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loan_id = this.route.snapshot.paramMap.get('id') || '';
-    this.loanRequestService.getLoanRequestByIdDisbursement(this.loan_id).subscribe({
-      next: (value) => {
-        this.review_loan = value;
-        const alamatParts = [
-          this.review_loan.customerDetails.street,
-          this.review_loan.customerDetails.district,
-          this.review_loan.customerDetails.province,
-          this.review_loan.customerDetails.postalCode,
-        ];
-
-        const formattedAlamat = alamatParts
-          .filter((part) => part && part.trim() !== '')
-          .join(', ');
-        this.loanForm.patchValue({
-          namaLengkap: this.review_loan.customerDetails.user.name,
-          alamat: formattedAlamat !== '' ? formattedAlamat : '-',
-          noKtp: "-",
-          tglLahir: "-",
-
-          noTelpon: "-",
-          email: this.review_loan.customerDetails.user.email,
-          kontakDarurat1: "-",
-          hubungan1: "-",
-          kontak1: "-",
-          kontakDarurat2: "-",
-          hubungan2: "-",
-          kontak2: "-",
-
-          penghasilan: 0,
-          statusPekerjaan: "-",
-          jumlahPinjaman: this.review_loan.loanRequest.amount,
-          plafond: "-",
-          sisaPlafond: this.review_loan.customerDetails.availablePlafond,
-          tenor: this.review_loan.loanRequest.tenor,
-          tujuanPenggunaan: "-",
-
-        });
-      },
-      error: (err) => {
-        console.error('Error fetching employee details:', err);
-      },
+    this.route.queryParamMap.subscribe((params) => {
+      this.loan_id = params.get('id') || '';
     });
+    // this.loan_id = this.route.snapshot.paramMap.get('id') || '';
+    this.loanRequestService
+      .getLoanRequestByIdDisbursement(this.loan_id)
+      .subscribe({
+        next: (value) => {
+          this.review_loan = value;
+          const alamatParts = [
+            this.review_loan.customerDetails.street,
+            this.review_loan.customerDetails.district,
+            this.review_loan.customerDetails.province,
+            this.review_loan.customerDetails.postalCode,
+          ];
+
+          const formattedAlamat = alamatParts
+            .filter((part) => part && part.trim() !== '')
+            .join(', ');
+          this.loanForm.patchValue({
+            namaLengkap: this.review_loan.customerDetails.user.name,
+            alamat: formattedAlamat !== '' ? formattedAlamat : '-',
+            noKtp: '-',
+            tglLahir: '-',
+
+            noTelpon: '-',
+            email: this.review_loan.customerDetails.user.email,
+            kontakDarurat1: '-',
+            hubungan1: '-',
+            kontak1: '-',
+            kontakDarurat2: '-',
+            hubungan2: '-',
+            kontak2: '-',
+
+            penghasilan: 0,
+            statusPekerjaan: '-',
+            jumlahPinjaman: this.review_loan.loanRequest.amount,
+            plafond: '-',
+            sisaPlafond: this.review_loan.customerDetails.availablePlafond,
+            tenor: this.review_loan.loanRequest.tenor,
+            tujuanPenggunaan: '-',
+          });
+        },
+        error: (err) => {
+          console.error('Error fetching employee details:', err);
+        },
+      });
     // Anda bisa menambahkan logika inisialisasi data di sini jika diperlukan
   }
 
@@ -147,7 +148,6 @@ export class DisbursementDetailComponent implements OnInit {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
 
-
       const notes = [];
 
       if (this.formData.identity.noteIdentity?.trim()) {
@@ -161,7 +161,6 @@ export class DisbursementDetailComponent implements OnInit {
       if (this.formData.capital.noteCapital?.trim()) {
         notes.push('Capital: ' + this.formData.capital.noteCapital);
       }
-
 
       const fullNote = notes.join(', ');
 
@@ -233,7 +232,6 @@ export class DisbursementDetailComponent implements OnInit {
         notes.push('Capital: ' + this.formData.capital.noteCapital);
       }
 
-
       const fullNote = notes.join(', ');
 
       // Tampilkan konfirmasi
@@ -276,7 +274,6 @@ export class DisbursementDetailComponent implements OnInit {
     }
   }
 
-
   toggleZoom(event: MouseEvent) {
     const img = event.target as HTMLImageElement;
     if (img.style.transform === 'scale(2)') {
@@ -288,6 +285,5 @@ export class DisbursementDetailComponent implements OnInit {
     }
   }
 
-
-  submitForm() { }
+  submitForm() {}
 }

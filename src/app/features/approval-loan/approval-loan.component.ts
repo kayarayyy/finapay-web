@@ -16,7 +16,7 @@ interface FormData {
   imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './approval-loan.component.html',
   styleUrl: './approval-loan.component.css',
-   standalone: true
+  standalone: true,
 })
 export class ApprovalLoanComponent {
   currentSection = 1;
@@ -28,8 +28,6 @@ export class ApprovalLoanComponent {
     capital: {},
     contact: {},
   };
-
-
 
   constructor(
     private route: ActivatedRoute,
@@ -45,7 +43,6 @@ export class ApprovalLoanComponent {
       tglLahir: [{ value: '', disabled: true }],
       noteIdentity: [''],
       // ... tambahkan field identitas lainnya
-
 
       // Bagian kontak
       noTelpon: [{ value: '', disabled: true }],
@@ -74,7 +71,10 @@ export class ApprovalLoanComponent {
   }
 
   ngOnInit(): void {
-    this.loan_id = this.route.snapshot.paramMap.get('id') || '';
+    this.route.queryParamMap.subscribe((params) => {
+      this.loan_id = params.get('id') || '';
+    });
+    // this.loan_id = this.route.snapshot.paramMap.get('id') || '';
     this.loanRequestService.getLoanRequestByIdApproval(this.loan_id).subscribe({
       next: (value) => {
         this.review_loan = value;
@@ -91,26 +91,25 @@ export class ApprovalLoanComponent {
         this.loanForm.patchValue({
           namaLengkap: this.review_loan.customerDetails.user.name,
           alamat: formattedAlamat !== '' ? formattedAlamat : '-',
-          noKtp: "-",
-          tglLahir: "-",
+          noKtp: '-',
+          tglLahir: '-',
 
-          noTelpon: "-",
+          noTelpon: '-',
           email: this.review_loan.customerDetails.user.email,
-          kontakDarurat1: "-",
-          hubungan1: "-",
-          kontak1: "-",
-          kontakDarurat2: "-",
-          hubungan2: "-",
-          kontak2: "-",
+          kontakDarurat1: '-',
+          hubungan1: '-',
+          kontak1: '-',
+          kontakDarurat2: '-',
+          hubungan2: '-',
+          kontak2: '-',
 
           penghasilan: 0,
-          statusPekerjaan: "-",
+          statusPekerjaan: '-',
           jumlahPinjaman: this.review_loan.loanRequest.amount,
-          plafond: "-",
+          plafond: '-',
           sisaPlafond: this.review_loan.customerDetails.availablePlafond,
           tenor: this.review_loan.loanRequest.tenor,
-          tujuanPenggunaan: "-",
-
+          tujuanPenggunaan: '-',
         });
       },
       error: (err) => {
@@ -133,76 +132,74 @@ export class ApprovalLoanComponent {
   }
 
   rejectLoan() {
-      if (this.loanForm.valid) {
-        this.formData.identity = {
-          noteIdentity: this.loanForm.get('noteIdentity')?.value,
-        };
-  
-        this.formData.contact = {
-          noteContact: this.loanForm.get('noteContact')?.value,
-        };
-  
-        this.formData.capital = {
-          noteCapital: this.loanForm.get('noteCapital')?.value,
-        };
-  
-  
-        const notes = [];
-  
-        if (this.formData.identity.noteIdentity?.trim()) {
-          notes.push('Identity: ' + this.formData.identity.noteIdentity);
-        }
-  
-        if (this.formData.contact.noteContact?.trim()) {
-          notes.push('Contact: ' + this.formData.contact.noteContact);
-        }
-  
-        if (this.formData.capital.noteCapital?.trim()) {
-          notes.push('Capital: ' + this.formData.capital.noteCapital);
-        }
-  
-  
-        const fullNote = notes.join(', ');
-  
-        // Tampilkan konfirmasi
-        Swal.fire({
-          title: 'Apakah anda yakin?',
-          text: 'Kamu akan menolak pengajuan!',
-          icon: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Ya, Tolak',
-          cancelButtonText: 'Batalkan',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Pastikan kamu punya ID LoanRequest yang sedang diproses
-  
-            this.loanRequestService
-              .updateLoanRequestApproval(this.loan_id, false, fullNote)
-              .subscribe({
-                next: (res) => {
-                  Swal.fire(
-                    'Success',
-                    res.message || 'Sukses menolak pengajuan!',
-                    'success'
-                  ).then(() => {
-                    this.router.navigate(['/loan-requests']);
-                  });
-                },
-                error: (err) => {
-                  Swal.fire(
-                    'Error',
-                    err.error.message || 'Terjadi kesalahan',
-                    'error'
-                  );
-                },
-              });
-          }
-        });
-      } else {
-        console.log('Formulir tidak valid');
-        Swal.fire('Invalid', 'Please fill in the form correctly!', 'warning');
+    if (this.loanForm.valid) {
+      this.formData.identity = {
+        noteIdentity: this.loanForm.get('noteIdentity')?.value,
+      };
+
+      this.formData.contact = {
+        noteContact: this.loanForm.get('noteContact')?.value,
+      };
+
+      this.formData.capital = {
+        noteCapital: this.loanForm.get('noteCapital')?.value,
+      };
+
+      const notes = [];
+
+      if (this.formData.identity.noteIdentity?.trim()) {
+        notes.push('Identity: ' + this.formData.identity.noteIdentity);
       }
+
+      if (this.formData.contact.noteContact?.trim()) {
+        notes.push('Contact: ' + this.formData.contact.noteContact);
+      }
+
+      if (this.formData.capital.noteCapital?.trim()) {
+        notes.push('Capital: ' + this.formData.capital.noteCapital);
+      }
+
+      const fullNote = notes.join(', ');
+
+      // Tampilkan konfirmasi
+      Swal.fire({
+        title: 'Apakah anda yakin?',
+        text: 'Kamu akan menolak pengajuan!',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Ya, Tolak',
+        cancelButtonText: 'Batalkan',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Pastikan kamu punya ID LoanRequest yang sedang diproses
+
+          this.loanRequestService
+            .updateLoanRequestApproval(this.loan_id, false, fullNote)
+            .subscribe({
+              next: (res) => {
+                Swal.fire(
+                  'Success',
+                  res.message || 'Sukses menolak pengajuan!',
+                  'success'
+                ).then(() => {
+                  this.router.navigate(['/loan-requests']);
+                });
+              },
+              error: (err) => {
+                Swal.fire(
+                  'Error',
+                  err.error.message || 'Terjadi kesalahan',
+                  'error'
+                );
+              },
+            });
+        }
+      });
+    } else {
+      console.log('Formulir tidak valid');
+      Swal.fire('Invalid', 'Please fill in the form correctly!', 'warning');
     }
+  }
 
   approveLoan() {
     if (this.loanForm.valid) {
@@ -231,7 +228,6 @@ export class ApprovalLoanComponent {
       if (this.formData.capital.noteCapital?.trim()) {
         notes.push('Capital: ' + this.formData.capital.noteCapital);
       }
-
 
       const fullNote = notes.join(', ');
 
@@ -275,7 +271,6 @@ export class ApprovalLoanComponent {
     }
   }
 
-
   toggleZoom(event: MouseEvent) {
     const img = event.target as HTMLImageElement;
     if (img.style.transform === 'scale(2)') {
@@ -287,6 +282,5 @@ export class ApprovalLoanComponent {
     }
   }
 
-
-  submitForm() { }
+  submitForm() {}
 }

@@ -35,8 +35,6 @@ export class ReviewLoanComponent implements OnInit {
     contact: {},
   };
 
-
-
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
@@ -51,7 +49,6 @@ export class ReviewLoanComponent implements OnInit {
       tglLahir: [{ value: '', disabled: true }],
       noteIdentity: [''],
       // ... tambahkan field identitas lainnya
-
 
       // Bagian kontak
       noTelpon: [{ value: '', disabled: true }],
@@ -80,7 +77,10 @@ export class ReviewLoanComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loan_id = this.route.snapshot.paramMap.get('id') || '';
+    this.route.queryParamMap.subscribe((params) => {
+      this.loan_id = params.get('id') || '';
+    });
+    // this.loan_id = this.route.snapshot.paramMap.get('id') || '';
     this.loanRequestService.getLoanRequestByIdReview(this.loan_id).subscribe({
       next: (value) => {
         this.review_loan = value;
@@ -97,26 +97,25 @@ export class ReviewLoanComponent implements OnInit {
         this.loanForm.patchValue({
           namaLengkap: this.review_loan.customerDetails.user.name,
           alamat: formattedAlamat !== '' ? formattedAlamat : '-',
-          noKtp: "-",
-          tglLahir: "-",
+          noKtp: '-',
+          tglLahir: '-',
 
-          noTelpon: "-",
+          noTelpon: '-',
           email: this.review_loan.customerDetails.user.email,
-          kontakDarurat1: "-",
-          hubungan1: "-",
-          kontak1: "-",
-          kontakDarurat2: "-",
-          hubungan2: "-",
-          kontak2: "-",
+          kontakDarurat1: '-',
+          hubungan1: '-',
+          kontak1: '-',
+          kontakDarurat2: '-',
+          hubungan2: '-',
+          kontak2: '-',
 
           penghasilan: 0,
-          statusPekerjaan: "-",
+          statusPekerjaan: '-',
           jumlahPinjaman: this.review_loan.loanRequest.amount,
-          plafond: "-",
+          plafond: '-',
           sisaPlafond: this.review_loan.customerDetails.availablePlafond,
           tenor: this.review_loan.loanRequest.tenor,
-          tujuanPenggunaan: "-",
-
+          tujuanPenggunaan: '-',
         });
       },
       error: (err) => {
@@ -152,7 +151,6 @@ export class ReviewLoanComponent implements OnInit {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
 
-
       const notes = [];
 
       if (this.formData.identity.noteIdentity?.trim()) {
@@ -166,7 +164,6 @@ export class ReviewLoanComponent implements OnInit {
       if (this.formData.capital.noteCapital?.trim()) {
         notes.push('Capital: ' + this.formData.capital.noteCapital);
       }
-
 
       const fullNote = notes.join(', ');
 
@@ -224,7 +221,6 @@ export class ReviewLoanComponent implements OnInit {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
 
-
       const notes = [];
 
       if (this.formData.identity.noteIdentity?.trim()) {
@@ -238,7 +234,6 @@ export class ReviewLoanComponent implements OnInit {
       if (this.formData.capital.noteCapital?.trim()) {
         notes.push('Capital: ' + this.formData.capital.noteCapital);
       }
-
 
       const fullNote = notes.join(', ');
 
@@ -282,7 +277,6 @@ export class ReviewLoanComponent implements OnInit {
     }
   }
 
-
   toggleZoom(event: MouseEvent) {
     const img = event.target as HTMLImageElement;
     if (img.style.transform === 'scale(2)') {
@@ -294,6 +288,5 @@ export class ReviewLoanComponent implements OnInit {
     }
   }
 
-
-  submitForm() { }
+  submitForm() {}
 }

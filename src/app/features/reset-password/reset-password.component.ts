@@ -10,21 +10,28 @@ import Swal from 'sweetalert2';
   imports: [CommonModule, FormsModule],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
-export class ResetPasswordComponent  {
+export class ResetPasswordComponent {
   email = '';
   newPassword = '';
   confirmPassword = '';
   resetId = '';
 
-  constructor(private route: ActivatedRoute, private authService: AuthService, private router: Router) {}
+  constructor(
+    private route: ActivatedRoute,
+    private authService: AuthService,
+    private router: Router
+  ) {}
   navigateToLogin() {
-    console.log("Dasd")
+    console.log('Dasd');
     this.router.navigate(['/login']);
   }
   handleSetPassword(form: NgForm): void {
-    this.resetId = this.route.snapshot.paramMap.get('id') || '';
+    this.route.queryParamMap.subscribe((params) => {
+      this.resetId = params.get('id') || '';
+    });
+    // this.resetId = this.route.snapshot.paramMap.get('id') || '';
     if (form.invalid) {
       return;
     }
@@ -41,18 +48,28 @@ export class ResetPasswordComponent  {
     });
 
     this.authService
-      .setResetPassword(this.resetId, this.email, this.newPassword, this.confirmPassword)
+      .setResetPassword(
+        this.resetId,
+        this.email,
+        this.newPassword,
+        this.confirmPassword
+      )
       .subscribe({
         next: (res) => {
-          Swal.fire('Berhasil', res.message || 'Password berhasil diubah', 'success').then(() => {
+          Swal.fire(
+            'Berhasil',
+            res.message || 'Password berhasil diubah',
+            'success'
+          ).then(() => {
             this.router.navigate(['/login']);
           });
         },
         error: (err) => {
-          const message = err.error?.message || 'Terjadi kesalahan saat mengatur ulang password.';
+          const message =
+            err.error?.message ||
+            'Terjadi kesalahan saat mengatur ulang password.';
           Swal.fire('Gagal', message, 'error');
         },
       });
   }
-
 }
