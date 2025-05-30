@@ -81,3 +81,21 @@ html {
   transform: translateY(-8px);
   box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
 }
+.hover-up {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-up:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.card-body h2 {
+  color: #212529;
+}
+
+.badge {
+  font-size: 0.75rem;
+  border-radius: 1rem;
+  background: #ffc107;
+}
