@@ -31,7 +31,7 @@ export class ReviewLoanComponent implements OnInit {
   loanForm: FormGroup;
   formData: FormData = {
     identity: {},
-    capital: {}
+    capital: {},
   };
 
   constructor(
@@ -42,22 +42,22 @@ export class ReviewLoanComponent implements OnInit {
   ) {
     this.loanForm = this.fb.group({
       // Bagian Identitas
-      namaLengkap: [{ value: '', disabled: true }],
-      alamat: [{ value: '', disabled: true }],
-      noKtp: [{ value: '', disabled: true }],
-      tglLahir: [{ value: '', disabled: true }],
+      // namaLengkap: [{ value: '', disabled: true }],
+      // alamat: [{ value: '', disabled: true }],
+      // noKtp: [{ value: '', disabled: true }],
+      // tglLahir: [{ value: '', disabled: true }],
       noteIdentity: [''],
       // ... tambahkan field identitas lainnya
 
       // Bagian Capital
-      penghasilan: [{ value: '', disabled: true }],
-      statusPekerjaan: [{ value: '', disabled: true }],
+      // penghasilan: [{ value: '', disabled: true }],
+      // statusPekerjaan: [{ value: '', disabled: true }],
       // Bagian Pengajuan Peminjaman
-      jumlahPinjaman: [{ value: '', disabled: true }],
-      plafond: [{ value: '', disabled: true }],
-      sisaPlafond: [{ value: '', disabled: true }],
-      tenor: [{ value: '', disabled: true }],
-      tujuanPenggunaan: [{ value: '', disabled: true }],
+      // jumlahPinjaman: [{ value: '', disabled: true }],
+      // plafond: [{ value: '', disabled: true }],
+      // sisaPlafond: [{ value: '', disabled: true }],
+      // tenor: [{ value: '', disabled: true }],
+      // tujuanPenggunaan: [{ value: '', disabled: true }],
       noteCapital: [''],
 
       // ... tambahkan field pengajuan lainnya
@@ -72,45 +72,57 @@ export class ReviewLoanComponent implements OnInit {
     this.loanRequestService.getLoanRequestByIdReview(this.loan_id).subscribe({
       next: (value) => {
         this.review_loan = value;
-        const alamatParts = [
-          this.review_loan.customerDetails.street,
-          this.review_loan.customerDetails.district,
-          this.review_loan.customerDetails.province,
-          this.review_loan.customerDetails.postalCode,
-        ];
+        this.review_loan.loanRequest.amount = this.fromRupiah(this.review_loan.loanRequest.amount.toString())
+        // const alamatParts = [
+        //   this.review_loan.customerDetails.street,
+        //   this.review_loan.customerDetails.district,
+        //   this.review_loan.customerDetails.province,
+        //   this.review_loan.customerDetails.postalCode,
+        // ];
 
-        const formattedAlamat = alamatParts
-          .filter((part) => part && part.trim() !== '')
-          .join(', ');
-        this.loanForm.patchValue({
-          namaLengkap: this.review_loan.customerDetails.user.name,
-          alamat: formattedAlamat !== '' ? formattedAlamat : '-',
-          noKtp: '-',
-          tglLahir: '-',
+        // const formattedAlamat = alamatParts
+        //   .filter((part) => part && part.trim() !== '')
+        //   .join(', ');
+        // this.review_loan.customerDetails.street = formattedAlamat
+        // this.loanForm.patchValue({
+        //   namaLengkap: this.review_loan.customerDetails.user.name,
+        //   alamat: formattedAlamat !== '' ? formattedAlamat : '-',
+        //   noKtp: '-',
+        //   tglLahir: '-',
 
-          noTelpon: '-',
-          email: this.review_loan.customerDetails.user.email,
-          kontakDarurat1: '-',
-          hubungan1: '-',
-          kontak1: '-',
-          kontakDarurat2: '-',
-          hubungan2: '-',
-          kontak2: '-',
+        //   noTelpon: '-',
+        //   email: this.review_loan.customerDetails.user.email,
+        //   kontakDarurat1: '-',
+        //   hubungan1: '-',
+        //   kontak1: '-',
+        //   kontakDarurat2: '-',
+        //   hubungan2: '-',
+        //   kontak2: '-',
 
-          penghasilan: 0,
-          statusPekerjaan: '-',
-          jumlahPinjaman: this.review_loan.loanRequest.amount,
-          plafond: '-',
-          sisaPlafond: this.review_loan.customerDetails.availablePlafond,
-          tenor: this.review_loan.loanRequest.tenor,
-          tujuanPenggunaan: '-',
-        });
+        //   penghasilan: 0,
+        //   statusPekerjaan: '-',
+        //   jumlahPinjaman: this.review_loan.loanRequest.amount,
+        //   plafond: '-',
+        //   sisaPlafond: this.review_loan.customerDetails.availablePlafond,
+        //   tenor: this.review_loan.loanRequest.tenor,
+        //   tujuanPenggunaan: '-',
+        // });
       },
       error: (err) => {
         console.error('Error fetching employee details:', err);
       },
     });
     // Anda bisa menambahkan logika inisialisasi data di sini jika diperlukan
+  }
+
+  toRupiah(value: number): string {
+    return 'Rp' + value.toLocaleString('id-ID', { maximumFractionDigits: 0 });
+  }
+
+  fromRupiah(rupiah: string): number {
+    // Hilangkan simbol 'Rp', spasi, dan titik pemisah ribuan
+    const cleanString = rupiah.replace(/[Rp\s.]/g, '');
+    return Number(cleanString);
   }
 
   nextSection() {

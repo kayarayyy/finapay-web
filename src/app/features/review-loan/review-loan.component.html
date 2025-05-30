@@ -223,6 +223,15 @@
                     readonly
                   />
                 </div>
+                <div class="col-12 mb-3">
+                  <label class="form-label">No. Rek</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    [value]="review_loan.customerDetails.noRek"
+                    readonly
+                  />
+                </div>
               </div>
 
               <div class="mb-3">
@@ -252,370 +261,453 @@
       </div>
     </div>
 
-    <!-- <div *ngIf="currentSection === 2" class="container mt-4">
-      <h3>Informasi Kontak</h3>
-      <div class="card shadow-sm mb-4">
-        <div class="card-header bg-info text-white">Kontak Pribadi</div>
-        <div class="card-body">
-          <div class="row mb-3">
-            <div class="col-md-6">
-              <label for="noTelpon" class="form-label">No Telpon</label>
-              <input
-                type="text"
-                id="noTelpon"
-                class="form-control"
-                formControlName="noTelpon"
-              />
-            </div>
-            <div class="col-md-6">
-              <label for="email" class="form-label">Email</label>
-              <input
-                type="text"
-                id="email"
-                class="form-control"
-                formControlName="email"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card shadow-sm mb-4">
-        <div class="card-header bg-warning text-dark">Kontak Darurat</div>
-        <div class="card-body">
-          <div class="row mb-3">
-            <div class="col-md-4">
-              <label for="kontakDarurat1" class="form-label"
-                >Nama Kontak Darurat 1</label
-              >
-              <input
-                type="text"
-                id="kontakDarurat1"
-                class="form-control"
-                formControlName="kontakDarurat1"
-              />
-            </div>
-            <div class="col-md-4">
-              <label for="hubungan1" class="form-label">Hubungan</label>
-              <input
-                type="text"
-                id="hubungan1"
-                class="form-control"
-                formControlName="hubungan1"
-              />
-            </div>
-            <div class="col-md-4">
-              <label for="kontak1" class="form-label">Kontak</label>
-              <input
-                type="text"
-                id="kontak1"
-                class="form-control"
-                formControlName="kontak1"
-              />
-            </div>
-          </div>
-
-          <div class="row mb-3">
-            <div class="col-md-4">
-              <label for="kontakDarurat2" class="form-label"
-                >Nama Kontak Darurat 2</label
-              >
-              <input
-                type="text"
-                id="kontakDarurat2"
-                class="form-control"
-                formControlName="kontakDarurat2"
-              />
-            </div>
-            <div class="col-md-4">
-              <label for="hubungan2" class="form-label">Hubungan</label>
-              <input
-                type="text"
-                id="hubungan2"
-                class="form-control"
-                formControlName="hubungan2"
-              />
-            </div>
-            <div class="col-md-4">
-              <label for="kontak2" class="form-label">Kontak</label>
-              <input
-                type="text"
-                id="kontak2"
-                class="form-control"
-                formControlName="kontak2"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label for="noteContact" class="form-label">Catatan</label>
-        <textarea
-          id="noteContact"
-          rows="3"
-          class="form-control"
-          formControlName="noteContact"
-        ></textarea>
-      </div>
-
-      <div class="form-navigation d-flex justify-content-between">
-        <button type="button" class="btn btn-secondary" (click)="prevSection()">
-          Sebelumnya
-        </button>
-        <button type="button" class="btn btn-primary" (click)="nextSection()">
-          Selanjutnya
-        </button>
-      </div>
-    </div> -->
-
-    <!-- <div *ngIf="currentSection === 2" class="container mt-4">
-      <h3>Informasi Capital & Pengajuan</h3>
-
-      <div class="row mb-4">
-        <div class="col-md-6 mb-3">
-          <label for="penghasilan" class="form-label">Penghasilan</label>
-          <input
-            type="number"
-            id="penghasilan"
-            class="form-control"
-            formControlName="penghasilan"
-          />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="statusPekerjaan" class="form-label"
-            >Status Pekerjaan</label
-          >
-          <input
-            type="text"
-            id="statusPekerjaan"
-            class="form-control"
-            formControlName="statusPekerjaan"
-          />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="jumlahPinjaman" class="form-label">Jumlah Pinjaman</label>
-          <input
-            type="text"
-            id="jumlahPinjaman"
-            class="form-control"
-            formControlName="jumlahPinjaman"
-          />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="tenor" class="form-label">Tenor</label>
-          <input
-            type="text"
-            id="tenor"
-            class="form-control"
-            formControlName="tenor"
-          />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="plafond" class="form-label">Plafond</label>
-          <input
-            type="text"
-            id="plafond"
-            class="form-control"
-            formControlName="plafond"
-          />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label for="sisaPlafond" class="form-label">Sisa Plafond</label>
-          <input
-            type="text"
-            id="sisaPlafond"
-            class="form-control"
-            formControlName="sisaPlafond"
-          />
-        </div>
-        <div class="col-12 mb-3">
-          <label for="tujuanPenggunaan" class="form-label"
-            >Tujuan Penggunaan</label
-          >
-          <input
-            type="text"
-            id="tujuanPenggunaan"
-            class="form-control"
-            formControlName="tujuanPenggunaan"
-          />
-        </div>
-      </div>
-
-      <div class="card shadow-sm mb-4">
-        <div
-          class="card-header bg-primary text-white d-flex justify-content-between align-items-center"
-        >
-          <span>Foto Rumah</span>
-          <button
-            class="btn btn-sm btn-light"
-            data-bs-toggle="modal"
-            data-bs-target="#fotoRumahModal"
-          >
-            Lihat Besar
-          </button>
-        </div>
-        <div class="card-body text-center">
-          <img
-            [src]="
-              review_loan.customerDetails.houseUrl ||
-              'assets/images/default-house.jpg'
-            "
-            alt="Rumah"
-            class="img-fluid rounded shadow-sm"
-            style="max-height: 300px; object-fit: cover; cursor: pointer"
-            data-bs-toggle="modal"
-            data-bs-target="#fotoRumahModal"
-          />
-        </div>
-      </div>
-
-      <div class="mb-3">
-        <label for="noteCapital" class="form-label">Catatan</label>
-        <textarea
-          id="noteCapital"
-          rows="3"
-          class="form-control"
-          formControlName="noteCapital"
-        ></textarea>
-      </div>
-
-      <div class="form-navigation d-flex justify-content-between">
-        <button type="button" class="btn btn-secondary" (click)="prevSection()">
-          Sebelumnya
-        </button>
-        <button type="button" class="btn btn-primary" (click)="nextSection()">
-          Selanjutnya
-        </button>
-      </div>
-
-      <div
-        class="modal fade"
-        id="slipGajiModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-body text-center p-0">
-              <img
-                [src]="
-                  review_loan.customerDetails.salarySlip ||
-                  'assets/images/default-salary.jpg'
-                "
-                alt="Slip Gaji Besar"
-                class="img-fluid rounded shadow-sm"
-                style="
-                  max-width: 100%;
-                  max-height: 80vh;
-                  transition: transform 0.2s ease;
-                  cursor: zoom-in;
-                "
-                (click)="toggleZoom($event)"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div
-        class="modal fade"
-        id="fotoRumahModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-body text-center p-0">
-              <img
-                [src]="
-                  review_loan.customerDetails.houseUrl ||
-                  'assets/images/default-house.jpg'
-                "
-                alt="Foto Rumah Besar"
-                class="img-fluid rounded shadow-sm"
-                style="
-                  max-width: 100%;
-                  max-height: 80vh;
-                  transition: transform 0.2s ease;
-                  cursor: zoom-in;
-                "
-                (click)="toggleZoom($event)"
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-    </div> -->
-
     <div *ngIf="currentSection === 2" class="container mt-4">
-      <h3 class="mb-3">Informasi Capital & Pengajuan</h3>
+      <h3 class="mb-4">Informasi Capital & Pengajuan</h3>
 
+      <!-- Summary Card untuk Quick Overview -->
       <div class="row mb-4">
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Penghasilan</label>
-          <input
-            type="text"
-            class="form-control"
-            [value]="'Rp ' + (review_loan.customerDetails.salary | number: '1.0-0')"
-            readonly
-          />
+        <div class="col-12">
+          <div class="card border-primary shadow-sm">
+            <div class="card-header bg-primary text-white">
+              <h5 class="mb-0">
+                <i class="fas fa-calculator me-2"></i>Ringkasan Perhitungan
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="row text-center">
+                <div class="col-md-3 mb-3">
+                  <div class="border-end">
+                    <h6 class="text-muted mb-1">Jumlah Pinjaman</h6>
+                    <h4 class="text-primary mb-0">
+                      {{ toRupiah(review_loan.loanRequest.amount) }}
+                    </h4>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <div class="border-end">
+                    <h6 class="text-muted mb-1">Total Bunga</h6>
+                    <h4 class="text-success mb-0">
+                      {{ toRupiah(review_loan.loanRequest.interest!!) }}
+                    </h4>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <div class="border-end">
+                    <h6 class="text-muted mb-1">Biaya Admin</h6>
+                    <h4 class="text-warning mb-0">
+                      {{ toRupiah(review_loan.loanRequest.adminFee!!) }}
+                    </h4>
+                  </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                  <h6 class="text-muted mb-1">
+                    Total Pinjaman + Bunga + Admin Fee
+                  </h6>
+                  <h4 class="text-danger mb-0">
+                    {{
+                      toRupiah(
+                        review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!! +
+                          review_loan.loanRequest.adminFee!!
+                      )
+                    }}
+                  </h4>
+                </div>
+              </div>
+
+              <!-- Perhitungan Cicilan -->
+              <div class="row mt-3 pt-3 border-top">
+                <div class="col-md-6">
+                  <div class="bg-light p-3 rounded">
+                    <h6 class="text-white mb-2">Cicilan per Bulan</h6>
+                    <h3 class="text-primary mb-0">
+                      {{
+                        toRupiah(
+                          (review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!!) /
+                            review_loan.loanRequest.tenor
+                        )
+                      }}
+                    </h3>
+                    <small class="text-white"
+                      >untuk {{ review_loan.loanRequest.tenor }} bulan</small
+                    >
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="bg-light p-3 rounded">
+                    <h6 class="text-white mb-2">Rasio Cicilan vs Gaji</h6>
+                    <h3
+                      class="mb-0"
+                      [ngClass]="{
+                        'text-success':
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                            100 <=
+                          30,
+                        'text-warning':
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                            100 >
+                            30 &&
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                            100 <=
+                            50,
+                        'text-danger':
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                            100 >
+                          50
+                      }"
+                    >
+                      {{
+                        (
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                          100
+                        ).toFixed(1)
+                      }}%
+                    </h3>
+                    <small class="text-white">dari penghasilan</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Status Pekerjaan</label>
-          <input
-            type="text"
-            class="form-control"
-            [value]="review_loan.customerDetails.job"
-            readonly
-          />
+      </div>
+
+      <!-- Informasi Customer Capital -->
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-info text-white">
+              <h6 class="mb-0">
+                <i class="fas fa-user-tie me-2"></i>Profil Customer
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label fw-bold text-muted"
+                  >Penghasilan Bulanan</label
+                >
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control fw-bold"
+                    [value]="toRupiah(review_loan.customerDetails.salary)"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold text-muted"
+                  >Status Pekerjaan</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="review_loan.customerDetails.job"
+                  readonly
+                />
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold text-muted"
+                  >Plafond Tersedia</label
+                >
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [value]="review_loan.customerDetails.availablePlafond"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="mb-0">
+                <label class="form-label fw-bold text-muted"
+                  >Kategori Plafond</label
+                >
+                <input
+                  type="text"
+                  class="form-control"
+                  [value]="review_loan.customerDetails.plafond.plan"
+                  readonly
+                />
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Jumlah Pinjaman</label>
-          <input
-            type="text"
-            class="form-control"
-            [value]="review_loan.loanRequest.amount"
-            readonly
-          />
+
+        <div class="col-md-6">
+          <div class="card h-100 shadow-sm">
+            <div class="card-header bg-secondary text-white">
+              <h6 class="mb-0">
+                <i class="fas fa-file-invoice-dollar me-2"></i>Detail Pengajuan
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="mb-3">
+                <label class="form-label fw-bold text-muted"
+                  >Jumlah Pinjaman</label
+                >
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control fw-bold text-primary"
+                    [value]="toRupiah(review_loan.loanRequest.amount)"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold text-muted"
+                  >Tenor Pinjaman</label
+                >
+                <div class="input-group">
+                  <input
+                    type="text"
+                    class="form-control"
+                    [value]="review_loan.loanRequest.tenor"
+                    readonly
+                  />
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold text-muted"
+                  >Tujuan Penggunaan</label
+                >
+                <textarea
+                  class="form-control"
+                  rows="2"
+                  [value]="
+                    review_loan.loanRequest.purpose || 'Tidak disebutkan'
+                  "
+                  readonly
+                ></textarea>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Tenor</label>
-          <input
-            type="text"
-            class="form-control"
-            [value]="review_loan.loanRequest.tenor"
-            readonly
-          />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Plafond</label>
-          <input
-            type="text"
-            class="form-control"
-            [value]="
-              review_loan.customerDetails.plafond.plan
-            "
-            readonly
-          />
-        </div>
-        <div class="col-md-6 mb-3">
-          <label class="form-label">Sisa Plafond</label>
-          <input
-            type="text"
-            class="form-control"
-            [value]="review_loan.customerDetails.availablePlafond"
-            readonly
-          />
-        </div>
-        <div class="col-12 mb-3">
-          <label class="form-label">Tujuan Penggunaan</label>
-          <input
-            type="text"
-            class="form-control"
-            [value]="review_loan.loanRequest.purpose || '-'"
-            readonly
-          />
+      </div>
+
+      <!-- Analisis Kelayakan -->
+      <div class="row mb-4">
+        <div class="col-12">
+          <div class="card shadow-sm">
+            <div
+              class="card-header"
+              [ngClass]="{
+                'bg-success text-white':
+                  ((review_loan.loanRequest.amount +
+                    review_loan.loanRequest.interest!!) /
+                    review_loan.loanRequest.tenor /
+                    review_loan.customerDetails.salary) *
+                    100 <=
+                  30,
+                'bg-warning text-dark':
+                  ((review_loan.loanRequest.amount +
+                    review_loan.loanRequest.interest!!) /
+                    review_loan.loanRequest.tenor /
+                    review_loan.customerDetails.salary) *
+                    100 >
+                    30 &&
+                  ((review_loan.loanRequest.amount +
+                    review_loan.loanRequest.interest!!) /
+                    review_loan.loanRequest.tenor /
+                    review_loan.customerDetails.salary) *
+                    100 <=
+                    50,
+                'bg-danger text-white':
+                  ((review_loan.loanRequest.amount +
+                    review_loan.loanRequest.interest!!) /
+                    review_loan.loanRequest.tenor /
+                    review_loan.customerDetails.salary) *
+                    100 >
+                  50
+              }"
+            >
+              <h6 class="mb-0">
+                <i class="fas fa-chart-line me-2"></i>Analisis Kelayakan Kredit
+                <span
+                  class="badge bg-light text-dark ms-2"
+                  *ngIf="
+                    ((review_loan.loanRequest.amount +
+                      review_loan.loanRequest.interest!!) /
+                      review_loan.loanRequest.tenor /
+                      review_loan.customerDetails.salary) *
+                      100 <=
+                    30
+                  "
+                  >LAYAK</span
+                >
+                <span
+                  class="badge bg-warning text-dark ms-2"
+                  *ngIf="
+                    ((review_loan.loanRequest.amount +
+                      review_loan.loanRequest.interest!!) /
+                      review_loan.loanRequest.tenor /
+                      review_loan.customerDetails.salary) *
+                      100 >
+                      30 &&
+                    ((review_loan.loanRequest.amount +
+                      review_loan.loanRequest.interest!!) /
+                      review_loan.loanRequest.tenor /
+                      review_loan.customerDetails.salary) *
+                      100 <=
+                      50
+                  "
+                  >PERLU REVIEW</span
+                >
+                <span
+                  class="badge bg-danger ms-2"
+                  *ngIf="
+                    ((review_loan.loanRequest.amount +
+                      review_loan.loanRequest.interest!!) /
+                      review_loan.loanRequest.tenor /
+                      review_loan.customerDetails.salary) *
+                      100 >
+                    50
+                  "
+                  >BERISIKO TINGGI</span
+                >
+              </h6>
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-4 text-center">
+                  <div class="mb-2">
+                    <i class="fas fa-percentage fa-2x text-muted"></i>
+                  </div>
+                  <h6 class="text-muted">Debt to Income Ratio</h6>
+                  <h4
+                    [ngClass]="{
+                      'text-success':
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100 <=
+                        30,
+                      'text-warning':
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100 >
+                          30 &&
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100 <=
+                          50,
+                      'text-danger':
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100 >
+                        50
+                    }"
+                  >
+                    {{
+                      (
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                        100
+                      ).toFixed(1)
+                    }}%
+                  </h4>
+                  <small class="text-muted"
+                    >Standar: ≤30% (Baik), 30-50% (Hati-hati), >50%
+                    (Berisiko)</small
+                  >
+                </div>
+                <div class="col-md-4 text-center">
+                  <div class="mb-2">
+                    <i class="fas fa-credit-card fa-2x text-muted"></i>
+                  </div>
+                  <h6 class="text-muted">Utilisasi Plafond</h6>
+                  <h4
+                    [ngClass]="{
+                      'text-success':
+                        ((review_loan.loanRequest.amount!! +
+                          review_loan.loanRequest.interest!! +
+                          review_loan.loanRequest.adminFee!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                          100 <=
+                        70,
+                      'text-warning':
+                        ((review_loan.loanRequest.amount!! +
+                          review_loan.loanRequest.interest!! +
+                          review_loan.loanRequest.adminFee!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                          100 >
+                          70 &&
+                        ((review_loan.loanRequest.amount!! +
+                          review_loan.loanRequest.interest!! +
+                          review_loan.loanRequest.adminFee!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                          100 <=
+                          90,
+                      'text-danger':
+                        ((review_loan.loanRequest.amount!! +
+                          review_loan.loanRequest.interest!! +
+                          review_loan.loanRequest.adminFee!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                          100 >
+                        90
+                    }"
+                  >
+                    {{
+                      (
+                        ((review_loan.loanRequest.amount!! +
+                          review_loan.loanRequest.interest!! +
+                          review_loan.loanRequest.adminFee!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                        100
+                      ).toFixed(1)
+                    }}%
+                  </h4>
+                  <small class="text-muted">dari plafond tersedia</small>
+                </div>
+                <div class="col-md-4 text-center">
+                  <div class="mb-2">
+                    <i class="fas fa-calendar-alt fa-2x text-muted"></i>
+                  </div>
+                  <h6 class="text-muted">Tenor Pinjaman</h6>
+                  <h4 class="text-info">
+                    {{ review_loan.loanRequest.tenor }} Bulan
+                  </h4>
+                  <small class="text-muted">periode pembayaran</small>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -646,64 +738,54 @@
             data-bs-target="#fotoRumahModal"
           />
         </div>
+        <app-image-modal
+          modalId="fotoRumahModal"
+          [imageUrl]="
+            review_loan.customerDetails.houseUrl ||
+            'assets/images/default-ktp.jpg'
+          "
+          title="Pratinjau Rumah"
+        >
+        </app-image-modal>
       </div>
 
-      <!-- Catatan -->
-      <div class="mb-3">
-        <label class="form-label">Catatan Marketing</label>
-        <textarea
-          class="form-control"
-          rows="3"
-          formControlName="noteCapital"
-          placeholder="Tulis catatan jika perlu..."
-        ></textarea>
+      <!-- Catatan Marketing -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-warning text-dark">
+          <h6 class="mb-0">
+            <i class="fas fa-sticky-note me-2"></i>Catatan Marketing
+          </h6>
+        </div>
+        <div class="card-body">
+          <textarea
+            class="form-control"
+            rows="4"
+            formControlName="noteCapital"
+          ></textarea>
+        </div>
       </div>
 
       <!-- Navigasi -->
       <div class="form-navigation d-flex justify-content-between">
-        <button type="button" class="btn btn-secondary" (click)="prevSection()">
-          Sebelumnya
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-lg"
+          (click)="prevSection()"
+        >
+          <i class="fas fa-arrow-left me-2"></i>Sebelumnya
         </button>
-        <button type="button" class="btn btn-primary" (click)="nextSection()">
-          Selanjutnya
+        <button
+          type="button"
+          class="btn btn-primary btn-lg"
+          (click)="nextSection()"
+        >
+          Selanjutnya<i class="fas fa-arrow-right ms-2"></i>
         </button>
-      </div>
-
-      <!-- Modal Foto Rumah -->
-      <div
-        class="modal fade"
-        id="fotoRumahModal"
-        tabindex="-1"
-        aria-hidden="true"
-      >
-        <div class="modal-dialog modal-dialog-centered modal-lg">
-          <div class="modal-content">
-            <div class="modal-body text-center p-0">
-              <img
-                [src]="
-                  review_loan.customerDetails.houseUrl ||
-                  'assets/images/default-house.jpg'
-                "
-                alt="Foto Rumah Besar"
-                class="img-fluid rounded shadow-sm"
-                style="
-                  max-width: 100%;
-                  max-height: 80vh;
-                  transition: transform 0.2s ease;
-                  cursor: zoom-in;
-                "
-                (click)="toggleZoom($event)"
-              />
-            </div>
-          </div>
-        </div>
       </div>
     </div>
-
     <div *ngIf="currentSection === 3" class="container mt-4">
       <h3 class="mb-3">Ringkasan Pengajuan</h3>
 
-      <!-- Identitas -->
       <div class="card shadow-sm mb-4">
         <div class="card-header bg-secondary text-white">Identitas</div>
         <div class="card-body row">
@@ -722,7 +804,6 @@
         </div>
       </div>
 
-      <!-- Capital & Pengajuan -->
       <div class="card shadow-sm mb-4">
         <div class="card-header bg-success text-white">Capital & Pengajuan</div>
         <div class="card-body row">
@@ -747,7 +828,6 @@
         </div>
       </div>
 
-      <!-- Navigasi & Aksi -->
       <div class="d-flex justify-content-between align-items-center mt-4">
         <button
           type="button"
