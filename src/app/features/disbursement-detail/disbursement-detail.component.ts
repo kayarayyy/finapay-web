@@ -189,7 +189,7 @@ export class DisbursementDetailComponent implements OnInit {
             .subscribe({
               next: (res) => {
                 Swal.fire(
-                  'Success',
+                  'Pencairan Dibatalkan',
                   res.message || 'Sukses membatalkan pencairan dana!',
                   'success'
                 ).then(() => {

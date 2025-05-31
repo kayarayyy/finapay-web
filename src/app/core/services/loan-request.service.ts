@@ -9,7 +9,7 @@ import { ReviewLoan } from '../models/review-loan';
 @Injectable({ providedIn: 'root' })
 export class LoanRequestService {
   private baseUrl = environment.apiUrl;
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAllLoanRequest(): Observable<LoanRequest[]> {
     return this.http
@@ -95,5 +95,15 @@ export class LoanRequestService {
     return this.http.put<{ message: string }>(`${this.baseUrl}/loan-requests/disbursement/${id}`, payload);
   }
 
-
+  rollbackLoanRequest(id: string, status: String): Observable<{ status: string; message: string; data: LoanRequest }> {
+    const payload = {
+      status: status
+    };
+    return this.http
+      .put<{ status: string; message: string; data: LoanRequest }>(
+        `${this.baseUrl}/loan-requests/rollback/${id}`,
+        payload
+      )
+      .pipe(map((response) => response));
+  }
 }

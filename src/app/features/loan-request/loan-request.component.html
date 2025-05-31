@@ -5,7 +5,7 @@
     <button *ngIf="hasFeature('FEATURE_GET_ALL_LOAN_REQUEST_REVIEW')" class="btn btn-info btn-sm" (click)="reviewRequest(row.id)">Review</button>
     <button *ngIf="hasFeature('FEATURE_GET_ALL_LOAN_REQUEST_APPROVAL')" class="btn btn-info btn-sm" (click)="detailRequest(row.id)">Detail</button>
     <button *ngIf="hasFeature('FEATURE_GET_ALL_LOAN_REQUEST_APPROVAL')" class="btn btn-warning btn-sm" (click)="actionRequest(row.id)">Action</button>
-    <button *ngIf="hasFeature('FEATURE_MANAGE_LOAN_REQUESTS')" class="btn btn-warning btn-sm" (click)="updateRequest(row.id)">Update</button>
+    <button *ngIf="hasFeature('FEATURE_MANAGE_LOAN_REQUESTS')" class="btn btn-warning btn-sm" (click)="rollbackRequest(row.id)">Rollback</button>
     <button *ngIf="hasFeature('FEATURE_MANAGE_LOAN_REQUESTS')" class="btn btn-danger btn-sm" (click)="deleteRequest(row.id)">Delete</button>
   </ng-template>
 

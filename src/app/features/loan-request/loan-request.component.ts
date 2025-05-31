@@ -69,6 +69,12 @@ export class LoanRequestComponent implements OnInit {
           templateRef: this.disbursementTpl,
         }
       );
+    }
+    this.loadLoanRequest();
+  }
+
+  loadLoanRequest(): void {
+    if (this.hasFeature('FEATURE_MANAGE_LOAN_REQUESTS')) {
       this.loanRequestService.getAllLoanRequest().subscribe({
         next: (value) => {
           this.loan_requests = value.map((loan_request) => ({
@@ -250,6 +256,56 @@ export class LoanRequestComponent implements OnInit {
         },
       });
   }
-  updateRequest(id: string): void { }
+  rollbackRequest(id: string): void {
+    Swal.fire({
+      title: 'Pilih Status Rollback',
+      input: 'select',
+      inputOptions: {
+        REVIEW: 'Review',
+        APPROVAL: 'Approval',
+        DISBURSEMENT: 'Disbursement',
+      },
+      inputPlaceholder: 'Pilih status tujuan',
+      showCancelButton: true,
+      confirmButtonText: 'Rollback',
+      cancelButtonText: 'Batal',
+      inputValidator: (value) => {
+        if (!value) {
+          return 'Silakan pilih status rollback!';
+        }
+        return null;
+      },
+    }).then((result) => {
+      if (result.isConfirmed && result.value) {
+        const selectedStatus = result.value;
+
+        this.loanRequestService
+          .rollbackLoanRequest(id, selectedStatus)
+          .subscribe({
+            next: (res) => {
+              // update list (opsional: bisa refresh atau patch)
+              this.loan_requests = this.loan_requests.map(item =>
+                item.id === id ? res.data : item
+              );
+              this.loadLoanRequest();
+              Swal.fire(
+                'Berhasil',
+                res.message || 'Status pengajuan berhasil di-rollback.',
+                'success'
+              );
+            },
+            error: (err) => {
+              Swal.fire(
+                'Gagal',
+                err.error?.message || 'Terjadi kesalahan saat rollback.',
+                'error'
+              );
+            },
+          });
+
+      }
+    });
+  }
+
   deleteRequest(id: string): void { }
 }
