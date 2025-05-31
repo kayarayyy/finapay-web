@@ -10,7 +10,6 @@ import { ImageModalComponent } from '../../shared/components/image-modal/image-m
 interface FormData {
   identity: any;
   capital: any;
-  contact: any;
 }
 
 @Component({
@@ -27,8 +26,7 @@ export class DisbursementDetailComponent implements OnInit {
   loanForm: FormGroup;
   formData: FormData = {
     identity: {},
-    capital: {},
-    contact: {},
+    capital: {}
   };
 
   constructor(
@@ -38,37 +36,8 @@ export class DisbursementDetailComponent implements OnInit {
     private router: Router
   ) {
     this.loanForm = this.fb.group({
-      // Bagian Identitas
-      namaLengkap: [{ value: '', disabled: true }],
-      alamat: [{ value: '', disabled: true }],
-      noKtp: [{ value: '', disabled: true }],
-      tglLahir: [{ value: '', disabled: true }],
       noteIdentity: [''],
-      // ... tambahkan field identitas lainnya
-
-      // Bagian kontak
-      noTelpon: [{ value: '', disabled: true }],
-      email: [{ value: '', disabled: true }],
-      kontakDarurat1: [{ value: '', disabled: true }],
-      hubungan1: [{ value: '', disabled: true }],
-      kontak1: [{ value: '', disabled: true }],
-      kontakDarurat2: [{ value: '', disabled: true }],
-      hubungan2: [{ value: '', disabled: true }],
-      kontak2: [{ value: '', disabled: true }],
-      noteContact: [''],
-
-      // Bagian Capital
-      penghasilan: [{ value: '', disabled: true }],
-      statusPekerjaan: [{ value: '', disabled: true }],
-      // Bagian Pengajuan Peminjaman
-      jumlahPinjaman: [{ value: '', disabled: true }],
-      plafond: [{ value: '', disabled: true }],
-      sisaPlafond: [{ value: '', disabled: true }],
-      tenor: [{ value: '', disabled: true }],
-      tujuanPenggunaan: [{ value: '', disabled: true }],
       noteCapital: [''],
-
-      // ... tambahkan field pengajuan lainnya
     });
   }
 
@@ -118,10 +87,6 @@ export class DisbursementDetailComponent implements OnInit {
         noteIdentity: this.loanForm.get('noteIdentity')?.value,
       };
 
-      this.formData.contact = {
-        noteContact: this.loanForm.get('noteContact')?.value,
-      };
-
       this.formData.capital = {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
@@ -130,10 +95,6 @@ export class DisbursementDetailComponent implements OnInit {
 
       if (this.formData.identity.noteIdentity?.trim()) {
         notes.push('Identity: ' + this.formData.identity.noteIdentity);
-      }
-
-      if (this.formData.contact.noteContact?.trim()) {
-        notes.push('Contact: ' + this.formData.contact.noteContact);
       }
 
       if (this.formData.capital.noteCapital?.trim()) {
@@ -200,18 +161,10 @@ export class DisbursementDetailComponent implements OnInit {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
 
-      this.formData.contact = {
-        noteLoan: this.loanForm.get('noteLoan')?.value,
-      };
-
       const notes = [];
 
       if (this.formData.identity.noteIdentity?.trim()) {
         notes.push('Identity: ' + this.formData.identity.noteIdentity);
-      }
-
-      if (this.formData.contact.noteLoan?.trim()) {
-        notes.push('Contact: ' + this.formData.contact.noteLoan);
       }
 
       if (this.formData.capital.noteCapital?.trim()) {
@@ -230,7 +183,6 @@ export class DisbursementDetailComponent implements OnInit {
         cancelButtonText: 'Batalkan',
       }).then((result) => {
         if (result.isConfirmed) {
-          // Pastikan kamu punya ID LoanRequest yang sedang diproses
           Swal.fire({
             title: 'Memproses...',
             text: 'Mohon tunggu sebentar',

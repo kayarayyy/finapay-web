@@ -9,7 +9,6 @@ import { ImageModalComponent } from '../../shared/components/image-modal/image-m
 interface FormData {
   identity: any;
   capital: any;
-  contact: any;
 }
 
 @Component({
@@ -26,8 +25,7 @@ export class ApprovalLoanComponent {
   loanForm: FormGroup;
   formData: FormData = {
     identity: {},
-    capital: {},
-    contact: {},
+    capital: {}
   };
 
   constructor(
@@ -85,10 +83,6 @@ export class ApprovalLoanComponent {
         noteIdentity: this.loanForm.get('noteIdentity')?.value,
       };
 
-      this.formData.contact = {
-        noteContact: this.loanForm.get('noteContact')?.value,
-      };
-
       this.formData.capital = {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
@@ -97,10 +91,6 @@ export class ApprovalLoanComponent {
 
       if (this.formData.identity.noteIdentity?.trim()) {
         notes.push('Identity: ' + this.formData.identity.noteIdentity);
-      }
-
-      if (this.formData.contact.noteContact?.trim()) {
-        notes.push('Contact: ' + this.formData.contact.noteContact);
       }
 
       if (this.formData.capital.noteCapital?.trim()) {
@@ -165,18 +155,10 @@ export class ApprovalLoanComponent {
         noteCapital: this.loanForm.get('noteCapital')?.value,
       };
 
-      this.formData.contact = {
-        noteLoan: this.loanForm.get('noteLoan')?.value,
-      };
-
       const notes = [];
 
       if (this.formData.identity.noteIdentity?.trim()) {
         notes.push('Identity: ' + this.formData.identity.noteIdentity);
-      }
-
-      if (this.formData.contact.noteLoan?.trim()) {
-        notes.push('Contact: ' + this.formData.contact.noteLoan);
       }
 
       if (this.formData.capital.noteCapital?.trim()) {
