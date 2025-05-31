@@ -256,6 +256,7 @@ export class LoanRequestComponent implements OnInit {
         },
       });
   }
+
   rollbackRequest(id: string): void {
     Swal.fire({
       title: 'Pilih Status Rollback',
@@ -277,6 +278,15 @@ export class LoanRequestComponent implements OnInit {
       },
     }).then((result) => {
       if (result.isConfirmed && result.value) {
+        Swal.fire({
+          title: 'Memproses...',
+          text: 'Mohon tunggu sebentar',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
         const selectedStatus = result.value;
 
         this.loanRequestService
@@ -307,5 +317,39 @@ export class LoanRequestComponent implements OnInit {
     });
   }
 
-  deleteRequest(id: string): void { }
+  deleteRequest(id: string): void {
+    Swal.fire({
+      title: 'Apakah Anda yakin?',
+      text: 'Pengajuan akan dihapus secara permanen!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Ya, hapus!',
+      cancelButtonText: 'Batal'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({
+          title: 'Memproses...',
+          text: 'Mohon tunggu sebentar',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
+          didOpen: () => {
+            Swal.showLoading();
+          }
+        });
+        this.loanRequestService.deleteBranchById(id).subscribe({
+          next: (res) => {
+            this.loan_requests = this.loan_requests.filter(item => item.id !== id);
+
+            Swal.fire('Dihapus!', res.message || 'Pengajuan berhasil dihapus.', 'success');
+          },
+          error: (err) => {
+            Swal.fire('Gagal', err.error?.message || 'Terjadi kesalahan saat menghapus.', 'error');
+          }
+        });
+      }
+    });
+  }
+
 }

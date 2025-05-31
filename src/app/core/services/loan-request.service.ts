@@ -106,4 +106,8 @@ export class LoanRequestService {
       )
       .pipe(map((response) => response));
   }
+
+  deleteBranchById(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.baseUrl}/loan-requests/${id}`);
+  }
 }
