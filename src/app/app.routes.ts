@@ -20,6 +20,7 @@ import { ApprovalLoanComponent } from './features/approval-loan/approval-loan.co
 import { AddUserComponent } from './features/add-user/add-user.component';
 import { LandingComponent } from './features/landing/landing.component';
 import { PlafondComponent } from './features/plafond/plafond.component';
+import { ActivationComponent } from './features/activation/activation.component';
 
 export const routes: Routes = [
   {
@@ -139,6 +140,11 @@ export const routes: Routes = [
         canActivate: [redirectIfLoggedInGuard],
       },
     ],
+  },
+  {
+    path: 'activate',
+    component: ActivationComponent,
+    data: { prerender: false },
   },
   {
     path: 'reset-password',

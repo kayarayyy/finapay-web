@@ -6,9 +6,13 @@ import { Auth } from '../models/auth.model';
 @Injectable({ providedIn: 'root' })
 export class AuthSessionService {
   get auth(): Auth | null {
-    const raw = localStorage.getItem('auth');
-    return raw ? (JSON.parse(raw) as Auth) : null;
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const raw = localStorage.getItem('auth');
+      return raw ? (JSON.parse(raw) as Auth) : null;
+    }
+    return null;
   }
+
 
   get name(): string {
     return this.auth?.name || 'Pengguna';
@@ -29,7 +33,7 @@ export class AuthSessionService {
   get isTokenExpired(): boolean {
     const token = this.token;
     if (!token) return true;
-  
+
     try {
       const payload = JSON.parse(atob(token.split('.')[1]));
       const expiry = payload.exp;
@@ -46,5 +50,5 @@ export class AuthSessionService {
       localStorage.removeItem('auth');
     }
   }
-  
+
 }
