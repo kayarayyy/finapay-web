@@ -5,6 +5,7 @@ import { ReviewLoan } from '../../core/models/review-loan';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LoanRequestService } from '../../core/services/loan-request.service';
 import Swal from 'sweetalert2';
+import { ImageModalComponent } from '../../shared/components/image-modal/image-modal.component';
 interface FormData {
   identity: any;
   capital: any;
@@ -13,7 +14,7 @@ interface FormData {
 
 @Component({
   selector: 'app-approval-loan',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ImageModalComponent],
   templateUrl: './approval-loan.component.html',
   styleUrl: './approval-loan.component.css',
   standalone: true,
@@ -36,37 +37,9 @@ export class ApprovalLoanComponent {
     private router: Router
   ) {
     this.loanForm = this.fb.group({
-      // Bagian Identitas
-      namaLengkap: [{ value: '', disabled: true }],
-      alamat: [{ value: '', disabled: true }],
-      noKtp: [{ value: '', disabled: true }],
-      tglLahir: [{ value: '', disabled: true }],
       noteIdentity: [''],
-      // ... tambahkan field identitas lainnya
-
-      // Bagian kontak
-      noTelpon: [{ value: '', disabled: true }],
-      email: [{ value: '', disabled: true }],
-      kontakDarurat1: [{ value: '', disabled: true }],
-      hubungan1: [{ value: '', disabled: true }],
-      kontak1: [{ value: '', disabled: true }],
-      kontakDarurat2: [{ value: '', disabled: true }],
-      hubungan2: [{ value: '', disabled: true }],
-      kontak2: [{ value: '', disabled: true }],
-      noteContact: [''],
-
-      // Bagian Capital
-      penghasilan: [{ value: '', disabled: true }],
-      statusPekerjaan: [{ value: '', disabled: true }],
-      // Bagian Pengajuan Peminjaman
-      jumlahPinjaman: [{ value: '', disabled: true }],
-      plafond: [{ value: '', disabled: true }],
-      sisaPlafond: [{ value: '', disabled: true }],
-      tenor: [{ value: '', disabled: true }],
-      tujuanPenggunaan: [{ value: '', disabled: true }],
       noteCapital: [''],
 
-      // ... tambahkan field pengajuan lainnya
     });
   }
 
@@ -74,49 +47,24 @@ export class ApprovalLoanComponent {
     this.route.queryParamMap.subscribe((params) => {
       this.loan_id = params.get('id') || '';
     });
-    // this.loan_id = this.route.snapshot.paramMap.get('id') || '';
     this.loanRequestService.getLoanRequestByIdApproval(this.loan_id).subscribe({
       next: (value) => {
         this.review_loan = value;
-        const alamatParts = [
-          this.review_loan.customerDetails.street,
-          this.review_loan.customerDetails.district,
-          this.review_loan.customerDetails.province,
-          this.review_loan.customerDetails.postalCode,
-        ];
-
-        const formattedAlamat = alamatParts
-          .filter((part) => part && part.trim() !== '')
-          .join(', ');
-        this.loanForm.patchValue({
-          namaLengkap: this.review_loan.customerDetails.user.name,
-          alamat: formattedAlamat !== '' ? formattedAlamat : '-',
-          noKtp: '-',
-          tglLahir: '-',
-
-          noTelpon: '-',
-          email: this.review_loan.customerDetails.user.email,
-          kontakDarurat1: '-',
-          hubungan1: '-',
-          kontak1: '-',
-          kontakDarurat2: '-',
-          hubungan2: '-',
-          kontak2: '-',
-
-          penghasilan: 0,
-          statusPekerjaan: '-',
-          jumlahPinjaman: this.review_loan.loanRequest.amount,
-          plafond: '-',
-          sisaPlafond: this.review_loan.customerDetails.availablePlafond,
-          tenor: this.review_loan.loanRequest.tenor,
-          tujuanPenggunaan: '-',
-        });
+        this.review_loan.loanRequest.amount = this.fromRupiah(this.review_loan.loanRequest.amount.toString())
       },
       error: (err) => {
         console.error('Error fetching employee details:', err);
       },
     });
-    // Anda bisa menambahkan logika inisialisasi data di sini jika diperlukan
+  }
+
+  fromRupiah(rupiah: string): number {
+    const cleanString = rupiah.replace(/[Rp\s.]/g, '');
+    return Number(cleanString);
+  }
+
+  toRupiah(value: number): string {
+    return 'Rp' + value.toLocaleString('id-ID', { maximumFractionDigits: 0 });
   }
 
   nextSection() {
@@ -161,7 +109,6 @@ export class ApprovalLoanComponent {
 
       const fullNote = notes.join(', ');
 
-      // Tampilkan konfirmasi
       Swal.fire({
         title: 'Apakah anda yakin?',
         text: 'Kamu akan menolak pengajuan!',
@@ -171,7 +118,6 @@ export class ApprovalLoanComponent {
         cancelButtonText: 'Batalkan',
       }).then((result) => {
         if (result.isConfirmed) {
-          // Pastikan kamu punya ID LoanRequest yang sedang diproses
           Swal.fire({
             title: 'Memproses...',
             text: 'Mohon tunggu sebentar',
@@ -239,7 +185,6 @@ export class ApprovalLoanComponent {
 
       const fullNote = notes.join(', ');
 
-      // Tampilkan konfirmasi
       Swal.fire({
         title: 'Apakah anda yakin?',
         text: 'Kamu akan menyetujui pengajuan!',
@@ -249,7 +194,6 @@ export class ApprovalLoanComponent {
         cancelButtonText: 'Batalkan',
       }).then((result) => {
         if (result.isConfirmed) {
-          // Pastikan kamu punya ID LoanRequest yang sedang diproses
           Swal.fire({
             title: 'Memproses...',
             text: 'Mohon tunggu sebentar',

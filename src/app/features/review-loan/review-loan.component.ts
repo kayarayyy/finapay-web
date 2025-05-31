@@ -32,7 +32,7 @@ export class ReviewLoanComponent implements OnInit {
   loanForm: FormGroup;
   lat = -6.200000; 
   lng = 106.816666;
-  apiKey = 'AIzaSyA86DgTHWD6n2rdV2I7EmX2KgGspLXudtc'; 
+  // apiKey = 'API_KEY'; 
   formData: FormData = {
     identity: {},
     capital: {},
@@ -67,9 +67,9 @@ export class ReviewLoanComponent implements OnInit {
     });
   }
 
-  get staticMapUrl(): string {
-    return `https://maps.googleapis.com/maps/api/staticmap?center=${this.lat},${this.lng}&zoom=15&size=600x300&markers=color:red%7C${this.lat},${this.lng}&key=${this.apiKey}`;
-  }
+  // get staticMapUrl(): string {
+  //   return `https://maps.googleapis.com/maps/api/staticmap?center=${this.lat},${this.lng}&zoom=15&size=600x300&markers=color:red%7C${this.lat},${this.lng}&key=${this.apiKey}`;
+  // }
 
   getDIRBadgeClass(dirValue: number): string {
     if (dirValue <= 30) {
