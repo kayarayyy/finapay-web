@@ -71,30 +71,6 @@ export class ReviewLoanComponent implements OnInit {
   //   return `https://maps.googleapis.com/maps/api/staticmap?center=${this.lat},${this.lng}&zoom=15&size=600x300&markers=color:red%7C${this.lat},${this.lng}&key=${this.apiKey}`;
   // }
 
-  getDIRBadgeClass(dirValue: number): string {
-    if (dirValue <= 30) {
-      return 'bg-success text-white';
-    } else if (dirValue <= 50) {
-      return 'bg-warning text-dark';
-    } else if (dirValue <= 70) {
-      return 'bg-orange text-white';
-    } else {
-      return 'bg-danger text-white';
-    }
-  }
-
-  getDIRProgressClass(dirValue: number): string {
-    if (dirValue <= 30) {
-      return 'bg-success';
-    } else if (dirValue <= 50) {
-      return 'bg-warning';
-    } else if (dirValue <= 70) {
-      return 'bg-orange';
-    } else {
-      return 'bg-danger';
-    }
-  }
-
   toRupiah(value: number): string {
     return 'Rp' + value.toLocaleString('id-ID', { maximumFractionDigits: 0 });
   }

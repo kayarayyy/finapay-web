@@ -10,16 +10,7 @@
                 <span class="step-label">Identitas</span>
             </li>
 
-            <li [class.active]="currentSection >= 2" [class.completed]="currentSection > 2">
-                <div class="step-wrapper">
-                    <span class="step-number">
-                        {{ currentSection > 2 ? "✔" : "2" }}
-                    </span>
-                </div>
-                <span class="step-label">Kontak</span>
-            </li>
-
-            <li [class.active]="currentSection >= 3" [class.completed]="currentSection > 3">
+            <li [class.active]="currentSection >= 2" [class.completed]="currentSection > 3">
                 <div class="step-wrapper">
                     <span class="step-number">
                         {{ currentSection > 3 ? "✔" : "3" }}
@@ -28,7 +19,7 @@
                 <span class="step-label">Capital & Pengajuan</span>
             </li>
 
-            <li [class.active]="currentSection >= 4">
+            <li [class.active]="currentSection >= 3">
                 <div class="step-wrapper">
                     <span class="step-number">4</span>
                 </div>
@@ -59,12 +50,11 @@
                     </div>
                 </div>
             </div>
-
             <h3 class="mb-3">Informasi Identitas</h3>
             <div class="row g-4">
-                <!-- Kiri: Preview KTP -->
+                <!-- Kiri: Preview Gambar KTP, Selfie KTP, dan Rumah -->
                 <div class="col-md-5">
-                    <div class="card shadow-sm">
+                    <div class="card shadow-sm mb-3">
                         <div
                             class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
                             <span>Foto KTP</span>
@@ -73,66 +63,121 @@
                             </button>
                         </div>
                         <div class="card-body text-center">
-                            <img [src]="review_loan.customerDetails.ktpUrl || 'assets/images/default-ktp.jpg'"
-                                alt="Foto KTP" class="img-fluid rounded shadow-sm"
+                            <img [src]="
+                  review_loan.customerDetails.ktpUrl ||
+                  'assets/images/default-ktp.jpg'
+                " alt="Foto KTP" class="img-fluid rounded shadow-sm"
                                 style="max-height: 300px; object-fit: cover; cursor: zoom-in" data-bs-toggle="modal"
                                 data-bs-target="#ktpModal" />
                         </div>
-
                     </div>
-                    <!-- Modal KTP -->
-                    <div class="modal fade" id="ktpModal" tabindex="-1" aria-labelledby="ktpModalLabel"
-                        aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-xl">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="ktpModalLabel">Pratinjau KTP</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"><i class="bi bi-x-lg me-2"></i></button>
-                                </div>
-                                <div class="modal-body text-center">
-                                    <img [src]="review_loan.customerDetails.ktpUrl || 'assets/images/default-ktp.jpg'"
-                                        alt="Foto KTP" id="zoomableImg" class="img-fluid rounded shadow-sm"
-                                        style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
-                                        (click)="toggleZoom($event)" />
-                                </div>
-                            </div>
+
+                    <div class="card shadow-sm mb-3">
+                        <div
+                            class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                            <span>Selfie + KTP</span>
+                            <button class="btn btn-sm btn-light" data-bs-toggle="modal"
+                                data-bs-target="#selfieKtpModal">
+                                Lihat Besar
+                            </button>
+                        </div>
+                        <div class="card-body text-center">
+                            <img [src]="
+                  review_loan.customerDetails.selfieKtpUrl ||
+                  'assets/images/default-selfie.jpg'
+                " alt="Selfie KTP" class="img-fluid rounded shadow-sm" style="max-height: 300px; object-fit: cover"
+                                style="max-height: 300px; object-fit: cover; cursor: zoom-in" data-bs-toggle="modal"
+                                data-bs-target="#selfieKtpModal" />
                         </div>
                     </div>
+
+                    <!-- Modal untuk Zoom KTP -->
+                    <app-image-modal modalId="ktpModal" [imageUrl]="
+              review_loan.customerDetails.ktpUrl ||
+              'assets/images/default-ktp.jpg'
+            " title="Pratinjau KTP">
+                    </app-image-modal>
+                    <app-image-modal modalId="selfieKtpModal" [imageUrl]="
+              review_loan.customerDetails.selfieKtpUrl ||
+              'assets/images/default-ktp.jpg'
+            " title="Pratinjau KTP">
+                    </app-image-modal>
                 </div>
 
                 <!-- Kanan: Data Identitas -->
                 <div class="col-md-7">
                     <div class="card shadow-sm">
                         <div class="card-header bg-secondary text-white">
-                            Data Inputan
+                            Data Inputan Nasabah
                         </div>
                         <div class="card-body">
                             <div class="mb-3">
-                                <label for="namaLengkap" class="form-label">Nama Lengkap</label>
-                                <input type="text" class="form-control" id="namaLengkap"
-                                    formControlName="namaLengkap" />
+                                <label class="form-label">Nama Lengkap</label>
+                                <input type="text" class="form-control" [value]="review_loan.customerDetails.user.name"
+                                    readonly />
                             </div>
 
                             <div class="mb-3">
-                                <label for="alamat" class="form-label">Alamat</label>
-                                <textarea class="form-control" id="alamat" formControlName="alamat" rows="3"></textarea>
+                                <label class="form-label">Alamat Lengkap</label>
+                                <textarea class="form-control" rows="3" readonly>{{ review_loan.customerDetails.street }}, {{
+                    review_loan.customerDetails.district
+                  }}, {{ review_loan.customerDetails.province }} {{
+                    review_loan.customerDetails.postalCode
+                  }}
+            </textarea>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">No KTP</label>
+                                    <input type="text" class="form-control" [value]="review_loan.customerDetails.nik"
+                                        readonly />
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Tanggal Lahir</label>
+                                    <input type="text" class="form-control"
+                                        [value]="review_loan.customerDetails.formattedTtl" readonly />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Jenis Kelamin</label>
+                                    <input type="text" class="form-control" [value]="review_loan.customerDetails.gender"
+                                        readonly />
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Nama Ibu Kandung</label>
+                                    <input type="text" class="form-control"
+                                        [value]="review_loan.customerDetails.mothersName" readonly />
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">No. Telpon</label>
+                                    <input type="text" class="form-control" [value]="review_loan.customerDetails.noTelp"
+                                        readonly />
+                                </div>
+
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email</label>
+                                    <input type="text" class="form-control"
+                                        [value]="review_loan.customerDetails.user.email" readonly />
+                                </div>
+                                <div class="col-12 mb-3">
+                                    <label class="form-label">No. Rek</label>
+                                    <input type="text" class="form-control" [value]="review_loan.customerDetails.noRek"
+                                        readonly />
+                                </div>
                             </div>
 
                             <div class="mb-3">
-                                <label for="noKtp" class="form-label">No KTP</label>
-                                <input type="text" class="form-control" id="noKtp" formControlName="noKtp" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="tglLahir" class="form-label">Tanggal Lahir</label>
-                                <input type="text" class="form-control" id="tglLahir" formControlName="tglLahir" />
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="noteIdentity" class="form-label">Catatan</label>
+                                <label for="noteIdentity" class="form-label">Catatan Identitas (optional)</label>
                                 <textarea class="form-control" id="noteIdentity" formControlName="noteIdentity"
-                                    rows="3"></textarea>
+                                    placeholder="Berikan catatan terkait data identitas" rows="3"></textarea>
                             </div>
 
                             <div class="text-end">
@@ -143,7 +188,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
@@ -168,204 +212,428 @@
                     </div>
                 </div>
             </div>
-            <h3>Informasi Kontak</h3>
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-info text-white">
-                    Kontak Pribadi
-                </div>
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <label for="noTelpon" class="form-label">No Telpon</label>
-                            <input type="text" id="noTelpon" class="form-control" formControlName="noTelpon" />
-                        </div>
-                        <div class="col-md-6">
-                            <label for="email" class="form-label">Email</label>
-                            <input type="text" id="email" class="form-control" formControlName="email" />
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h3 class="mb-4">Informasi Capital & Pengajuan</h3>
 
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-warning text-dark">
-                    Kontak Darurat
-                </div>
-                <div class="card-body">
-                    <!-- Darurat 1 -->
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="kontakDarurat1" class="form-label">Nama Kontak Darurat 1</label>
-                            <input type="text" id="kontakDarurat1" class="form-control"
-                                formControlName="kontakDarurat1" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="hubungan1" class="form-label">Hubungan</label>
-                            <input type="text" id="hubungan1" class="form-control" formControlName="hubungan1" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="kontak1" class="form-label">Kontak</label>
-                            <input type="text" id="kontak1" class="form-control" formControlName="kontak1" />
-                        </div>
-                    </div>
-
-                    <!-- Darurat 2 -->
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="kontakDarurat2" class="form-label">Nama Kontak Darurat 2</label>
-                            <input type="text" id="kontakDarurat2" class="form-control"
-                                formControlName="kontakDarurat2" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="hubungan2" class="form-label">Hubungan</label>
-                            <input type="text" id="hubungan2" class="form-control" formControlName="hubungan2" />
-                        </div>
-                        <div class="col-md-4">
-                            <label for="kontak2" class="form-label">Kontak</label>
-                            <input type="text" id="kontak2" class="form-control" formControlName="kontak2" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="mb-3">
-                <label for="noteContact" class="form-label">Catatan</label>
-                <textarea id="noteContact" rows="3" class="form-control" formControlName="noteContact"></textarea>
-            </div>
-
-            <div class="form-navigation d-flex justify-content-between">
-                <button type="button" class="btn btn-secondary" (click)="prevSection()">Sebelumnya</button>
-                <button type="button" class="btn btn-primary" (click)="nextSection()">Selanjutnya</button>
-            </div>
-        </div>
-
-        <div *ngIf="currentSection === 3" class="container mt-4">
-            <div class="alert alert-warning d-flex align-items-start gap-4 shadow-sm p-3 mb-4 rounded">
-                <i class="bi bi-chat-left-quote-fill fs-4 text-dark mt-1"></i>
-
-                <div class="d-flex flex-grow-1 gap-4">
-                    <!-- Catatan Marketing -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Marketing:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.marketingNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
-
-                    <!-- Divider -->
-                    <div class="vr"></div>
-
-                    <!-- Catatan Branch Manager -->
-                    <div class="flex-fill">
-                        <strong>Catatan dari Branch Manager:</strong>
-                        <p class="mb-0">{{ review_loan.loanRequest.branchManagerNotes || 'Tidak ada catatan.' }}</p>
-                    </div>
-                </div>
-            </div>
-            <h3>Informasi Capital & Pengajuan</h3>
-
-            <!-- Slip Gaji -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
-                    <span>Foto Slip Gaji</span>
-                    <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#slipGajiModal">Lihat
-                        Besar</button>
-                </div>
-                <!-- <div class="card-body text-center">
-                    <img [src]="review_loan.customerDetails.salarySlip || 'assets/images/default-salary.jpg'"
-                        alt="Slip Gaji" class="img-fluid rounded shadow-sm"
-                        style="max-height: 300px; object-fit: cover; cursor: pointer" data-bs-toggle="modal"
-                        data-bs-target="#slipGajiModal" />
-                </div> -->
-            </div>
-
-            <!-- Informasi Finansial -->
+            <!-- Summary Card untuk Quick Overview -->
             <div class="row mb-4">
-                <div class="col-md-6 mb-3">
-                    <label for="penghasilan" class="form-label">Penghasilan</label>
-                    <input type="number" id="penghasilan" class="form-control" formControlName="penghasilan" />
+                <div class="col-12">
+                    <div class="card border-primary shadow-sm">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0">
+                                <i class="fas fa-calculator me-2"></i>Ringkasan Perhitungan
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row text-center">
+                                <div class="col-md-3 mb-3">
+                                    <div class="border-end">
+                                        <h6 class="text-muted mb-1">Jumlah Pinjaman</h6>
+                                        <h4 class="text-primary mb-0">
+                                            {{ toRupiah(review_loan.loanRequest.amount) }}
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="border-end">
+                                        <h6 class="text-muted mb-1">Total Bunga</h6>
+                                        <h4 class="text-success mb-0">
+                                            {{ toRupiah(review_loan.loanRequest.interest!!) }}
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <div class="border-end">
+                                        <h6 class="text-muted mb-1">Biaya Admin</h6>
+                                        <h4 class="text-warning mb-0">
+                                            {{ toRupiah(review_loan.loanRequest.adminFee!!) }}
+                                        </h4>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 mb-3">
+                                    <h6 class="text-muted mb-1">
+                                        Total Pinjaman + Bunga + Admin Fee
+                                    </h6>
+                                    <h4 class="text-danger mb-0">
+                                        {{
+                                        toRupiah(
+                                        review_loan.loanRequest.amount +
+                                        review_loan.loanRequest.interest!! +
+                                        review_loan.loanRequest.adminFee!!
+                                        )
+                                        }}
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <!-- Perhitungan Cicilan -->
+                            <div class="row mt-3 pt-3 border-top">
+                                <div class="col-md-6">
+                                    <div class="bg-light p-3 rounded">
+                                        <h6 class="text-white mb-2">Cicilan per Bulan</h6>
+                                        <h3 class="text-primary mb-0">
+                                            {{
+                                            toRupiah(
+                                            (review_loan.loanRequest.amount +
+                                            review_loan.loanRequest.interest!!) /
+                                            review_loan.loanRequest.tenor
+                                            )
+                                            }}
+                                        </h3>
+                                        <small class="text-white">untuk {{ review_loan.loanRequest.tenor }}
+                                            bulan</small>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="bg-light p-3 rounded">
+                                        <h6 class="text-white mb-2">Rasio Cicilan vs Gaji</h6>
+                                        <h3 class="mb-0" [ngClass]="{
+                        'text-success':
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                            100 <=
+                          30,
+                        'text-warning':
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                            100 >
+                            30 &&
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                            100 <=
+                            50,
+                        'text-danger':
+                          ((review_loan.loanRequest.amount +
+                            review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                            review_loan.loanRequest.tenor /
+                            review_loan.customerDetails.salary) *
+                            100 >
+                          50
+                      }">
+                                            {{
+                                            (
+                                            ((review_loan.loanRequest.amount +
+                                            review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                                            review_loan.loanRequest.tenor /
+                                            review_loan.customerDetails.salary) *
+                                            100
+                                            ).toFixed(1)
+                                            }}%
+                                        </h3>
+                                        <small class="text-white">dari penghasilan</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="statusPekerjaan" class="form-label">Status Pekerjaan</label>
-                    <input type="text" id="statusPekerjaan" class="form-control" formControlName="statusPekerjaan" />
+            </div>
+
+            <!-- Informasi Customer Capital -->
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-info text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-user-tie me-2"></i>Profil Customer
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">Penghasilan Bulanan</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control fw-bold"
+                                        [value]="toRupiah(review_loan.customerDetails.salary)" readonly />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">Status Pekerjaan</label>
+                                <input type="text" class="form-control" [value]="review_loan.customerDetails.job"
+                                    readonly />
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">Plafond Tersedia</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control"
+                                        [value]="review_loan.customerDetails.availablePlafond" readonly />
+                                </div>
+                            </div>
+                            <div class="mb-0">
+                                <label class="form-label fw-bold text-muted">Kategori Plafond</label>
+                                <input type="text" class="form-control"
+                                    [value]="review_loan.customerDetails.plafond.plan" readonly />
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="jumlahPinjaman" class="form-label">Jumlah Pinjaman</label>
-                    <input type="text" id="jumlahPinjaman" class="form-control" formControlName="jumlahPinjaman" />
+
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-header bg-secondary text-white">
+                            <h6 class="mb-0">
+                                <i class="fas fa-file-invoice-dollar me-2"></i>Detail Pengajuan
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">Jumlah Pinjaman</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control fw-bold text-primary"
+                                        [value]="toRupiah(review_loan.loanRequest.amount)" readonly />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">Tenor Pinjaman</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" [value]="review_loan.loanRequest.tenor"
+                                        readonly />
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label fw-bold text-muted">Tujuan Penggunaan</label>
+                                <textarea class="form-control" rows="2" [value]="
+                    review_loan.loanRequest.purpose || 'Tidak disebutkan'
+                  " readonly></textarea>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="col-md-6 mb-3">
-                    <label for="tenor" class="form-label">Tenor</label>
-                    <input type="text" id="tenor" class="form-control" formControlName="tenor" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="plafond" class="form-label">Plafond</label>
-                    <input type="text" id="plafond" class="form-control" formControlName="plafond" />
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="sisaPlafond" class="form-label">Sisa Plafond</label>
-                    <input type="text" id="sisaPlafond" class="form-control" formControlName="sisaPlafond" />
-                </div>
-                <div class="col-12 mb-3">
-                    <label for="tujuanPenggunaan" class="form-label">Tujuan Penggunaan</label>
-                    <input type="text" id="tujuanPenggunaan" class="form-control" formControlName="tujuanPenggunaan" />
+            </div>
+
+            <!-- Analisis Kelayakan -->
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card shadow-sm">
+                        <div class="card-header" [ngClass]="{
+                'bg-success text-white':
+                  ((review_loan.loanRequest.amount +
+                    review_loan.loanRequest.interest!!) /
+                    review_loan.loanRequest.tenor /
+                    review_loan.customerDetails.salary) *
+                    100 <=
+                  30,
+                'bg-warning text-dark':
+                  ((review_loan.loanRequest.amount +
+                    review_loan.loanRequest.interest!!) /
+                    review_loan.loanRequest.tenor /
+                    review_loan.customerDetails.salary) *
+                    100 >
+                    30 &&
+                  ((review_loan.loanRequest.amount +
+                    review_loan.loanRequest.interest!!) /
+                    review_loan.loanRequest.tenor /
+                    review_loan.customerDetails.salary) *
+                    100 <=
+                    50,
+                'bg-danger text-white':
+                  ((review_loan.loanRequest.amount +
+                    review_loan.loanRequest.interest!!) /
+                    review_loan.loanRequest.tenor /
+                    review_loan.customerDetails.salary) *
+                    100 >
+                  50
+              }">
+                            <h6 class="mb-0">
+                                <i class="fas fa-chart-line me-2"></i>Analisis Kelayakan Kredit
+                                <span class="badge bg-white text-success ms-2" *ngIf="
+                    ((review_loan.loanRequest.amount +
+                      review_loan.loanRequest.interest!!) /
+                      review_loan.loanRequest.tenor /
+                      review_loan.customerDetails.salary) *
+                      100 <=
+                    30
+                  ">LAYAK</span>
+                                <span class="badge bg-white text-warning ms-2" *ngIf="
+                    ((review_loan.loanRequest.amount +
+                      review_loan.loanRequest.interest!!) /
+                      review_loan.loanRequest.tenor /
+                      review_loan.customerDetails.salary) *
+                      100 >
+                      30 &&
+                    ((review_loan.loanRequest.amount +
+                      review_loan.loanRequest.interest!!) /
+                      review_loan.loanRequest.tenor /
+                      review_loan.customerDetails.salary) *
+                      100 <=
+                      50
+                  ">PERLU REVIEW</span>
+                                <span class="badge bg-white text-danger ms-2" *ngIf="
+                    ((review_loan.loanRequest.amount +
+                      review_loan.loanRequest.interest!!) /
+                      review_loan.loanRequest.tenor /
+                      review_loan.customerDetails.salary) *
+                      100 >
+                    50
+                  ">BERISIKO TINGGI</span>
+                            </h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <div class="mb-2">
+                                        <i class="fas fa-percentage fa-2x text-muted"></i>
+                                    </div>
+                                    <h6 class="text-muted">Debt to Income Ratio</h6>
+                                    <h4 [ngClass]="{
+                      'text-success':
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100 <=
+                        30,
+                      'text-warning':
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100 >
+                          30 &&
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100 <=
+                          50,
+                      'text-danger':
+                        ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100 >
+                        50
+                    }">
+                                        {{
+                                        (
+                                        ((review_loan.loanRequest.amount +
+                                        review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                                        review_loan.loanRequest.tenor /
+                                        review_loan.customerDetails.salary) *
+                                        100
+                                        ).toFixed(1)
+                                        }}%
+                                    </h4>
+                                    <small class="text-muted">Standar: ≤30% (Baik), 30-50% (Hati-hati), >50%
+                                        (Berisiko)</small>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="mb-2">
+                                        <i class="fas fa-credit-card fa-2x text-muted"></i>
+                                    </div>
+                                    <h6 class="text-muted">Utilisasi Plafond</h6>
+                                    <h4 [ngClass]="{
+                      'text-success':
+                        ((review_loan.loanRequest.amount!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                          100 <=
+                        70,
+                      'text-warning':
+                        ((review_loan.loanRequest.amount!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                          100 >
+                          70 &&
+                        ((review_loan.loanRequest.amount!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                          100 <=
+                          90,
+                      'text-danger':
+                        ((review_loan.loanRequest.amount!!) /
+                          fromRupiah(
+                            review_loan.customerDetails.availablePlafond
+                          )) *
+                          100 >
+                        90
+                    }">
+                                        {{
+                                        (
+                                        ((review_loan.loanRequest.amount!!) /
+                                        fromRupiah(
+                                        review_loan.customerDetails.availablePlafond
+                                        )) *
+                                        100
+                                        ).toFixed(1)
+                                        }}%
+                                    </h4>
+                                    <small class="text-muted">dari plafond tersedia</small>
+                                </div>
+                                <div class="col-md-4 text-center">
+                                    <div class="mb-2">
+                                        <i class="fas fa-calendar-alt fa-2x text-muted"></i>
+                                    </div>
+                                    <h6 class="text-muted">Tenor Pinjaman</h6>
+                                    <h4 class="text-info">
+                                        {{ review_loan.loanRequest.tenor }} Bulan
+                                    </h4>
+                                    <small class="text-muted">periode pembayaran</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Foto Rumah -->
             <div class="card shadow-sm mb-4">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <span>Foto Rumah</span>
-                    <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#fotoRumahModal">Lihat
-                        Besar</button>
+                    <span>Foto Rumah ({{ review_loan.customerDetails.houseStatus }})</span>
+                    <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#fotoRumahModal">
+                        Lihat Besar
+                    </button>
                 </div>
                 <div class="card-body text-center">
-                    <img [src]="review_loan.customerDetails.houseUrl || 'assets/images/default-house.jpg'"
-                        alt="Rumah" class="img-fluid rounded shadow-sm"
+                    <img [src]="
+              review_loan.customerDetails.houseUrl ||
+              'assets/images/default-house.jpg'
+            " alt="Foto Rumah" class="img-fluid rounded shadow-sm"
                         style="max-height: 300px; object-fit: cover; cursor: pointer" data-bs-toggle="modal"
                         data-bs-target="#fotoRumahModal" />
                 </div>
+                <app-image-modal modalId="fotoRumahModal" [imageUrl]="
+            review_loan.customerDetails.houseUrl ||
+            'assets/images/default-ktp.jpg'
+          " title="Pratinjau Rumah">
+                </app-image-modal>
             </div>
 
-            <!-- Catatan -->
-            <div class="mb-3">
-                <label for="noteCapital" class="form-label">Catatan</label>
-                <textarea id="noteCapital" rows="3" class="form-control" formControlName="noteCapital"></textarea>
+            <!-- Catatan Marketing -->
+            <div class="card shadow-sm mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h6 class="mb-0">
+                        <i class="fas fa-sticky-note me-2"></i>Catatan Keuangan (optional)
+                    </h6>
+                </div>
+                <div class="card-body">
+                    <textarea class="form-control" rows="4"
+                        placeholder="Berikan catatan terkait data keuangan dan pengajuan"
+                        formControlName="noteCapital"></textarea>
+                </div>
             </div>
 
             <!-- Navigasi -->
             <div class="form-navigation d-flex justify-content-between">
-                <button type="button" class="btn btn-secondary" (click)="prevSection()">Sebelumnya</button>
-                <button type="button" class="btn btn-primary" (click)="nextSection()">Selanjutnya</button>
-            </div>
-
-            <!-- Modal Slip Gaji -->
-            <div class="modal fade" id="slipGajiModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content">
-                        <!-- <div class="modal-body text-center p-0">
-                            <img [src]="review_loan.customerDetails.salarySlip || 'assets/images/default-salary.jpg'"
-                                alt="Slip Gaji Besar" class="img-fluid rounded shadow-sm"
-                                style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
-                                (click)="toggleZoom($event)" />
-                        </div> -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- Modal Foto Rumah -->
-            <div class="modal fade" id="fotoRumahModal" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-body text-center p-0">
-                            <img [src]="review_loan.customerDetails.houseUrl || 'assets/images/default-house.jpg'"
-                                alt="Foto Rumah Besar" class="img-fluid rounded shadow-sm"
-                                style="max-width: 100%; max-height: 80vh; transition: transform 0.2s ease; cursor: zoom-in;"
-                                (click)="toggleZoom($event)" />
-                        </div>
-                    </div>
-                </div>
+                <button type="button" class="btn btn-outline-secondary btn-lg" (click)="prevSection()">
+                    <i class="fas fa-arrow-left me-2"></i>Sebelumnya
+                </button>
+                <button type="button" class="btn btn-primary btn-lg" (click)="nextSection()">
+                    Selanjutnya<i class="fas fa-arrow-right ms-2"></i>
+                </button>
             </div>
         </div>
 
-        <div *ngIf="currentSection === 4" class="container mt-4">
+        <div *ngIf="currentSection === 3" class="container-fluid py-4">
+      <div class="row justify-content-center">
+        <div class="col-12 col-xl-10">
             <div class="alert alert-warning d-flex align-items-start gap-4 shadow-sm p-3 mb-4 rounded">
                 <i class="bi bi-chat-left-quote-fill fs-4 text-dark mt-1"></i>
 
@@ -386,98 +654,213 @@
                     </div>
                 </div>
             </div>
-            <h3 class="mb-3">Ringkasan Pengajuan</h3>
+          <!-- Header Section -->
+          <div class="d-flex align-items-center justify-content-between mb-4">
+            <div>
+              <h2 class="text-primary mb-1">
+                <i class="bi bi-clipboard-check me-2"></i>Ringkasan Pengajuan Pinjaman
+              </h2>
+              <p class="text-muted mb-0">Tinjau semua informasi sebelum memberikan keputusan</p>
+            </div>
+            <div class="badge bg-warning text-dark fs-6 px-3 py-2">
+              <i class="bi bi-clock me-1"></i>Menunggu Pencairan
+            </div>
+          </div>
 
-            <!-- Identitas -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-secondary text-white">
-                    Identitas
+          <!-- Main Content Row -->
+          <div class="row g-4">
+            <!-- Left Column - Customer Info -->
+            <div class="col-lg-6">
+              <!-- Identity Card -->
+              <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-gradient"
+                  style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                  <h5 class="card-title text-white mb-0">
+                    <i class="bi bi-person-circle me-2"></i>Identitas Nasabah
+                  </h5>
                 </div>
-                <div class="card-body row">
-                    <div class="col-md-6 mb-2">
-                        <label class="fw-bold">Nama Lengkap:</label>
-                        <p>{{ loanForm.get("namaLengkap")?.value || "-" }}</p>
+                <div class="card-body">
+                  <div class="row g-3">
+                    <div class="col-12">
+                      <div class="d-flex align-items-center p-3 bg-light rounded">
+                        <div class="bg-primary rounded-circle p-2 me-3">
+                          <i class="bi bi-person text-white"></i>
+                        </div>
+                        <div>
+                          <small class="text-white">Nama Lengkap</small>
+                          <div class="text-white fw-bold">{{ review_loan.customerDetails.user.name }}</div>
+                        </div>
+                      </div>
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <label class="fw-bold">Alamat:</label>
-                        <p>{{ loanForm.get("alamat")?.value || "-" }}</p>
+
+                    <div class="col-12">
+                      <div class="info-item">
+                        <label class="form-label text-muted mb-1">
+                          <i class="bi bi-geo-alt me-1"></i>Alamat
+                        </label>
+                        <p class="fw-medium mb-0">{{ review_loan.customerDetails.street }}</p>
+                      </div>
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <label class="fw-bold">Note Identity:</label>
-                        <p>{{ loanForm.get("noteIdentity")?.value || "-" }}</p>
+
+                    <div class="col-md-6">
+                      <div class="info-item">
+                        <label class="form-label text-muted mb-1">
+                          <i class="bi bi-heart me-1"></i>Nama Ibu Kandung
+                        </label>
+                        <p class="fw-medium mb-0">{{ review_loan.customerDetails.mothersName }}</p>
+                      </div>
                     </div>
+
+                    <div class="col-md-6">
+                      <div class="info-item">
+                        <label class="form-label text-muted mb-1">
+                          <i class="bi bi-telephone me-1"></i>No. Telepon
+                        </label>
+                        <p class="fw-medium mb-0">{{ review_loan.customerDetails.noTelp }}</p>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="info-item">
+                        <label class="form-label text-muted mb-1">
+                          <i class="bi bi-envelope me-1"></i>Email
+                        </label>
+                        <p class="fw-medium mb-0">{{ review_loan.customerDetails.user.email }}</p>
+                      </div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <div class="info-item">
+                        <label class="form-label text-muted mb-1">
+                          <i class="bi bi-credit-card me-1"></i>No. Rekening
+                        </label>
+                        <p class="fw-medium mb-0">{{ review_loan.customerDetails.noRek }}</p>
+                      </div>
+                    </div>
+
+                    <!-- <img [src]="staticMapUrl" alt="Map with pin" width="100%" height="300"> -->
+
+                    <div class="col-12" *ngIf="loanForm.get('noteIdentity')?.value">
+                      <div class="alert alert-info mb-0">
+                        <strong><i class="bi bi-info-circle me-1"></i>Catatan Identitas:</strong>
+                        <p class="mb-0 mt-1">{{ loanForm.get("noteIdentity")?.value }}</p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
 
-            <!-- Kontak -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-info text-white">
-                    Kontak
+            <!-- Right Column - Loan Details -->
+            <div class="col-lg-6">
+              <!-- Loan Details Card -->
+              <div class="card h-100 shadow-sm border-0">
+                <div class="card-header bg-gradient"
+                  style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);">
+                  <h5 class="card-title text-white mb-0">
+                    <i class="bi bi-cash-coin me-2"></i>Detail Pengajuan & Kapasitas
+                  </h5>
                 </div>
-                <div class="card-body row">
-                    <div class="col-md-4 mb-2">
-                        <label class="fw-bold">No Telpon:</label>
-                        <p>{{ loanForm.get("notelpon")?.value || "-" }}</p>
-                    </div>
-                    <div class="col-md-4 mb-2">
-                        <label class="fw-bold">Kontak Darurat 1:</label>
-                        <p>{{ loanForm.get("kontakdarurat1")?.value || "-" }}</p>
-                    </div>
-                    <div class="col-md-4 mb-2">
-                        <label class="fw-bold">Kontak Darurat 2:</label>
-                        <p>{{ loanForm.get("kontakdarurat2")?.value || "-" }}</p>
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <label class="fw-bold">Note Contact:</label>
-                        <p>{{ loanForm.get("noteContact")?.value || "-" }}</p>
-                    </div>
-                </div>
-            </div>
+                <div class="card-body">
+                  <!-- Loan Amount Highlight -->
+                  <div class="text-center p-4 bg-light rounded mb-4">
+                    <small class="text-white">Jumlah Pinjaman yang Diajukan</small>
+                    <h3 class="text-danger fw-bold mb-0">
+                      {{ toRupiah(review_loan.loanRequest.amount) }}
+                    </h3>
+                    <small class="text-white">Tenor: {{ review_loan.loanRequest.tenor }} bulan</small>
+                  </div>
 
-            <!-- Capital & Pengajuan -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-header bg-success text-white">
-                    Capital & Pengajuan
-                </div>
-                <div class="card-body row">
-                    <div class="col-md-4 mb-2">
-                        <label class="fw-bold">Jumlah Pinjaman:</label>
-                        <p class="text-danger fw-semibold">
-                            {{ loanForm.get("jumlahPinjaman")?.value || "Rp0" }}
+                  <div class="row g-3">
+                    <!-- Financial Capacity -->
+                    <div class="col-12">
+                      <div class="border rounded p-3">
+                        <h6 class="text-success mb-3">
+                          <i class="bi bi-bar-chart me-1"></i>Kapasitas Keuangan
+                        </h6>
+                        <div class="row g-2">
+                          <div class="col-6">
+                            <small class="text-muted">Penghasilan</small>
+                            <div class="fw-bold text-success">{{ toRupiah(review_loan.customerDetails.salary) }}</div>
+                          </div>
+                          <div class="col-6">
+                            <small class="text-muted">Sisa Plafond</small>
+                            <div class="fw-bold">{{ review_loan.customerDetails.availablePlafond }}</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Risk Assessment -->
+                    <div class="col-12">
+                      <div class="info-item">
+                        <label class="form-label text-muted mb-1">
+                          <i class="bi bi-bar-chart me-1"></i>Debt Income Ratio
+                        </label>
+                        <p class="fw-medium mb-0">
+                          {{
+                          (
+                          ((review_loan.loanRequest.amount +
+                          review_loan.loanRequest.interest!! + review_loan.loanRequest.adminFee!!) /
+                          review_loan.loanRequest.tenor /
+                          review_loan.customerDetails.salary) *
+                          100
+                          ).toFixed(1)
+                          }}%
                         </p>
+                      </div>
                     </div>
-                    <div class="col-md-4 mb-2">
-                        <label class="fw-bold">Sisa Plafond:</label>
-                        <p>{{ loanForm.get("sisaPlafond")?.value || "Rp0" }}</p>
+
+                    <!-- Purpose -->
+                    <div class="col-12">
+                      <div class="info-item">
+                        <label class="form-label text-muted mb-1">
+                          <i class="bi bi-target me-1"></i>Tujuan Penggunaan
+                        </label>
+                        <p class="fw-medium mb-0">{{ review_loan.loanRequest.purpose || "Tidak disebutkan" }}</p>
+                      </div>
                     </div>
-                    <div class="col-md-4 mb-2">
-                        <label class="fw-bold">Tenor:</label>
-                        <p>{{ loanForm.get("tenor")?.value || "0" }} bulan</p>
+
+                    <div class="col-12" *ngIf="loanForm.get('noteCapital')?.value">
+                      <div class="alert alert-warning mb-0">
+                        <strong><i class="bi bi-exclamation-triangle me-1"></i>Catatan Kapital:</strong>
+                        <p class="mb-0 mt-1">{{ loanForm.get("noteCapital")?.value }}</p>
+                      </div>
                     </div>
-                    <div class="col-md-12 mb-2">
-                        <label class="fw-bold">Note Capital:</label>
-                        <p>{{ loanForm.get("noteCapital")?.value || "-" }}</p>
-                    </div>
+                  </div>
                 </div>
+              </div>
             </div>
+          </div>
 
-            <!-- Navigasi & Aksi -->
-            <div class="d-flex justify-content-between align-items-center mt-4">
-                <button type="button" class="btn btn-outline-secondary" (click)="prevSection()">
-                    <i class="bi bi-arrow-left"></i> Kembali
-                </button>
+          <!-- Action Buttons -->
+          <div class="row mt-4">
+            <div class="col-12">
+              <!-- <div class="card border-0 shadow-sm">
+                <div class="card-body"> -->
+                  <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3">
+                    <button type="button" class="btn btn-outline-secondary btn-lg" (click)="prevSection()">
+                      <i class="bi bi-arrow-left"></i> Kembali
+                    </button>
 
-                <div class="d-flex gap-2">
-                    <button type="button" class="btn btn-outline-danger" (click)="rejectLoan()">
-                        <i class="bi bi-x-circle-fill"></i> Tolak
-                    </button>
-                    <button type="button" class="btn btn-outline-success" (click)="disburseLoan()">
-                        <i class="bi bi-check-circle-fill"></i> Cairkan
-                    </button>
-                </div>
+                    <div class="d-flex gap-3">
+                      <button type="button" class="btn btn-danger btn-lg px-4" (click)="rejectLoan()"
+                        data-bs-toggle="tooltip" title="Tolak pengajuan ini">
+                        <i class="bi bi-x-circle-fill me-2"></i>Tolak
+                      </button>
+                      <button type="button" class="btn btn-success btn-lg px-4" (click)="disburseLoan()"
+                        data-bs-toggle="tooltip" title="Rekomendasikan untuk disetujui">
+                        <i class="bi bi-check-circle-fill me-2"></i>Cairkan
+                      </button>
+                    </div>
+                  </div>
+                <!-- </div>
+              </div> -->
             </div>
-
+          </div>
         </div>
+      </div>
+    </div>
 
     </form>
 </div>

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { LoanRequestService } from '../../core/services/loan-request.service';
 import Swal from 'sweetalert2';
 import { CommonModule } from '@angular/common';
+import { ImageModalComponent } from '../../shared/components/image-modal/image-modal.component';
 
 interface FormData {
   identity: any;
@@ -14,7 +15,7 @@ interface FormData {
 
 @Component({
   selector: 'app-disbursement-detail',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ImageModalComponent],
   templateUrl: './disbursement-detail.component.html',
   styleUrl: './disbursement-detail.component.css',
   standalone: true,
@@ -81,45 +82,22 @@ export class DisbursementDetailComponent implements OnInit {
       .subscribe({
         next: (value) => {
           this.review_loan = value;
-          const alamatParts = [
-            this.review_loan.customerDetails.street,
-            this.review_loan.customerDetails.district,
-            this.review_loan.customerDetails.province,
-            this.review_loan.customerDetails.postalCode,
-          ];
-
-          const formattedAlamat = alamatParts
-            .filter((part) => part && part.trim() !== '')
-            .join(', ');
-          this.loanForm.patchValue({
-            namaLengkap: this.review_loan.customerDetails.user.name,
-            alamat: formattedAlamat !== '' ? formattedAlamat : '-',
-            noKtp: '-',
-            tglLahir: '-',
-
-            noTelpon: '-',
-            email: this.review_loan.customerDetails.user.email,
-            kontakDarurat1: '-',
-            hubungan1: '-',
-            kontak1: '-',
-            kontakDarurat2: '-',
-            hubungan2: '-',
-            kontak2: '-',
-
-            penghasilan: 0,
-            statusPekerjaan: '-',
-            jumlahPinjaman: this.review_loan.loanRequest.amount,
-            plafond: '-',
-            sisaPlafond: this.review_loan.customerDetails.availablePlafond,
-            tenor: this.review_loan.loanRequest.tenor,
-            tujuanPenggunaan: '-',
-          });
+          this.review_loan.loanRequest.amount = this.fromRupiah(this.review_loan.loanRequest.amount.toString())
         },
         error: (err) => {
           console.error('Error fetching employee details:', err);
         },
       });
     // Anda bisa menambahkan logika inisialisasi data di sini jika diperlukan
+  }
+
+  toRupiah(value: number): string {
+    return 'Rp' + value.toLocaleString('id-ID', { maximumFractionDigits: 0 });
+  }
+
+  fromRupiah(rupiah: string): number {
+    const cleanString = rupiah.replace(/[Rp\s.]/g, '');
+    return Number(cleanString);
   }
 
   nextSection() {
