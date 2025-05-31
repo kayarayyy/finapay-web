@@ -30,6 +30,9 @@ export class ReviewLoanComponent implements OnInit {
   loan_id = '';
   review_loan!: ReviewLoan;
   loanForm: FormGroup;
+  lat = -6.200000; 
+  lng = 106.816666;
+  apiKey = 'AIzaSyA86DgTHWD6n2rdV2I7EmX2KgGspLXudtc'; 
   formData: FormData = {
     identity: {},
     capital: {},
@@ -43,26 +46,9 @@ export class ReviewLoanComponent implements OnInit {
     private router: Router
   ) {
     this.loanForm = this.fb.group({
-      // Bagian Identitas
-      // namaLengkap: [{ value: '', disabled: true }],
-      // alamat: [{ value: '', disabled: true }],
-      // noKtp: [{ value: '', disabled: true }],
-      // tglLahir: [{ value: '', disabled: true }],
       noteIdentity: [''],
-      // ... tambahkan field identitas lainnya
-
-      // Bagian Capital
-      // penghasilan: [{ value: '', disabled: true }],
-      // statusPekerjaan: [{ value: '', disabled: true }],
-      // Bagian Pengajuan Peminjaman
-      // jumlahPinjaman: [{ value: '', disabled: true }],
-      // plafond: [{ value: '', disabled: true }],
-      // sisaPlafond: [{ value: '', disabled: true }],
-      // tenor: [{ value: '', disabled: true }],
-      // tujuanPenggunaan: [{ value: '', disabled: true }],
       noteCapital: [''],
 
-      // ... tambahkan field pengajuan lainnya
     });
   }
 
@@ -70,53 +56,20 @@ export class ReviewLoanComponent implements OnInit {
     this.route.queryParamMap.subscribe((params) => {
       this.loan_id = params.get('id') || '';
     });
-    // this.loan_id = this.route.snapshot.paramMap.get('id') || '';
     this.loanRequestService.getLoanRequestByIdReview(this.loan_id).subscribe({
       next: (value) => {
         this.review_loan = value;
         this.review_loan.loanRequest.amount = this.fromRupiah(this.review_loan.loanRequest.amount.toString())
-        // const alamatParts = [
-        //   this.review_loan.customerDetails.street,
-        //   this.review_loan.customerDetails.district,
-        //   this.review_loan.customerDetails.province,
-        //   this.review_loan.customerDetails.postalCode,
-        // ];
-
-        // const formattedAlamat = alamatParts
-        //   .filter((part) => part && part.trim() !== '')
-        //   .join(', ');
-        // this.review_loan.customerDetails.street = formattedAlamat
-        // this.loanForm.patchValue({
-        //   namaLengkap: this.review_loan.customerDetails.user.name,
-        //   alamat: formattedAlamat !== '' ? formattedAlamat : '-',
-        //   noKtp: '-',
-        //   tglLahir: '-',
-
-        //   noTelpon: '-',
-        //   email: this.review_loan.customerDetails.user.email,
-        //   kontakDarurat1: '-',
-        //   hubungan1: '-',
-        //   kontak1: '-',
-        //   kontakDarurat2: '-',
-        //   hubungan2: '-',
-        //   kontak2: '-',
-
-        //   penghasilan: 0,
-        //   statusPekerjaan: '-',
-        //   jumlahPinjaman: this.review_loan.loanRequest.amount,
-        //   plafond: '-',
-        //   sisaPlafond: this.review_loan.customerDetails.availablePlafond,
-        //   tenor: this.review_loan.loanRequest.tenor,
-        //   tujuanPenggunaan: '-',
-        // });
       },
       error: (err) => {
         console.error('Error fetching employee details:', err);
       },
     });
-    // Anda bisa menambahkan logika inisialisasi data di sini jika diperlukan
   }
 
+  get staticMapUrl(): string {
+    return `https://maps.googleapis.com/maps/api/staticmap?center=${this.lat},${this.lng}&zoom=15&size=600x300&markers=color:red%7C${this.lat},${this.lng}&key=${this.apiKey}`;
+  }
 
   getDIRBadgeClass(dirValue: number): string {
     if (dirValue <= 30) {
@@ -147,7 +100,6 @@ export class ReviewLoanComponent implements OnInit {
   }
 
   fromRupiah(rupiah: string): number {
-    // Hilangkan simbol 'Rp', spasi, dan titik pemisah ribuan
     const cleanString = rupiah.replace(/[Rp\s.]/g, '');
     return Number(cleanString);
   }
@@ -186,7 +138,6 @@ export class ReviewLoanComponent implements OnInit {
 
       const fullNote = notes.join(', ');
 
-      // Tampilkan konfirmasi
       Swal.fire({
         title: 'Apakah anda yakin?',
         text: 'Kamu akan menolak pengajuan!',
@@ -196,7 +147,6 @@ export class ReviewLoanComponent implements OnInit {
         cancelButtonText: 'Batalkan',
       }).then((result) => {
         if (result.isConfirmed) {
-          // Pastikan kamu punya ID LoanRequest yang sedang diproses
 
           this.loanRequestService
             .updateLoanRequestReview(this.loan_id, false, fullNote)
@@ -248,7 +198,6 @@ export class ReviewLoanComponent implements OnInit {
 
       const fullNote = notes.join(', ');
 
-      // Tampilkan konfirmasi
       Swal.fire({
         title: 'Apakah anda yakin?',
         text: 'Kamu akan merekomendasikan pengajuan!',
@@ -258,7 +207,6 @@ export class ReviewLoanComponent implements OnInit {
         cancelButtonText: 'Batalkan',
       }).then((result) => {
         if (result.isConfirmed) {
-          // Tampilkan loading Swal
           Swal.fire({
             title: 'Memproses...',
             text: 'Mohon tunggu sebentar',

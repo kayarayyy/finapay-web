@@ -543,7 +543,7 @@
       <!-- Foto Rumah -->
       <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-          <span>Foto Rumah</span>
+          <span>Foto Rumah ({{ review_loan.customerDetails.houseStatus }})</span>
           <button class="btn btn-sm btn-light" data-bs-toggle="modal" data-bs-target="#fotoRumahModal">
             Lihat Besar
           </button>
@@ -586,104 +586,6 @@
         </button>
       </div>
     </div>
-    <!-- <div *ngIf="currentSection === 3" class="container mt-4">
-      <h3 class="mb-3">Ringkasan Pengajuan</h3>
-
-      <div class="card shadow-sm mb-4">
-        <div class="card-header bg-secondary text-white">Identitas</div>
-        <div class="card-body row">
-          <div class="col-md-6 mb-2">
-            <label class="fw-bold">Nama Lengkap:</label>
-            <p>{{ review_loan.customerDetails.user.name }}</p>
-          </div>
-          <div class="col-md-6 mb-2">
-            <label class="fw-bold">Alamat:</label>
-            <p>{{ review_loan.customerDetails.street }}</p>
-          </div>
-          <div class="col-md-6 mb-2">
-            <label class="fw-bold">Nama Ibu Kandung:</label>
-            <p>{{ review_loan.customerDetails.mothersName }}</p>
-          </div>
-          <div class="col-md-6 mb-2">
-            <label class="fw-bold">No. Telp:</label>
-            <p>{{ review_loan.customerDetails.noTelp }}</p>
-          </div>
-          <div class="col-md-6 mb-2">
-            <label class="fw-bold">Email:</label>
-            <p>{{ review_loan.customerDetails.user.email }}</p>
-          </div>
-          <div class="col-md-6 mb-2">
-            <label class="fw-bold">No. Rek:</label>
-            <p>{{ review_loan.customerDetails.noRek }}</p>
-          </div>
-          <div class="col-md-6 mb-2">
-            <label class="fw-bold">Note Identity:</label>
-            <p>{{ loanForm.get("noteIdentity")?.value || "-" }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="card shadow-sm mb-4">
-        <div class="card-header bg-success text-white">Capital & Pengajuan</div>
-        <div class="card-body row">
-          <div class="col-md-4 mb-2">
-            <label class="fw-bold">Jumlah Pinjaman:</label>
-            <p class="text-danger fw-semibold">
-              {{ toRupiah(review_loan.loanRequest.amount) }}
-            </p>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="fw-bold">Sisa Plafond:</label>
-            <p>{{ review_loan.customerDetails.availablePlafond }}</p>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="fw-bold">Tenor:</label>
-            <p>{{ review_loan.loanRequest.tenor }} bulan</p>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="fw-bold">Penghasilan:</label>
-            <p>{{ toRupiah(review_loan.customerDetails.salary) }}</p>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="fw-bold">Debt Income Ratio:</label>
-            <p>{{
-              (
-              ((review_loan.loanRequest.amount!! +
-              review_loan.loanRequest.interest!! +
-              review_loan.loanRequest.adminFee!!) /
-              fromRupiah(
-              review_loan.customerDetails.availablePlafond
-              )) *
-              100
-              ).toFixed(1)
-              }}%</p>
-          </div>
-          <div class="col-md-4 mb-2">
-            <label class="fw-bold">Tujuan Penggunaan:</label>
-            <p>{{ review_loan.loanRequest.purpose || "Tidak disebutkan" }}</p>
-          </div>
-          <div class="col-md-12 mb-2">
-            <label class="fw-bold">Note Capital:</label>
-            <p>{{ loanForm.get("noteCapital")?.value || "-" }}</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="d-flex justify-content-between align-items-center mt-4">
-        <button type="button" class="btn btn-outline-secondary" (click)="prevSection()">
-          <i class="bi bi-arrow-left-circle"></i> Sebelumnya
-        </button>
-
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-outline-danger" (click)="rejectLoan()">
-            <i class="bi bi-x-circle-fill"></i> Tolak
-          </button>
-          <button type="button" class="btn btn-outline-success" (click)="recommendLoan()">
-            <i class="bi bi-check-circle-fill"></i> Rekomendasikan
-          </button>
-        </div>
-      </div>
-    </div> -->
     <div *ngIf="currentSection === 3" class="container-fluid py-4">
       <div class="row justify-content-center">
         <div class="col-12 col-xl-10">
@@ -770,6 +672,8 @@
                         <p class="fw-medium mb-0">{{ review_loan.customerDetails.noRek }}</p>
                       </div>
                     </div>
+
+                    <!-- <img [src]="staticMapUrl" alt="Map with pin" width="100%" height="300"> -->
 
                     <div class="col-12" *ngIf="loanForm.get('noteIdentity')?.value">
                       <div class="alert alert-info mb-0">
