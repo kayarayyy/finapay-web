@@ -11,6 +11,7 @@ import { LoanRequestService } from '../../core/services/loan-request.service';
 import { ReviewLoan } from '../../core/models/review-loan';
 import Swal from 'sweetalert2';
 import { ImageModalComponent } from '../../shared/components/image-modal/image-modal.component';
+import { delay } from 'rxjs';
 
 interface FormData {
   identity: any;
@@ -33,6 +34,7 @@ export class ReviewLoanComponent implements OnInit {
     identity: {},
     capital: {},
   };
+  Math = Math;
 
   constructor(
     private route: ActivatedRoute,
@@ -113,6 +115,31 @@ export class ReviewLoanComponent implements OnInit {
       },
     });
     // Anda bisa menambahkan logika inisialisasi data di sini jika diperlukan
+  }
+
+
+  getDIRBadgeClass(dirValue: number): string {
+    if (dirValue <= 30) {
+      return 'bg-success text-white';
+    } else if (dirValue <= 50) {
+      return 'bg-warning text-dark';
+    } else if (dirValue <= 70) {
+      return 'bg-orange text-white';
+    } else {
+      return 'bg-danger text-white';
+    }
+  }
+
+  getDIRProgressClass(dirValue: number): string {
+    if (dirValue <= 30) {
+      return 'bg-success';
+    } else if (dirValue <= 50) {
+      return 'bg-warning';
+    } else if (dirValue <= 70) {
+      return 'bg-orange';
+    } else {
+      return 'bg-danger';
+    }
   }
 
   toRupiah(value: number): string {
@@ -231,7 +258,16 @@ export class ReviewLoanComponent implements OnInit {
         cancelButtonText: 'Batalkan',
       }).then((result) => {
         if (result.isConfirmed) {
-          // Pastikan kamu punya ID LoanRequest yang sedang diproses
+          // Tampilkan loading Swal
+          Swal.fire({
+            title: 'Memproses...',
+            text: 'Mohon tunggu sebentar',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
 
           this.loanRequestService
             .updateLoanRequestReview(this.loan_id, true, fullNote)
@@ -251,7 +287,7 @@ export class ReviewLoanComponent implements OnInit {
                   err.error.message || 'Terjadi kesalahan',
                   'error'
                 );
-              },
+              }
             });
         }
       });
@@ -272,5 +308,5 @@ export class ReviewLoanComponent implements OnInit {
     }
   }
 
-  submitForm() {}
+  submitForm() { }
 }

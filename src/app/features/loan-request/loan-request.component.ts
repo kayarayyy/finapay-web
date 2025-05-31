@@ -37,7 +37,7 @@ export class LoanRequestComponent implements OnInit {
     private loanRequestService: LoanRequestService,
     private authSessionService: AuthSessionService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.columns = [
@@ -188,6 +188,15 @@ export class LoanRequestComponent implements OnInit {
           cancelButtonText: 'Batalkan',
         }).then((confirmRes) => {
           if (confirmRes.isConfirmed) {
+            Swal.fire({
+              title: 'Memproses...',
+              text: 'Mohon tunggu sebentar',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              didOpen: () => {
+                Swal.showLoading();
+              }
+            });
             this.submitApproval(id, true, notes);
           }
         });
@@ -202,6 +211,15 @@ export class LoanRequestComponent implements OnInit {
           cancelButtonText: 'Batalkan',
         }).then((confirmRes) => {
           if (confirmRes.isConfirmed) {
+            Swal.fire({
+              title: 'Memproses...',
+              text: 'Mohon tunggu sebentar',
+              allowOutsideClick: false,
+              allowEscapeKey: false,
+              didOpen: () => {
+                Swal.showLoading();
+              }
+            });
             this.submitApproval(id, false, notes);
           }
         });
@@ -232,6 +250,6 @@ export class LoanRequestComponent implements OnInit {
         },
       });
   }
-  updateRequest(id: string): void {}
-  deleteRequest(id: string): void {}
+  updateRequest(id: string): void { }
+  deleteRequest(id: string): void { }
 }

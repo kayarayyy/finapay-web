@@ -172,7 +172,15 @@ export class ApprovalLoanComponent {
       }).then((result) => {
         if (result.isConfirmed) {
           // Pastikan kamu punya ID LoanRequest yang sedang diproses
-
+          Swal.fire({
+            title: 'Memproses...',
+            text: 'Mohon tunggu sebentar',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
           this.loanRequestService
             .updateLoanRequestApproval(this.loan_id, false, fullNote)
             .subscribe({
@@ -242,7 +250,15 @@ export class ApprovalLoanComponent {
       }).then((result) => {
         if (result.isConfirmed) {
           // Pastikan kamu punya ID LoanRequest yang sedang diproses
-
+          Swal.fire({
+            title: 'Memproses...',
+            text: 'Mohon tunggu sebentar',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+              Swal.showLoading();
+            }
+          });
           this.loanRequestService
             .updateLoanRequestApproval(this.loan_id, true, fullNote)
             .subscribe({
@@ -282,5 +298,5 @@ export class ApprovalLoanComponent {
     }
   }
 
-  submitForm() {}
+  submitForm() { }
 }

@@ -183,3 +183,42 @@ button:hover {
   background: linear-gradient(135deg, #388e3c, #4caf50);
 }
 
+.info-item {
+  padding: 0.75rem;
+  border-left: 3px solid #e9ecef;
+  transition: border-color 0.2s ease;
+}
+
+.info-item:hover {
+  border-left-color: #007bff;
+  background-color: #f8f9fa;
+}
+
+.bg-gradient {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0,0,0,0.1) !important;
+}
+
+@media (max-width: 768px) {
+  .container-fluid {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  
+  .d-flex.gap-3 {
+    flex-direction: column;
+    width: 100%;
+  }
+  
+  .d-flex.gap-3 .btn {
+    width: 100%;
+  }
+}
