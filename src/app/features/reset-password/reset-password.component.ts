@@ -17,12 +17,21 @@ export class ResetPasswordComponent {
   newPassword = '';
   confirmPassword = '';
   resetId = '';
+  showPassword: boolean = false;
+  showConfirmPassword: boolean = false;
+
+  togglePasswordVisibility() {
+    this.showPassword = !this.showPassword;
+  }
+  toggleConfirmPasswordVisibility() {
+    this.showConfirmPassword = !this.showConfirmPassword;
+  }
 
   constructor(
     private route: ActivatedRoute,
     private authService: AuthService,
     private router: Router
-  ) {}
+  ) { }
   navigateToLogin() {
     console.log('Dasd');
     this.router.navigate(['/login']);
