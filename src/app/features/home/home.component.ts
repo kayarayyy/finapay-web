@@ -22,10 +22,10 @@ export class HomeComponent implements OnInit {
   isLoading = true;
 
 
-  totalBranches = 12;
-  totalUsers = 247;
-  totalLoanRequests = 156;
-  approvedLoans = 89;
+  totalBranches = 0;
+  totalUsers = 0;
+  totalLoanRequests = 0;
+  approvedLoans = 0;
   branches: any[] = [
   ];
 
@@ -47,7 +47,8 @@ export class HomeComponent implements OnInit {
 
   constructor(
     private session: AuthSessionService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private authSessionService: AuthSessionService
   ) { }
 
 
@@ -66,36 +67,140 @@ export class HomeComponent implements OnInit {
       });
     }
 
-    this.dashboardService.getDashboardSuperadmin().subscribe({
-      next: (data) => {
-        this.dashboardData = data;
-        this.totalBranches = data.totalBranches;
-        this.totalUsers = data.totalActiveUsers;
-        this.totalLoanRequests = data.totalLoanRequests;
-        this.approvedLoans = data.totalApproved;
-        this.branches = data.branches;
+    this.fetchDashboard();
+  }
 
-        // Update loan stats
-        this.loanStats = {
-          pending: data.totalPending,
-          approved: data.totalApproved,
-          rejected: data.totalRejected,
-        };
+  fetchDashboard(): void {
+    if (this.hasFeature("FEATURE_DASHBOARD_SUPERADMIN")) {
+      this.dashboardService.getDashboardSuperadmin().subscribe({
+        next: (data) => {
+          this.dashboardData = data;
+          this.totalBranches = data.totalBranches;
+          this.totalUsers = data.totalActiveUsers;
+          this.totalLoanRequests = data.totalLoanRequests;
+          this.approvedLoans = data.totalApproved;
+          this.branches = data.branches;
 
-        // Update loan amount stats
-        this.loanAmountStats = {
-          approved: data.amountApproved,
-          pending: data.amountPending,
-          rejected: data.amountRejected,
-        };
+          // Update loan stats
+          this.loanStats = {
+            pending: data.totalPending,
+            approved: data.totalApproved,
+            rejected: data.totalRejected,
+          };
 
-        this.isLoading = false;
-      },
-      error: (err) => {
-        console.error('Failed to load dashboard data:', err);
-        this.isLoading = false;
-      }
-    });
+          // Update loan amount stats
+          this.loanAmountStats = {
+            approved: data.amountApproved,
+            pending: data.amountPending,
+            rejected: data.amountRejected,
+          };
+
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Failed to load dashboard data:', err);
+          this.isLoading = false;
+        }
+      });
+    } else if (this.hasFeature("FEATURE_DASHBOARD_MARKETING")) {
+      this.dashboardService.getDashboardMarketing().subscribe({
+        next: (data) => {
+          this.dashboardData = data;
+          this.totalBranches = data.totalBranches;
+          this.totalUsers = data.totalActiveUsers;
+          this.totalLoanRequests = data.totalLoanRequests;
+          this.approvedLoans = data.totalApproved;
+          this.branches = data.branches;
+
+          // Update loan stats
+          this.loanStats = {
+            pending: data.totalPending,
+            approved: data.totalApproved,
+            rejected: data.totalRejected,
+          };
+
+          // Update loan amount stats
+          this.loanAmountStats = {
+            approved: data.amountApproved,
+            pending: data.amountPending,
+            rejected: data.amountRejected,
+          };
+
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Failed to load dashboard data:', err);
+          this.isLoading = false;
+        }
+      });
+    } else if (this.hasFeature("FEATURE_DASHBOARD_BRANCHMANAGER")) {
+      this.dashboardService.getDashboardBranchManager().subscribe({
+        next: (data) => {
+          this.dashboardData = data;
+          this.totalBranches = data.totalBranches;
+          this.totalUsers = data.totalActiveUsers;
+          this.totalLoanRequests = data.totalLoanRequests;
+          this.approvedLoans = data.totalApproved;
+          this.branches = data.branches;
+
+          // Update loan stats
+          this.loanStats = {
+            pending: data.totalPending,
+            approved: data.totalApproved,
+            rejected: data.totalRejected,
+          };
+
+          // Update loan amount stats
+          this.loanAmountStats = {
+            approved: data.amountApproved,
+            pending: data.amountPending,
+            rejected: data.amountRejected,
+          };
+
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Failed to load dashboard data:', err);
+          this.isLoading = false;
+        }
+      });
+    } else if (this.hasFeature("FEATURE_DASHBOARD_BACKOFFICE")) {
+      this.dashboardService.getDashboardBackOffice().subscribe({
+        next: (data) => {
+          this.dashboardData = data;
+          this.totalBranches = data.totalBranches;
+          this.totalUsers = data.totalActiveUsers;
+          this.totalLoanRequests = data.totalLoanRequests;
+          this.approvedLoans = data.totalApproved;
+          this.branches = data.branches;
+
+          // Update loan stats
+          this.loanStats = {
+            pending: data.totalPending,
+            approved: data.totalApproved,
+            rejected: data.totalRejected,
+          };
+
+          // Update loan amount stats
+          this.loanAmountStats = {
+            approved: data.amountApproved,
+            pending: data.amountPending,
+            rejected: data.amountRejected,
+          };
+
+          this.isLoading = false;
+        },
+        error: (err) => {
+          console.error('Failed to load dashboard data:', err);
+          this.isLoading = false;
+        }
+      });
+    }
+  }
+
+  hasFeature(feature: string): boolean {
+    const features = this.authSessionService.features;
+    return features.includes(feature);
   }
 
 
