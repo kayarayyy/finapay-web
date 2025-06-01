@@ -16,7 +16,7 @@
             <div class="kpi-content">
                 <div class="kpi-value">{{ totalBranches }}</div>
                 <div class="kpi-label">Total Cabang</div>
-                
+
             </div>
         </div>
 
@@ -27,7 +27,7 @@
             <div class="kpi-content">
                 <div class="kpi-value">{{ totalUsers }}</div>
                 <div class="kpi-label">User Aktif</div>
-                
+
             </div>
         </div>
 
@@ -38,7 +38,7 @@
             <div class="kpi-content">
                 <div class="kpi-value">{{ totalLoanRequests }}</div>
                 <div class="kpi-label">Total Pengajuan</div>
-                
+
             </div>
         </div>
 
@@ -49,7 +49,7 @@
             <div class="kpi-content">
                 <div class="kpi-value">{{ approvedLoans }}</div>
                 <div class="kpi-label">Disetujui</div>
-                
+
             </div>
         </div>
     </div>
@@ -185,7 +185,9 @@
                 <div class="table-actions">
                     <div class="search-box">
                         <i class="bi bi-search"></i>
-                        <input type="text" placeholder="Cari cabang..." class="search-input">
+                        <input type="text" placeholder="Cari cabang..." class="search-input" [(ngModel)]="searchTerm"
+                            (input)="applyFilter()" />
+
                     </div>
                 </div>
             </div>
@@ -194,34 +196,37 @@
                     <table class="modern-table">
                         <thead>
                             <tr>
-                                <th>
+                                <th (click)="sortBy('name')">
                                     <div class="th-content">
                                         Nama Cabang
-                                        <i class="bi bi-chevron-expand sort-icon"></i>
+                                        <i class="bi"
+                                            [ngClass]="{'bi-chevron-up': sortField === 'name' && sortDirection === 'asc', 'bi-chevron-down': sortField === 'name' && sortDirection === 'desc', 'bi-chevron-expand': sortField !== 'name'}"></i>
                                     </div>
                                 </th>
-                                <th>
+                                <th (click)="sortBy('city')">
                                     <div class="th-content">
                                         Kota
-                                        <i class="bi bi-chevron-expand sort-icon"></i>
+                                        <i class="bi"
+                                            [ngClass]="{'bi-chevron-up': sortField === 'city' && sortDirection === 'asc', 'bi-chevron-down': sortField === 'city' && sortDirection === 'desc', 'bi-chevron-expand': sortField !== 'city'}"></i>
                                     </div>
                                 </th>
-                                <th>
+                                <th (click)="sortBy('branchManager')">
                                     <div class="th-content">
                                         Manager
-                                        <i class="bi bi-chevron-expand sort-icon"></i>
+                                        <i class="bi"
+                                            [ngClass]="{'bi-chevron-up': sortField === 'branchManager' && sortDirection === 'asc', 'bi-chevron-down': sortField === 'branchManager' && sortDirection === 'desc', 'bi-chevron-expand': sortField !== 'branchManager'}"></i>
                                     </div>
                                 </th>
+
                                 <th>
                                     <div class="th-content">
                                         Jumlah Marketing
-                                        <i class="bi bi-chevron-expand sort-icon"></i>
                                     </div>
                                 </th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr *ngFor="let b of branches; let i = index" class="table-row">
+                            <tr *ngFor="let b of filteredBranches; let i = index" class="table-row">
                                 <td>
                                     <div class="cell-content">
                                         <div class="branch-info">

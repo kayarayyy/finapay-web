@@ -5,13 +5,14 @@ import { AuthSessionService } from '../../core/services/auth-session.service';
 import { LoanRequest } from '../../core/models/loan-request.model';
 import { DashboardService } from '../../core/services/dashboard.service';
 import { Dashboard } from '../../core/models/dashboard.model';
+import { FormsModule } from '@angular/forms';
 
 type LoanStatus = 'approved' | 'pending' | 'rejected';
 
 @Component({
   selector: 'app-home',
   standalone: true,  // Standalone component
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
@@ -44,6 +45,14 @@ export class HomeComponent implements OnInit {
   };
 
   plafondCustomerCount: { [plafondName: string]: number } = {};
+  searchTerm: string = '';
+  filteredBranches: any[] = [];
+  sortField: string = '';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
+
+
+
 
   constructor(
     private session: AuthSessionService,
@@ -80,6 +89,7 @@ export class HomeComponent implements OnInit {
           this.totalLoanRequests = data.totalLoanRequests;
           this.approvedLoans = data.totalApproved;
           this.branches = data.branches;
+          this.applyFilter();
 
           // Update loan stats
           this.loanStats = {
@@ -111,6 +121,7 @@ export class HomeComponent implements OnInit {
           this.totalLoanRequests = data.totalLoanRequests;
           this.approvedLoans = data.totalApproved;
           this.branches = data.branches;
+          this.applyFilter();
 
           // Update loan stats
           this.loanStats = {
@@ -142,7 +153,7 @@ export class HomeComponent implements OnInit {
           this.totalLoanRequests = data.totalLoanRequests;
           this.approvedLoans = data.totalApproved;
           this.branches = data.branches;
-
+          this.applyFilter();
           // Update loan stats
           this.loanStats = {
             pending: data.totalPending,
@@ -173,6 +184,7 @@ export class HomeComponent implements OnInit {
           this.totalLoanRequests = data.totalLoanRequests;
           this.approvedLoans = data.totalApproved;
           this.branches = data.branches;
+          this.applyFilter();
 
           // Update loan stats
           this.loanStats = {
@@ -197,6 +209,42 @@ export class HomeComponent implements OnInit {
       });
     }
   }
+
+  applyFilter(): void {
+    const term = this.searchTerm.toLowerCase();
+    this.filteredBranches = this.branches.filter(branch =>
+      branch.name.toLowerCase().includes(term) ||
+      branch.city.toLowerCase().includes(term) ||
+      branch.branchManager?.name?.toLowerCase().includes(term)
+    );
+  }
+  sortBy(field: string): void {
+    if (this.sortField === field) {
+      this.sortDirection = this.sortDirection === 'asc' ? 'desc' : 'asc';
+    } else {
+      this.sortField = field;
+      this.sortDirection = 'asc';
+    }
+
+    this.filteredBranches.sort((a, b) => {
+      let aValue = a[field];
+      let bValue = b[field];
+
+      // Untuk nested value seperti branchManager.name
+      if (field === 'branchManager') {
+        aValue = a.branchManager?.name || '';
+        bValue = b.branchManager?.name || '';
+      }
+
+      aValue = aValue?.toString().toLowerCase();
+      bValue = bValue?.toString().toLowerCase();
+
+      if (aValue < bValue) return this.sortDirection === 'asc' ? -1 : 1;
+      if (aValue > bValue) return this.sortDirection === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
 
   hasFeature(feature: string): boolean {
     const features = this.authSessionService.features;
